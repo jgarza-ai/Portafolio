@@ -1,1575 +1,2249 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>José Garza | Desarrollador Full Stack y Especialista en Automatización</title>
+    <title>José Garza - Desarrollador Full Stack y Especialista en Automatización</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- GSAP para animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <!-- Three.js para fondo interactivo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         :root {
-            --primary: #00d9ff;
-            --secondary: #8b5cf6;
-            --accent: #10b981;
-            --dark: #0a0a0f;
-            --dark-card: #141420;
+            --dark: #0D0A1F;
+            --dark-card: #1A1531;
+            --primary: #7C3AED;
+            --secondary: #EC4899;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --info: #3B82F6;
+            --gradient-start: #7C3AED;
+            --gradient-end: #EC4899;
+            --gradient-alt: #F59E0B;
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
-            background: var(--dark);
-            color: #e5e7eb;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--dark);
+            color: #fff;
             overflow-x: hidden;
         }
         
-        /* Animated Background */
-        .animated-bg {
+        /* Fondo con partículas */
+        #particles-bg {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.2), transparent 50%),
-                        radial-gradient(ellipse at 80% 50%, rgba(0, 217, 255, 0.2), transparent 50%);
-            animation: bgPulse 10s ease-in-out infinite;
-        }
-        
-        @keyframes bgPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        
-        .particles {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
         }
         
-        .particle {
-            position: absolute;
-            width: 3px; height: 3px;
-            background: rgba(139, 92, 246, 0.6);
-            border-radius: 50%;
-            animation: float 20s infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translate(100vw, -100vh); opacity: 0; }
-        }
-        
+        /* Glassmorphism con colores */
         .glass {
-            background: rgba(20, 20, 32, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(26, 21, 49, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(124, 58, 237, 0.2);
         }
         
+        .glass-accent {
+            background: rgba(236, 72, 153, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+        
+        /* Gradientes de texto */
         .gradient-text {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
+            color: transparent;
         }
         
-        /* Project Cards */
+        .gradient-text-alt {
+            background: linear-gradient(to right, var(--gradient-end), var(--gradient-alt));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Animación de entrada */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        /* Tarjetas de proyecto con colores */
         .project-card {
-            transition: all 0.4s ease;
-            position: relative;
+            transition: all 0.3s ease;
             overflow: hidden;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid rgba(124, 58, 237, 0.2);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+            border-color: var(--primary);
         }
         
         .project-card::before {
             content: '';
             position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.2), transparent);
-            transition: left 0.6s;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.2), transparent);
+            transition: left 0.5s;
         }
         
         .project-card:hover::before {
             left: 100%;
         }
         
-        .project-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.3);
-        }
-        
-        /* Demo Styles */
-        .demo-container {
-            min-height: 500px;
-            position: relative;
-        }
-        
-        /* WhatsApp Demo */
-        .whatsapp-mockup {
-            max-width: 400px;
-            margin: 0 auto;
-            background: #0d1418;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-        
-        .whatsapp-header {
-            background: #2a2f32;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .whatsapp-messages {
-            height: 400px;
-            overflow-y: auto;
-            padding: 20px;
-            background: linear-gradient(to bottom, #0a0a0f, #141420);
-        }
-        
-        .message {
-            margin-bottom: 12px;
-            animation: slideIn 0.4s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .message-bubble {
-            padding: 10px 14px;
-            border-radius: 8px;
-            max-width: 80%;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .message.bot .message-bubble {
-            background: #262d31;
-            border-bottom-left-radius: 2px;
-        }
-        
-        .message.user {
-            text-align: right;
-        }
-        
-        .message.user .message-bubble {
-            background: #056162;
-            border-bottom-right-radius: 2px;
-        }
-        
-        .typing-indicator {
-            display: inline-flex;
-            gap: 4px;
-            padding: 10px 14px;
-        }
-        
-        .typing-indicator span {
-            width: 8px;
-            height: 8px;
-            background: #666;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-        
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-        
-        @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-8px); }
-        }
-        
-        .message-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 0 20px 20px;
-        }
-        
-        .option-btn {
-            background: #25d366;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        
-        .option-btn:hover {
-            background: #128c7e;
-            transform: scale(1.05);
-        }
-        
-        /* ETL Demo */
-        .etl-pipeline {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 40px 20px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .etl-stage {
+        /* Tarjetas de tecnología con colores */
+        .tech-card {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-            opacity: 0.4;
-            transition: all 0.5s;
-        }
-        
-        .etl-stage.active {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        
-        .etl-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid var(--secondary);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 35px;
-            background: var(--dark-card);
-            transition: all 0.5s;
-        }
-        
-        .etl-stage.active .etl-icon {
-            background: var(--secondary);
-            border-color: var(--primary);
-            box-shadow: 0 0 30px var(--secondary);
-        }
-        
-        .etl-arrow {
-            font-size: 30px;
-            color: var(--secondary);
-            opacity: 0;
-            transform: scaleX(0);
-            transition: all 0.5s;
-        }
-        
-        .etl-arrow.visible {
-            opacity: 1;
-            transform: scaleX(1);
-        }
-        
-        .etl-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 20px;
-        }
-        
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .slider {
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--dark);
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--dark);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        /* Financial Demo */
-        .risk-selector {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .risk-btn {
-            padding: 12px 24px;
-            border: 2px solid var(--secondary);
-            background: transparent;
-            color: white;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .risk-btn.active {
-            background: var(--secondary);
-            transform: scale(1.1);
-        }
-        
-        .portfolio-chart {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        /* Scraping Demo */
-        .scraping-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        
-        .metric-card {
-            background: var(--dark-card);
-            padding: 20px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(26, 21, 49, 0.5);
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s;
+            border: 1px solid rgba(124, 58, 237, 0.1);
         }
         
-        .metric-card:hover {
+        .tech-card:hover {
+            transform: scale(1.05);
+            background: rgba(124, 58, 237, 0.1);
             border-color: var(--primary);
-            transform: translateY(-5px);
         }
         
-        .metric-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--primary);
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
         
-        .metric-label {
-            font-size: 14px;
-            color: #999;
-            margin-top: 5px;
-        }
+        .tech-icon.python { color: #3776AB; }
+        .tech-icon.javascript { color: #F7DF1E; }
+        .tech-icon.react { color: #61DAFB; }
+        .tech-icon.node { color: #339933; }
+        .tech-icon.docker { color: #2496ED; }
+        .tech-icon.database { color: #336791; }
+        .tech-icon.google { color: #4285F4; }
+        .tech-icon.robot { color: var(--primary); }
+        .tech-icon.brain { color: var(--secondary); }
+        .tech-icon.workflow { color: var(--accent); }
+        .tech-icon.comments { color: var(--info); }
+        .tech-icon.flutter { color: #02569B; }
         
-        .chart-bars {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            height: 200px;
-            padding: 20px;
-        }
-        
-        .bar {
-            width: 40px;
-            background: linear-gradient(to top, var(--primary), var(--secondary));
-            border-radius: 4px 4px 0 0;
-            transform-origin: bottom;
-            transform: scaleY(0);
-            animation: growBar 1s ease forwards;
-        }
-        
-        @keyframes growBar {
-            to { transform: scaleY(1); }
-        }
-        
-        /* Mobile App Demo */
-        .phone-mockup {
-            width: 300px;
-            height: 600px;
-            margin: 0 auto;
-            background: #1a1a1a;
-            border-radius: 40px;
-            padding: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .phone-screen {
+        /* Demo containers */
+        .demo-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 30px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .app-ui {
-            padding: 20px;
-            color: white;
-        }
-        
-        .app-header {
-            display: flex;
-            justify-content: space-between;
+            background-color: rgba(13, 10, 31, 0.95);
+            z-index: 1000;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .balance-card {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            animation: slideIn 0.5s ease;
-        }
-        
-        .balance-amount {
-            font-size: 36px;
-            font-weight: bold;
-        }
-        
-        .transaction {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            animation: slideIn 0.5s ease;
-        }
-        
-        /* Navigation Tabs */
-        .demo-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            overflow-x: auto;
-            padding: 10px;
-        }
-        
-        .tab-btn {
-            padding: 12px 24px;
-            border: none;
-            background: var(--dark-card);
-            color: white;
-            border-radius: 25px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .tab-btn.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-color: var(--primary);
         }
         
         .demo-content {
-            display: none;
+            background: linear-gradient(135deg, var(--dark-card), rgba(124, 58, 237, 0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 900px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid rgba(124, 58, 237, 0.3);
         }
         
-        .demo-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
+        .close-demo {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(236, 72, 153, 0.2);
+            border: 1px solid var(--secondary);
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .close-demo:hover {
+            background: var(--secondary);
+            transform: rotate(90deg);
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .etl-pipeline {
-                flex-direction: column;
-            }
-            
-            .etl-arrow {
-                transform: rotate(90deg);
-            }
-            
-            .demo-tabs {
-                flex-wrap: wrap;
-            }
+        /* Chat demo mejorado */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #128C7E, #075E54);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
-        /* Button Styles */
-        .btn-primary {
+        .chat-header {
+            background: linear-gradient(135deg, #075E54, #128C7E);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #ECE5DD;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZTVkY2M4Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNkOWQ5ZDkiLz4KICAgICAgPGNpcmNsZSBjeD0iODAiIGN5PSI4MCIgcj0iMiIgZmlsbD0iI2Q5ZDlkOSIvPgogICAgPC9wYXR0ZXJuPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPgo8L3N2Zz4=');
+        }
+        
+        .chat-input-container {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            font-size: 0.9rem;
+        }
+        
+        .chat-send {
+            padding: 0.75rem 1.5rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
+            border-radius: 24px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-send:hover {
+            transform: scale(1.05);
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            max-width: 70%;
+            animation: messageSlide 0.3s ease;
+        }
+        
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background: white;
+            padding: 0.75rem 1rem;
+            border-radius: 18px 18px 18px 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            color: #303030;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #DCF8C6, #A8E6CF);
+            color: #303030;
+            padding: 0.75rem 1rem;
+            border-radius: 18px 18px 4px 18px;
+            margin-left: auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 0.75rem;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: #303030;
+        }
+        
+        .product-price {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        
+        .quick-reply {
+            background: #075E54; /* WhatsApp Green */
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .quick-reply:hover {
+            background: #128C7E; /* Darker WhatsApp Green */
+            transform: scale(1.03);
+        }
+        
+        /* Flow visualization */
+        .flow-visualization {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .flow-node {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .flow-node.active {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px currentColor;
+        }
+        
+        .flow-node.n8n {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+        }
+        
+        .flow-node.flowise {
+            background: linear-gradient(135deg, #4E54C8, #8F94FB);
+        }
+        
+        .flow-node.supabase {
+            background: linear-gradient(135deg, #3ECF8E, #1EBB8E);
+        }
+        
+        .flow-node.whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+        }
+        
+        .flow-line {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            flex: 1;
+            margin: 0 1rem;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .flow-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: flowAnimation 2s infinite;
+        }
+        
+        @keyframes flowAnimation {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* WallyUp App mejorada */
+        .wallyup-app {
+            width: 320px;
+            height: 640px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 30px;
+            padding: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .app-content {
+            background: white;
+            height: calc(100% - 60px);
+            border-radius: 0 0 20px 20px;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3);
+        }
+        
+        .balance-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(124, 58, 237, 0.05);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .transaction-item:hover {
+            background: rgba(124, 58, 237, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        .transaction-icon.income {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+        
+        .transaction-icon.expense {
+            background: rgba(236, 72, 153, 0.2);
+            color: var(--secondary);
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-name {
+            font-weight: bold;
+            color: #303030;
+        }
+        
+        .transaction-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .transaction-amount {
+            font-weight: bold;
+        }
+        
+        .transaction-amount.income {
+            color: var(--success);
+        }
+        
+        .transaction-amount.expense {
+            color: var(--secondary);
+        }
+        
+        /* Dashboard mejorado */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+        }
+        
+        .dashboard-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .dashboard-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .dashboard-change.positive {
+            color: var(--success);
+        }
+        
+        .dashboard-change.negative {
+            color: var(--secondary);
+        }
+        
+        /* Document automation mejorado */
+        .doc-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        
+        .doc-step {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .doc-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-right: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .doc-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .doc-icon.excel {
+            background: linear-gradient(135deg, #217346, #107C41);
+        }
+        
+        .doc-icon.process {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .doc-icon.word {
+            background: linear-gradient(135deg, #2B579A, #185ABD);
+        }
+        
+        .doc-icon.pdf {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+        }
+        
+        .doc-icon.email {
+            background: linear-gradient(135deg, #EA4335, #D93025);
+        }
+        
+        .doc-content {
+            flex: 1;
+        }
+        
+        .doc-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .doc-description {
+            color: var(--accent);
+            line-height: 1.5;
+        }
+        
+        .doc-arrow {
+            position: absolute;
+            left: 40px;
+            top: 80px;
+            color: var(--primary);
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+        
+        /* Botón flotante */
+        .floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+        }
+        
+        /* Navegación */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(13, 10, 31, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+        }
+        
+        nav.scrolled {
+            padding: 0.5rem 2rem;
+            background: rgba(13, 10, 31, 0.95);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        /* Sección Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 2rem;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.1), transparent 70%);
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 217, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
         }
         
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid var(--primary);
         }
         
-        /* Tech Stack */
-        .tech-stack-grid {
+        .btn-secondary:hover {
+            background: rgba(124, 58, 237, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-cv {
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        
+        .btn-cv:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+        
+        /* Sección de Proyectos */
+        .projects {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.05));
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-        }
-
-        .tech-category {
-            background: rgba(20, 20, 32, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .tech-category:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .tech-category h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .tech-icons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-        }
-
-        .tech-icon {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .tech-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .tech-icon img {
-            height: 48px;
-            transition: transform 0.3s ease;
-        }
-
-        .tech-icon span {
-            font-size: 0.875rem;
-            color: #e5e7eb;
-            margin-top: 0.75rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        .tech-stack-grid {
+        .project-card {
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .project-description {
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tech-tag {
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .tech-tag:hover {
+            background: rgba(124, 58, 237, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .project-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .project-link:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        /* Sección de Stack Tecnológico */
+        .tech-stack {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, rgba(124, 58, 237, 0.05), rgba(236, 72, 153, 0.05));
+        }
+        
+        .tech-grid {
             display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        @media (min-width: 1024px) {
-            .tech-stack-grid {
-                grid-template-columns: repeat(3, 1fr);
+        /* Tech Stack Carousel */
+        .tech-carousel-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+            mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+        }
+
+        .tech-carousel-track {
+            display: flex;
+            width: calc(2 * (120px * 12 + 2rem * 12)); /* (card width * num cards + gap * num cards) * 2 */
+            animation: scroll 40s linear infinite;
+        }
+
+        .tech-carousel-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-1 * (120px * 12 + 2rem * 12)));
             }
         }
 
-        /* Agent Visualization */
-        #agent-visualization {
-            position: relative;
-        }
-        .agent-node {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 10px;
-            background: var(--dark);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            width: 110px;
+        
+        /* Sección de Contacto */
+        .contact {
+            padding: 5rem 2rem;
             text-align: center;
-            transition: all 0.4s ease;
-            z-index: 10;
-            font-size: 12px;
+            background: linear-gradient(180deg, rgba(236, 72, 153, 0.05), transparent);
         }
-        .agent-node i {
-            font-size: 20px;
+        
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-description {
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
+        .contact-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 50%;
             color: var(--primary);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(124, 58, 237, 0.2);
         }
-        .agent-node.active {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-            transform: scale(1.05);
+        
+        .contact-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
         }
-        #viz-user.active, #viz-agent.active, #viz-tool-search.active, #viz-response.active {
-            transform: translateX(-50%) scale(1.05);
+        
+        /* Footer */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(124, 58, 237, 0.2);
         }
-        .agent-line {
-            stroke: var(--secondary);
-            stroke-width: 2;
-            fill: none;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            transition: stroke-dashoffset 0.8s ease-in-out;
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tech-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
         }
-        .agent-line.active {
-            stroke-dashoffset: 0;
-        }
-        .product-message { display: flex; align-items: center; gap: 12px; background-color: transparent !important; padding: 0 !important; }
-        .product-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
     </style>
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <div class="particles" id="particles"></div>
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <a href="#home" class="text-2xl font-bold gradient-text">JG</a>
-                <div class="hidden md:flex gap-8">
-                    <a href="#home" class="hover:text-[var(--primary)] transition-colors">Inicio</a>
-                    <a href="#proyectos" class="hover:text-[var(--primary)] transition-colors">Proyectos</a>
-                    <a href="#tech-stack" class="hover:text-[var(--primary)] transition-colors">Stack</a>
-                    <a href="#demos" class="hover:text-[var(--primary)] transition-colors">Demos</a>
-                    <a href="#contacto" class="hover:text-[var(--primary)] transition-colors">Contacto</a>
-                </div>
+    <!-- Fondo con partículas -->
+    <div id="particles-bg"></div>
+    
+    <!-- Navegación -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">JG</div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Inicio</a>
+                <a href="#projects" class="nav-link">Proyectos</a>
+                <a href="#tech" class="nav-link">Stack</a>
+                <a href="#contact" class="nav-link">Contacto</a>
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center pt-20 px-6">
-        <div class="container mx-auto text-center">
-            <h1 class="text-6xl md:text-7xl font-bold mb-4">
-                <span class="gradient-text">José Garza</span>
-            </h1>
-            <h2 class="text-2xl md:text-3xl text-gray-400 mb-6">
-                Desarrollador Full Stack y Especialista en Automatización
-            </h2>
-            <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
+    
+    <!-- Sección Hero -->
+    <section id="home" class="hero">
+        <div class="hero-content fade-in">
+            <h1 class="hero-title gradient-text">José Garza</h1>
+            <h2 class="hero-subtitle gradient-text-alt">Desarrollador Full Stack y Especialista en Automatización</h2>
+            <p class="hero-description">
                 Apasionado por crear soluciones inteligentes que combinan IA, automatización y diseño escalable. Transformo ideas en sistemas funcionales que optimizan procesos y potencian la productividad.
             </p>
-            <div class="flex flex-wrap justify-center gap-4 mb-12">
-                <a href="#demos" class="btn-primary">
-                    <i class="fas fa-laptop-code mr-2"></i>Ver Demos Interactivos
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">
+                    <i class="fas fa-briefcase"></i> Ver Proyectos
                 </a>
-                <a href="CV.pdf" target="_blank" class="btn-primary" download>
-                    <i class="fas fa-download mr-2"></i>Descargar CV
+                <a href="CV.pdf" download="CV_Jose_Garza.pdf" class="btn btn-cv">
+                    <i class="fas fa-download"></i> Descargar CV
                 </a>
-            </div>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
-                <div class="glass p-6 rounded-xl">
-                    <div class="text-4xl font-bold gradient-text" id="stat1">50+</div>
-                    <div class="text-sm text-gray-500 mt-2">Proyectos</div>
-                </div>
-                <div class="glass p-6 rounded-xl">
-                    <div class="text-4xl font-bold gradient-text" id="stat2">10K+</div>
-                    <div class="text-sm text-gray-500 mt-2">Docs/Mes</div>
-                </div>
-                <div class="glass p-6 rounded-xl">
-                    <div class="text-4xl font-bold gradient-text" id="stat3">80%</div>
-                    <div class="text-sm text-gray-500 mt-2">Optimización</div>
-                </div>
+                <a href="#contact" class="btn btn-secondary">
+                    <i class="fas fa-envelope"></i> Contactar
+                </a>
             </div>
         </div>
     </section>
-
-    <!-- Projects Section -->
-    <section id="proyectos" class="py-20 px-6">
-        <div class="container mx-auto">
-            <h2 class="text-5xl font-bold text-center mb-16 gradient-text">Proyectos Destacados</h2>
+    
+    <!-- Sección de Proyectos -->
+    <section id="projects" class="projects">
+        <h2 class="section-title gradient-text">Proyectos Destacados</h2>
+        <div class="projects-grid">
+            <!-- Proyecto 1: WallyUp -->
+            <div class="project-card fade-in">
+                <h3 class="project-title">WallyUp - Asistente Financiero Móvil</h3>
+                <p class="project-description">
+                    Aplicación móvil multiplataforma para gestión de finanzas personales con asistente de IA conversacional.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> Flutter</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg" alt="Dart" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> Dart</span>
+                    <span class="tech-tag"><i class="fas fa-project-diagram"></i> Riverpod</span>
+                    <span class="tech-tag"><i class="fas fa-database"></i> Supabase</span>
+                    <span class="tech-tag"><i class="fas fa-brain"></i> Google Gemini</span>
+                </div>
+                <a href="#" class="project-link" onclick="openDemo('wallyup'); return false;">
+                    Ver Demo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="project-card glass p-6 rounded-xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-file-alt text-4xl" style="color: #00d9ff"></i>
-                        <h3 class="text-xl font-bold">Generación Masiva de Documentos</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Sistema automatizado que procesa +10K documentos legales mensuales con templates Word y Python.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Python</span>
-                        <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">PyQt5</span>
-                    </div>
+            <!-- Proyecto 2: GMDScriptsAFC -->
+            <div class="project-card fade-in">
+                <h3 class="project-title">Sistema de Automatización de Documentos</h3>
+                <p class="project-description">
+                    Aplicación de escritorio que automatiza la generación masiva de documentos legales y administrativos.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
+                    <span class="tech-tag"><i class="fas fa-desktop"></i> PyQt5</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" alt="Pandas" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> Pandas</span>
+                    <span class="tech-tag"><i class="fas fa-file-word"></i> python-docx</span>
+                    <span class="tech-tag"><i class="fas fa-box-open"></i> PyInstaller</span>
                 </div>
-
-                <div class="project-card glass p-6 rounded-xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-chart-line text-4xl" style="color: #10b981"></i>
-                        <h3 class="text-xl font-bold">Portfolio Intelligence IA</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Plataforma de optimización financiera con Markowitz y análisis IA para recomendaciones personalizadas.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">FastAPI</span>
-                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">React</span>
-                    </div>
+                <a href="#" class="project-link" onclick="openDemo('docs'); return false;">
+                    Ver Demo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Proyecto 3: Allianz Portfolio Intelligence -->
+            <div class="project-card fade-in">
+                <h3 class="project-title">Asesor Financiero con IA</h3>
+                <p class="project-description">
+                    Aplicación web que actúa como asesor de inversiones personal, recomendando portafolios optimizados.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> FastAPI</span>
+                    <span class="tech-tag"><i class="fab fa-react"></i> React</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> TypeScript</span>
+                    <span class="tech-tag"><i class="fas fa-brain"></i> Google Gemini</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" alt="NumPy" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> NumPy</span>
                 </div>
-
-                <div class="project-card glass p-6 rounded-xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-robot text-4xl" style="color: #8b5cf6"></i>
-                        <h3 class="text-xl font-bold">E-Commerce Conversacional</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Bot de ventas vía WhatsApp con n8n y Flowise. +60% aumento en ventas automatizadas.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">n8n</span>
-                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">Flowise</span>
-                    </div>
+                <a href="#" class="project-link" onclick="openDemo('advisor'); return false;">
+                    Ver Demo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Proyecto 4: Advantage Scrapping Ads -->
+            <div class="project-card fade-in">
+                <h3 class="project-title">Dashboard de Inteligencia de Anuncios</h3>
+                <p class="project-description">
+                    Sistema autónomo de inteligencia de mercado que realiza web scraping en múltiples plataformas.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> FastAPI</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/streamlit/streamlit-original.svg" alt="Streamlit" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"> Streamlit</span>
+                    <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
+                    <span class="tech-tag"><i class="fas fa-spider"></i> Scrapy</span>
+                    <span class="tech-tag"><i class="fas fa-mouse-pointer"></i> Playwright</span>
                 </div>
+                <a href="#" class="project-link" onclick="openDemo('dashboard'); return false;">
+                    Ver Demo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Proyecto 5: Linnia -->
+            <div class="project-card fade-in">
+                <h3 class="project-title">E-Commerce Conversacional End-to-End</h3>
+                <p class="project-description">
+                    Sistema conversacional completo para e-commerce que opera a través de WhatsApp sin intervención humana.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag"><i class="fas fa-project-diagram"></i> n8n</span>
+                    <span class="tech-tag"><i class="fas fa-comments"></i> Flowise</span>
+                    <span class="tech-tag"><i class="fas fa-robot"></i> GPT-4</span>
+                    <span class="tech-tag"><i class="fas fa-database"></i> Supabase</span>
+                    <span class="tech-tag"><i class="fab fa-whatsapp"></i> WhatsApp API</span>
+                </div>
+                <a href="#" class="project-link" onclick="openDemo('ecommerce'); return false;">
+                    Ver Demo <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         </div>
     </section>
-
-    <!-- Tech Stack Section -->
-    <section id="tech-stack" class="py-20 px-6">
-        <div class="container mx-auto">
-            <h2 class="text-5xl font-bold text-center mb-16 gradient-text">Mi Stack Tecnológico</h2>
-            <div class="tech-stack-grid">
-                <div class="tech-category">
-                    <h3>Automatización & No-Code</h3>
-                    <div class="tech-icons">
-                        <div class="tech-icon">
-                            <img src="https://static.cdnlogo.com/logos/n/19/n8n.svg" alt="n8n">
-                            <span>n8n</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://www.vectorlogo.zone/logos/make/make-icon.svg" alt="Make.com">
-                            <span>Make.com</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://avatars.githubusercontent.com/u/124463833?s=200&v=4" alt="Flowise">
-                            <span>Flowise</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h3>Desarrollo</h3>
-                    <div class="tech-icons">
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
-                            <span>Python</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
-                            <span>JavaScript</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg" alt="Next.js" style="filter: invert(1);">
-                            <span>Next.js</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter">
-                            <span>Flutter</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" alt="WordPress" style="filter: invert(1);">
-                            <span>WordPress</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h3>IA & LLMs</h3>
-                    <div class="tech-icons">
-                        <div class="tech-icon">
-                            <img src="https://www.vectorlogo.zone/logos/openai/openai-icon.svg" alt="OpenAI" style="filter: invert(1);">
-                            <span>OpenAI</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg" alt="Gemini">
-                            <span>Gemini</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h3>BI & Reporting</h3>
-                    <div class="tech-icons">
-                        <div class="tech-icon">
-                            <img src="https://www.svgrepo.com/show/354213/power-bi.svg" alt="Power BI">
-                            <span>Power BI</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://www.svgrepo.com/show/353731/excel.svg" alt="Excel">
-                            <span>Excel</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h3>Sistemas & Cloud</h3>
-                    <div class="tech-icons">
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux">
-                            <span>Linux</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg" alt="Debian">
-                            <span>Debian</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redhat/redhat-original.svg" alt="RedHat">
-                            <span>RedHat</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure">
-                            <span>Azure</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt="GCP">
-                            <span>GCP</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h3>Bases de Datos</h3>
-                    <div class="tech-icons">
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL">
-                            <span>PostgreSQL</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
-                            <span>MySQL</span>
-                        </div>
-                        <div class="tech-icon">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQLite">
-                            <span>SQLite</span>
-                        </div>
-                    </div>
-                </div>
+    
+    <!-- Sección de Stack Tecnológico -->
+    <section id="tech" class="tech-stack">
+        <h2 class="section-title gradient-text">Stack Tecnológico</h2>
+        <div class="tech-carousel-container">
+            <div class="tech-carousel-track">
+                <!-- Original Items -->
+                <div class="tech-card fade-in"><i class="fab fa-python tech-icon python"></i><span>Python</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-js tech-icon javascript"></i><span>JavaScript</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-react tech-icon react"></i><span>React</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-node tech-icon node"></i><span>Node.js</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-docker tech-icon docker"></i><span>Docker</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-database tech-icon database"></i><span>PostgreSQL</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-google tech-icon google"></i><span>Google Cloud</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-robot tech-icon robot"></i><span>OpenAI</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-brain tech-icon brain"></i><span>Google Gemini</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-project-diagram tech-icon workflow"></i><span>n8n</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-comments tech-icon comments"></i><span>Flowise</span></div>
+                <div class="tech-card fade-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" style="width: 40px; height: 40px;"><span>Flutter</span></div>
+                <!-- Duplicated Items -->
+                <div class="tech-card fade-in"><i class="fab fa-python tech-icon python"></i><span>Python</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-js tech-icon javascript"></i><span>JavaScript</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-react tech-icon react"></i><span>React</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-node tech-icon node"></i><span>Node.js</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-docker tech-icon docker"></i><span>Docker</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-database tech-icon database"></i><span>PostgreSQL</span></div>
+                <div class="tech-card fade-in"><i class="fab fa-google tech-icon google"></i><span>Google Cloud</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-robot tech-icon robot"></i><span>OpenAI</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-brain tech-icon brain"></i><span>Google Gemini</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-project-diagram tech-icon workflow"></i><span>n8n</span></div>
+                <div class="tech-card fade-in"><i class="fas fa-comments tech-icon comments"></i><span>Flowise</span></div>
+                <div class="tech-card fade-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" style="width: 40px; height: 40px;"><span>Flutter</span></div>
             </div>
         </div>
     </section>
-
-    <!-- Demos Section -->
-    <section id="demos" class="py-20 px-6">
-        <div class="container mx-auto">
-            <h2 class="text-5xl font-bold text-center mb-8 gradient-text">Demos Interactivos</h2>
-            <p class="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
-                Explora simulaciones funcionales de mis proyectos más destacados
+    
+    <!-- Sección de Contacto -->
+    <section id="contact" class="contact">
+        <div class="contact-content fade-in">
+            <h2 class="section-title gradient-text">Contacto</h2>
+            <p class="contact-description">
+                ¿Interesado en colaborar o tienes alguna pregunta? No dudes en contactarme.
             </p>
-
-            <!-- Demo Tabs -->
-            <div class="demo-tabs">
-                <button class="tab-btn active" data-demo="whatsapp">
-                    <i class="fab fa-whatsapp mr-2"></i>Chatbot WhatsApp
-                </button>
-                <button class="tab-btn" data-demo="etl">
-                    <i class="fas fa-cogs mr-2"></i>Pipeline ETL
-                </button>
-                <button class="tab-btn" data-demo="financial">
-                    <i class="fas fa-chart-pie mr-2"></i>Asesor Financiero
-                </button>
-                <button class="tab-btn" data-demo="scraping">
-                    <i class="fas fa-spider mr-2"></i>Web Scraping
-                </button>
-                <button class="tab-btn" data-demo="mobile">
-                    <i class="fas fa-mobile-alt mr-2"></i>App Móvil
-                </button>
-            </div>
-
-            <!-- Demo Contents -->
-            <div class="glass rounded-2xl p-4 md:p-8">
-                <!-- WhatsApp Demo -->
-                <div id="demo-whatsapp" class="demo-content active">
-                    <div class="grid lg:grid-cols-5 gap-8 items-start">
-                        <!-- Left Column: Chat Mockup -->
-                        <div class="lg:col-span-2">
-                            <div class="whatsapp-mockup">
-                                <div class="whatsapp-header">
-                                    <div class="avatar"><i class="fas fa-seedling"></i></div>
-                                    <div>
-                                        <div class="font-bold">Linnia</div>
-                                        <div class="text-sm text-gray-400" id="whatsapp-status">en línea</div>
-                                    </div>
-                                </div>
-                                <div class="whatsapp-messages" id="chat-messages"></div>
-                                <div class="message-options" id="chat-options"></div>
-                            </div>
-                            <div class="text-center mt-6">
-                                <button class="btn-primary" onclick="resetChat()">
-                                    <i class="fas fa-redo mr-2"></i>Reiniciar Conversación
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Agent Visualization -->
-                        <div class="lg:col-span-3 glass p-6 rounded-xl">
-                            <h3 class="text-xl font-bold text-center mb-6 gradient-text">Proceso del Agente IA</h3>
-                            <div class="relative flex flex-col items-center justify-center min-h-[450px]" id="viz-container">
-                                <!-- Nodes -->
-                                <div class="agent-node" id="viz-user" style="top: 0; left: 50%; transform: translateX(-50%);">
-                                    <i class="fas fa-comment"></i><span>Usuario</span>
-                                </div>
-                                <div class="agent-node" id="viz-agent" style="top: 120px; left: 50%; transform: translateX(-50%);">
-                                    <i class="fas fa-robot"></i><span>Agente Linnia</span>
-                                </div>
-                                <div class="agent-node" id="viz-tool-promo" style="top: 240px; left: 0;">
-                                    <i class="fas fa-tags"></i><span>Tool: Get Promotions</span>
-                                </div>
-                                <div class="agent-node" id="viz-tool-search" style="top: 240px; left: 50%; transform: translateX(-50%);">
-                                    <i class="fas fa-search"></i><span>Tool: Product Search</span>
-                                </div>
-                                <div class="agent-node" id="viz-tool-cart" style="top: 240px; right: 0;">
-                                    <i class="fas fa-shopping-cart"></i><span>Tool: Add to Cart</span>
-                                </div>
-                                <div class="agent-node" id="viz-response" style="top: 360px; left: 50%; transform: translateX(-50%);">
-                                    <i class="fas fa-reply"></i><span>Respuesta</span>
-                                </div>
-
-                                <!-- SVG Lines -->
-                                <svg class="absolute top-0 left-0 w-full h-full z-0" id="viz-svg">
-                                    <!-- User -> Agent -->
-                                    <path id="line-user-agent" class="agent-line" d="M 150 55 V 120" />
-                                    <!-- Agent -> Tools -->
-                                    <path id="line-agent-promo" class="agent-line" d="M 150 165 C 150 200, 60 200, 60 240" />
-                                    <path id="line-agent-search" class="agent-line" d="M 150 165 V 240" />
-                                    <path id="line-agent-cart" class="agent-line" d="M 150 165 C 150 200, 240 200, 240 240" />
-                                    <!-- Tools -> Agent -->
-                                    <path id="line-promo-agent" class="agent-line" d="M 60 295 C 60 200, 150 200, 150 165" />
-                                    <path id="line-search-agent" class="agent-line" d="M 150 295 V 165" />
-                                    <path id="line-cart-agent" class="agent-line" d="M 240 295 C 240 200, 150 200, 150 165" />
-                                    <!-- Agent -> Response -->
-                                    <path id="line-agent-response" class="agent-line" d="M 150 165 V 360" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ETL Demo -->
-                <div id="demo-etl" class="demo-content">
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="glass p-4 rounded-lg col-span-1">
-                            <div class="control-group">
-                                <label class="text-sm font-medium">Registros a Procesar: <span id="doc-count-visual">5000</span></label>
-                                <input type="range" class="slider" id="doc-slider-visual" min="100" max="50000" value="5000" step="100">
-                            </div>
-                            <div class="control-group mt-4">
-                                <label class="text-sm font-medium">Progreso</label>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="etl-progress-visual"></div>
-                                </div>
-                                <div class="text-center mt-2 text-sm text-gray-400" id="etl-status-visual">Listo para iniciar</div>
-                            </div>
-                            <button class="btn-primary w-full mt-4" id="run-etl-visual" onclick="runETLVisual()">
-                                <i class="fas fa-play mr-2"></i>Ejecutar Proceso
-                            </button>
-                        </div>
-                        <div class="col-span-2 glass p-4 rounded-xl relative min-h-[350px] flex items-center justify-center overflow-hidden" id="etl-canvas">
-                            <div class="etl-viz-item" id="viz-excel">
-                                <i class="fas fa-file-excel text-green-400 text-6xl"></i>
-                                <div class="mt-2">Datos de Origen</div>
-                            </div>
-                            <div class="etl-viz-item doc-template" id="viz-doc">
-                                <div class="doc-header">REQUERIMIENTO</div>
-                                <p>Estimado <span class="placeholder" id="ph-name">[[NOMBRE]]</span>,</p>
-                                <p>Le informamos que su cuenta <span class="placeholder" id="ph-account">[[CUENTA]]</span> presenta un adeudo de <span class="placeholder" id="ph-amount">[[MONTO]]</span>.</p>
-                                <p class="mt-4">Fecha Límite: <span class="placeholder" id="ph-date">[[FECHA]]</span></p>
-                            </div>
-                            <div class="etl-viz-item" id="viz-batch">
-                                <div class="file-batch">
-                                    <i class="fas fa-copy"></i>
-                                    <i class="fas fa-copy"></i>
-                                    <i class="fas fa-copy"></i>
-                                </div>
-                                <div class="mt-2">Lote de Archivos</div>
-                            </div>
-                            <div class="etl-viz-item" id="viz-printer">
-                                <i class="fas fa-print text-gray-400 text-6xl"></i>
-                                <div class="mt-2">Impresora</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Financial Demo -->
-                <div id="demo-financial" class="demo-content">
-                    <div class="risk-selector">
-                        <button class="risk-btn active" data-risk="conservative">Conservador</button>
-                        <button class="risk-btn" data-risk="moderate">Moderado</button>
-                        <button class="risk-btn" data-risk="aggressive">Agresivo</button>
-                    </div>
-                    <div class="portfolio-chart">
-                        <canvas id="portfolio-chart"></canvas>
-                    </div>
-                    <div class="text-center mt-6 text-gray-400">
-                        <p>Selecciona un perfil de riesgo para ver la distribución recomendada</p>
-                    </div>
-                </div>
-
-                <!-- Scraping Demo -->
-                <div id="demo-scraping" class="demo-content">
-                    <div class="scraping-dashboard">
-                        <div class="metric-card">
-                            <div class="metric-value" id="ads-count">0</div>
-                            <div class="metric-label">Anuncios Scrapeados</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="platforms-count">0</div>
-                            <div class="metric-label">Plataformas</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="competitors-count">0</div>
-                            <div class="metric-label">Competidores</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="success-rate">0%</div>
-                            <div class="metric-label">Tasa de Éxito</div>
-                        </div>
-                    </div>
-                    <div class="chart-bars mt-6">
-                        <div class="bar" style="height: 60%; animation-delay: 0.1s;"></div>
-                        <div class="bar" style="height: 85%; animation-delay: 0.2s;"></div>
-                        <div class="bar" style="height: 45%; animation-delay: 0.3s;"></div>
-                        <div class="bar" style="height: 95%; animation-delay: 0.4s;"></div>
-                        <div class="bar" style="height: 70%; animation-delay: 0.5s;"></div>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button class="btn-primary" onclick="animateScrapingStats()">
-                            <i class="fas fa-sync mr-2"></i>Actualizar Datos
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Mobile App Demo -->
-                <div id="demo-mobile" class="demo-content">
-                    <div class="phone-mockup">
-                        <div class="phone-screen">
-                            <div class="app-ui">
-                                <div class="app-header">
-                                    <h3 class="text-xl font-bold">WallyUp</h3>
-                                    <i class="fas fa-bell"></i>
-                                </div>
-                                <div class="balance-card">
-                                    <div class="text-sm opacity-80">Balance Total</div>
-                                    <div class="balance-amount">$12,458.50</div>
-                                    <div class="text-sm opacity-80 mt-2">+2.5% este mes</div>
-                                </div>
-                                <div class="transaction">
-                                    <div>
-                                        <div class="font-semibold">Supermercado</div>
-                                        <div class="text-sm opacity-70">Hoy, 10:30 AM</div>
-                                    </div>
-                                    <div class="font-bold text-red-300">-$45.20</div>
-                                </div>
-                                <div class="transaction">
-                                    <div>
-                                        <div class="font-semibold">Salario</div>
-                                        <div class="text-sm opacity-70">Ayer, 9:00 AM</div>
-                                    </div>
-                                    <div class="font-bold text-green-300">+$2,500.00</div>
-                                </div>
-                                <div class="transaction">
-                                    <div>
-                                        <div class="font-semibold">Netflix</div>
-                                        <div class="text-sm opacity-70">2 días atrás</div>
-                                    </div>
-                                    <div class="font-bold text-red-300">-$15.99</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center mt-6 text-gray-400">
-                        <p><i class="fas fa-mobile-alt mr-2"></i>Aplicación móvil de finanzas personales con IA</p>
-                    </div>
-                </div>
+            <div class="contact-links">
+                <a href="mailto:jgarza.cloud@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="https://github.com/josegarza1" target="_blank" class="contact-link">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/josegarza1" target="_blank" class="contact-link">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="tel:+528123321007" class="contact-link">
+                    <i class="fas fa-phone"></i>
+                </a>
             </div>
         </div>
     </section>
-
-    <!-- Contact Section -->
-    <section id="contacto" class="py-20 px-6">
-        <div class="container mx-auto max-w-4xl">
-            <h2 class="text-5xl font-bold text-center mb-4 gradient-text">¿Listo para Automatizar?</h2>
-            <p class="text-xl text-gray-400 text-center mb-12">
-                Transformemos tus procesos con automatización inteligente
-            </p>
-
-            <div class="glass p-8 rounded-2xl">
-                <div class="grid md:grid-cols-3 gap-6 mb-8">
-                    <a href="mailto:eduardgo29@hotmail.com" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-[var(--primary)] transition-all">
-                        <i class="fas fa-envelope text-4xl" style="color: var(--primary)"></i>
-                        <div class="text-center">
-                            <div class="font-bold">Email</div>
-                            <div class="text-sm text-gray-400">eduardgo29@hotmail.com</div>
-                        </div>
-                    </a>
-
-                    <a href="tel:+528123321007" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-[var(--accent)] transition-all">
-                        <i class="fas fa-phone text-4xl" style="color: var(--accent)"></i>
-                        <div class="text-center">
-                            <div class="font-bold">Teléfono</div>
-                            <div class="text-sm text-gray-400">+52 81 2332 1007</div>
-                        </div>
-                    </a>
-
-                    <a href="https://www.linkedin.com/in/josegarzal" target="_blank" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-blue-400 transition-all">
-                        <i class="fab fa-linkedin text-4xl text-blue-400"></i>
-                        <div class="text-center">
-                            <div class="font-bold">LinkedIn</div>
-                            <div class="text-sm text-gray-400">/in/josegarzal</div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="flex justify-center gap-4">
-                    <a href="https://github.com/jgarza-ai" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-[var(--primary)] transition-all">
-                        <i class="fab fa-github text-xl"></i>
-                    </a>
-                    <a href="https://wa.me/528123321007" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-[var(--accent)] transition-all">
-                        <i class="fab fa-whatsapp text-xl"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- Footer -->
-    <footer class="py-8 border-t border-gray-800">
-        <div class="container mx-auto px-6 text-center text-gray-500">
-            <p>© 2025 José Garza. Desarrollador Full Stack y Especialista en Automatización</p>
-        </div>
+    <footer>
+        <p>&copy; 2025 José Garza. Todos los derechos reservados.</p>
     </footer>
-
-    <script>
-        // Particles
-        function createParticles() {
-            const container = document.getElementById('particles');
-            if (!container) return;
-            container.innerHTML = ''; // Clear existing particles
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                container.appendChild(particle);
-            }
-        }
-
-        // Tab Navigation
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const demoId = btn.dataset.demo;
-                
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                document.querySelectorAll('.demo-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                document.getElementById('demo-' + demoId).classList.add('active');
-                
-                // Initialize specific demos when activated
-                if (demoId === 'whatsapp') {
-                    if (!window.chatInitialized) {
-                        startChat();
-                        window.chatInitialized = true;
-                    } else {
-                        resetChat();
-                    }
-                }
-                if (demoId === 'financial' && !window.chartInitialized) {
-                    initFinancialChart();
-                    window.chartInitialized = true;
-                }
-                if (demoId === 'scraping' && !window.scrapingInitialized) {
-                    animateScrapingStats();
-                    window.scrapingInitialized = true;
-                }
-            });
-        });
-
-        // --- Linnia WhatsApp Demo Logic ---
-        const linniaDemoFlow = [
-            {
-                step: 0,
-                action: 'start',
-                messages: [
-                    { from: 'bot', text: '¡Hola! Soy Linnia, tu asistente de compras. Te comento que hoy tenemos un 20% de descuento en productos para el cuidado de la piel.', delay: 1500 }
-                ],
-                visualize: [
-                    { type: 'node', id: 'viz-agent', duration: 500 },
-                    { type: 'line', id: 'line-agent-promo', delay: 500 },
-                    { type: 'node', id: 'viz-tool-promo', delay: 1000, duration: 1500 },
-                    { type: 'line', id: 'line-promo-agent', delay: 1500 },
-                    { type: 'line', id: 'line-agent-response', delay: 2000 },
-                    { type: 'node', id: 'viz-response', delay: 2500, duration: 1000 }
-                ],
-                options: ['Busco algo para la energía', 'Ver productos para la piel', '¿Qué es Linnia?']
-            },
-            {
-                step: 1,
-                trigger: 'Busco algo para la energía',
-                messages: [
-                    { from: 'user', text: 'Busco algo para darme más energía' },
-                    { from: 'bot', text: 'Entendido, buscas más energía. Permíteme revisar...', delay: 1200 },
-                    { from: 'bot', text: 'Encontré estos productos que te pueden ayudar:', products: [
-                        { name: 'Vitality Boost', price: '$450.00', img: 'https://i.imgur.com/5yS6m2N.png' },
-                        { name: 'Focus Max', price: '$520.00', img: 'https://i.imgur.com/tZ8sL0s.png' }
-                    ], delay: 3000 }
-                ],
-                visualize: [
-                    { type: 'node', id: 'viz-user', duration: 500 },
-                    { type: 'line', id: 'line-user-agent', delay: 500 },
-                    { type: 'node', id: 'viz-agent', delay: 1000, duration: 2500 },
-                    { type: 'line', id: 'line-agent-search', delay: 1500 },
-                    { type: 'node', id: 'viz-tool-search', delay: 2000, duration: 1500 },
-                    { type: 'line', id: 'line-search-agent', delay: 2500 },
-                    { type: 'line', id: 'line-agent-response', delay: 3000 },
-                    { type: 'node', id: 'viz-response', delay: 3500, duration: 1000 }
-                ],
-                options: ['Quiero el Vitality Boost', 'Más detalles de Focus Max']
-            },
-            {
-                step: 2,
-                trigger: 'Quiero el Vitality Boost',
-                messages: [
-                    { from: 'user', text: 'Quiero el Vitality Boost' },
-                    { from: 'bot', text: '¡Perfecto! Agregué 1 \'Vitality Boost\' a tu orden. El total es $450.00.', delay: 1200 }
-                ],
-                visualize: [
-                    { type: 'node', id: 'viz-user', duration: 500 },
-                    { type: 'line', id: 'line-user-agent', delay: 500 },
-                    { type: 'node', id: 'viz-agent', delay: 1000, duration: 2500 },
-                    { type: 'line', id: 'line-agent-cart', delay: 1500 },
-                    { type: 'node', id: 'viz-tool-cart', delay: 2000, duration: 1500 },
-                    { type: 'line', id: 'line-cart-agent', delay: 2500 },
-                    { type: 'line', id: 'line-agent-response', delay: 3000 },
-                    { type: 'node', id: 'viz-response', delay: 3500, duration: 1000 }
-                ],
-                options: ['Finalizar compra', 'Seguir buscando']
-            }
-        ];
-
-        let chatTimeout;
-
-        function addMessage(text, type, product = null) {
-            const messagesContainer = document.getElementById('chat-messages');
-            if (!messagesContainer) return;
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            let bubbleHTML = '';
-            if (product) {
-                bubbleHTML = `
-                    <div class="message-bubble product-message">
-                        <img src="${product.img}" alt="${product.name}" class="product-image">
-                        <div class="product-details">
-                            <div class="font-bold">${product.name}</div>
-                            <div>${product.price}</div>
+    
+    <!-- Botón flotante -->
+    <div class="floating-btn" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- Demo Containers -->
+    <!-- Demo 1: WallyUp -->
+    <div id="wallyup-demo" class="demo-container">
+        <div class="demo-content">
+            <button class="close-demo" onclick="closeDemo('wallyup')">&times;</button>
+            <h2 class="section-title gradient-text">WallyUp - Asistente Financiero Móvil</h2>
+            <div class="glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                <p>Esta demo simula la experiencia de usuario dentro de la app móvil WallyUp, mostrando cómo interactuar con el asistente de IA para registrar transacciones y consultar saldos.</p>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div class="wallyup-app">
+                    <div class="app-header">
+                        <h3>WallyUp</h3>
+                    </div>
+                    <div class="app-content">
+                        <div class="balance-card">
+                            <div class="balance-amount">$2,350.00</div>
+                            <div>Saldo Total</div>
                         </div>
-                    </div>`;
-            } else {
-                bubbleHTML = `<div class="message-bubble">${text}</div>`;
+                        
+                        <h4 style="margin-bottom: 1rem; color: #303030;">Transacciones Recientes</h4>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon expense">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-name">Supermercado</div>
+                                <div class="transaction-date">Hoy, 14:30</div>
+                            </div>
+                            <div class="transaction-amount expense">-$500</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon income">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-name">Salario</div>
+                                <div class="transaction-date">Ayer, 09:00</div>
+                            </div>
+                            <div class="transaction-amount income">+$3,000</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon expense">
+                                <i class="fas fa-gas-pump"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-name">Gasolina</div>
+                                <div class="transaction-date">Ayer, 18:45</div>
+                            </div>
+                            <div class="transaction-amount expense">-$750</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon expense">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-name">Restaurante</div>
+                                <div class="transaction-date">2 días atrás</div>
+                            </div>
+                            <div class="transaction-amount expense">-$350</div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem; padding: 1rem; background: rgba(124, 58, 237, 0.1); border-radius: 12px;">
+                            <h4 style="margin-bottom: 0.5rem; color: var(--primary);">Asistente de IA</h4>
+                            <div style="background: white; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                                <p style="color: #303030; font-size: 0.9rem;">¡Hola! He registrado tu gasto de $500 en supermercado. Tu saldo actual es de $2,350.</p>
+                            </div>
+                            <div style="background: #DCF8C6; padding: 0.75rem; border-radius: 8px; margin-left: auto; max-width: 80%;">
+                                <p style="color: #303030; font-size: 0.9rem;">¿Cuánto he gastado esta semana?</p>
+                            </div>
+                            <div style="background: white; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                                <p style="color: #303030; font-size: 0.9rem;">Esta semana has gastado $1,250. Tu mayor gasto fue en "Supermercado" con $500.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Demo 2: Document Automation -->
+    <div id="docs-demo" class="demo-container">
+        <div class="demo-content">
+            <button class="close-demo" onclick="closeDemo('docs')">&times;</button>
+            <h2 class="section-title gradient-text">Sistema de Automatización de Documentos</h2>
+            <div class="glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                <p>Esta demo visualiza el proceso ETL (Extracción, Transformación y Carga) que realiza el sistema para automatizar la generación de documentos.</p>
+            </div>
+            <div class="doc-flow">
+                <div class="doc-step">
+                    <div class="doc-icon excel">
+                        <i class="fas fa-file-excel"></i>
+                    </div>
+                    <div class="doc-content">
+                        <div class="doc-title">Extracción de Datos</div>
+                        <div class="doc-description">El sistema lee miles de registros desde archivos Excel con Pandas</div>
+                    </div>
+                    <div class="doc-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <div class="doc-step">
+                    <div class="doc-icon process">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="doc-content">
+                        <div class="doc-title">Procesamiento Inteligente</div>
+                        <div class="doc-description">Los datos son validados, limpiados y transformados usando algoritmos de Python</div>
+                    </div>
+                    <div class="doc-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <div class="doc-step">
+                    <div class="doc-icon word">
+                        <i class="fas fa-file-word"></i>
+                    </div>
+                    <div class="doc-content">
+                        <div class="doc-title">Generación de Documentos</div>
+                        <div class="doc-description">Se insertan los datos en plantillas de Word personalizadas con python-docx</div>
+                    </div>
+                    <div class="doc-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <div class="doc-step">
+                    <div class="doc-icon pdf">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="doc-content">
+                        <div class="doc-title">Conversión Automática</div>
+                        <div class="doc-description">Los documentos se convierten a PDF para su distribución y archivo</div>
+                    </div>
+                    <div class="doc-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <div class="doc-step">
+                    <div class="doc-icon email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="doc-content">
+                        <div class="doc-title">Distribución Automatizada</div>
+                        <div class="doc-description">Los documentos se envían automáticamente a los destinatarios correspondientes</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="margin-top: 2rem;" onclick="animateDocFlow()">
+                    <i class="fas fa-play"></i> Iniciar Simulación
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Demo 3: Financial Advisor -->
+    <div id="advisor-demo" class="demo-container">
+        <div class="demo-content">
+            <button class="close-demo" onclick="closeDemo('advisor')">&times;</button>
+            <h2 class="section-title gradient-text">Asesor Financiero con IA</h2>
+            <div class="glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                <p>Esta demo muestra cómo el asesor financiero recomienda portafolios de inversión optimizados según el perfil de riesgo del usuario.</p>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <select class="advisor-dropdown" id="risk-profile" onchange="updateChart()" style="padding: 0.75rem 1.5rem; background: var(--dark-card); color: white; border: 1px solid var(--primary); border-radius: 8px; margin-bottom: 2rem; font-size: 1rem;">
+                    <option value="conservative">Perfil Conservador</option>
+                    <option value="moderate">Perfil Moderado</option>
+                    <option value="aggressive">Perfil Agresivo</option>
+                </select>
+                <div style="width: 350px; height: 350px; margin-bottom: 2rem;">
+                    <canvas id="portfolio-chart"></canvas>
+                </div>
+                <div class="glass-accent" style="padding: 1.5rem; max-width: 600px; text-align: center;" id="recommendation">
+                    <h3 style="margin-bottom: 1rem; color: var(--secondary);">Recomendación para Perfil Conservador</h3>
+                    <p style="line-height: 1.6;">Basado en tu perfil de riesgo conservador, te recomendamos una cartera con 60% en bonos, 30% en acciones de grandes empresas y 10% en efectivo. Esta distribución busca preservar tu capital con un crecimiento moderado y bajo riesgo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Demo 4: Dashboard -->
+    <div id="dashboard-demo" class="demo-container">
+        <div class="demo-content">
+            <button class="close-demo" onclick="closeDemo('dashboard')">&times;</button>
+            <h2 class="section-title gradient-text">Dashboard de Inteligencia de Anuncios</h2>
+            <div class="glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                <p>Esta demo simula el dashboard interactivo que muestra datos de anuncios recopilados mediante web scraping.</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="dashboard-title">Total de Anuncios</div>
+                    <div class="dashboard-value" style="color: var(--primary);">281</div>
+                    <div class="dashboard-change positive">
+                        <i class="fas fa-arrow-up"></i> +12.5% vs mes anterior
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-title">Plataforma Principal</div>
+                    <div class="dashboard-value" style="color: var(--secondary);">Google</div>
+                    <div class="dashboard-change positive">
+                        <i class="fas fa-arrow-up"></i> 125 anuncios
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-title">Tasa de Crecimiento</div>
+                    <div class="dashboard-value" style="color: var(--accent);">+24%</div>
+                    <div class="dashboard-change positive">
+                        <i class="fas fa-arrow-up"></i> Últimos 7 días
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-title">Anunciante Top</div>
+                    <div class="dashboard-value" style="color: var(--success);">TechStore</div>
+                    <div class="dashboard-change positive">
+                        <i class="fas fa-arrow-up"></i> 15 campañas
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="glass" style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Anuncios por Plataforma</h3>
+                    <canvas id="platform-chart"></canvas>
+                </div>
+                <div class="glass" style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--secondary);">Tendencia Semanal</h3>
+                    <canvas id="trend-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="glass" style="padding: 1.5rem; margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--accent);">Anuncios Recientes</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--primary);">
+                                <th style="text-align: left; padding: 0.75rem; color: var(--primary);">Plataforma</th>
+                                <th style="text-align: left; padding: 0.75rem; color: var(--primary);">Anunciante</th>
+                                <th style="text-align: left; padding: 0.75rem; color: var(--primary);">Texto del Anuncio</th>
+                                <th style="text-align: left; padding: 0.75rem; color: var(--primary);">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(124, 58, 237, 0.2); transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='rgba(124, 58, 237, 0.05)'" onmouseout="this.style.backgroundColor='transparent'">
+                                <td style="padding: 0.75rem;"><span style="background: linear-gradient(135deg, #4285F4, #34A853); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">Google</span></td>
+                                <td style="padding: 0.75rem; font-weight: bold;">TechStore</td>
+                                <td style="padding: 0.75rem;">¡Oferta especial en laptops! 30% de descuento</td>
+                                <td style="padding: 0.75rem; color: var(--accent);">2025-07-15</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(124, 58, 237, 0.2); transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='rgba(124, 58, 237, 0.05)'" onmouseout="this.style.backgroundColor='transparent'">
+                                <td style="padding: 0.75rem;"><span style="background: linear-gradient(135deg, #1877F2, #42B883); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">Meta</span></td>
+                                <td style="padding: 0.75rem; font-weight: bold;">FashionBrand</td>
+                                <td style="padding: 0.75rem;">Nueva colección de verano. ¡Descúbrela ahora!</td>
+                                <td style="padding: 0.75rem; color: var(--accent);">2025-07-14</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(124, 58, 237, 0.2); transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='rgba(124, 58, 237, 0.05)'" onmouseout="this.style.backgroundColor='transparent'">
+                                <td style="padding: 0.75rem;"><span style="background: linear-gradient(135deg, #0077B5, #0A66C2); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">LinkedIn</span></td>
+                                <td style="padding: 0.75rem; font-weight: bold;">BusinessSolutions</td>
+                                <td style="padding: 0.75rem;">Optimiza tus procesos con nuestra herramienta de IA</td>
+                                <td style="padding: 0.75rem; color: var(--accent);">2025-07-13</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Demo 5: E-Commerce -->
+    <div id="ecommerce-demo" class="demo-container">
+        <div class="demo-content">
+            <button class="close-demo" onclick="closeDemo('ecommerce')">&times;</button>
+            <h2 class="section-title gradient-text">E-Commerce Conversacional End-to-End</h2>
+            <div class="glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                <p>Esta demo recrea la experiencia de interactuar con el bot de ventas por WhatsApp, mostrando el flujo completo de n8n, Flowise y Supabase.</p>
+            </div>
+            
+            <!-- Visualización del flujo -->
+            <div class="flow-visualization">
+                <div class="flow-node n8n" id="n8n-node">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node flowise" id="flowise-node">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node supabase" id="supabase-node">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node whatsapp" id="whatsapp-node">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 1rem 0;">
+                <p style="color: var(--accent); font-size: 0.9rem;">Flujo: n8n → Flowise → Supabase → WhatsApp</p>
+            </div>
+            
+            <!-- Chat de WhatsApp -->
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-avatar">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold;">Linnia Store</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8;">Bot de ventas</div>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        ¡Hola! Bienvenido a Linnia. Soy tu asistente de compras personal. ¿Qué estás buscando hoy? 🛍️
+                    </div>
+                </div>
+                <div class="chat-input-container" id="chat-input-container">
+                    <div class="quick-replies">
+                        <div class="quick-reply" onclick="sendQuickReply('Ver catálogo')">
+                            <i class="fas fa-th"></i> Ver catálogo
+                        </div>
+                        <div class="quick-reply" onclick="sendQuickReply('Ofertas')">
+                            <i class="fas fa-tag"></i> Ofertas
+                        </div>
+                        <div class="quick-reply" onclick="sendQuickReply('Mi pedido')">
+                            <i class="fas fa-box"></i> Mi pedido
+                        </div>
+                        <div class="quick-reply" onclick="sendQuickReply('Ayuda')">
+                            <i class="fas fa-question-circle"></i> Ayuda
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    
+    <script>
+        // Inicialización de Three.js para el fondo de partículas
+        function initParticles() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('particles-bg').appendChild(renderer.domElement);
+            
+            // Crear partículas con colores
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 3000;
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorsArray = new Float32Array(particlesCount * 3);
+            
+            for (let i = 0; i < particlesCount * 3; i += 3) {
+                posArray[i] = (Math.random() - 0.5) * 10;
+                posArray[i + 1] = (Math.random() - 0.5) * 10;
+                posArray[i + 2] = (Math.random() - 0.5) * 10;
+                
+                // Colores variados
+                const colorChoice = Math.random();
+                if (colorChoice < 0.33) {
+                    colorsArray[i] = 124/255;     // Purple
+                    colorsArray[i + 1] = 58/255;
+                    colorsArray[i + 2] = 237/255;
+                } else if (colorChoice < 0.66) {
+                    colorsArray[i] = 236/255;     // Pink
+                    colorsArray[i + 1] = 72/255;
+                    colorsArray[i + 2] = 153/255;
+                } else {
+                    colorsArray[i] = 245/255;     // Amber
+                    colorsArray[i + 1] = 158/255;
+                    colorsArray[i + 2] = 11/255;
+                }
             }
-            messageDiv.innerHTML = bubbleHTML;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function showTyping(status = 'escribiendo...') {
-            const statusEl = document.getElementById('whatsapp-status');
-            if(statusEl) statusEl.textContent = status;
-        }
-
-        function hideTyping() {
-            const statusEl = document.getElementById('whatsapp-status');
-            if(statusEl) statusEl.textContent = 'en línea';
-        }
-
-        function showOptions(options) {
-            const optionsContainer = document.getElementById('chat-options');
-            if (!optionsContainer) return;
-            optionsContainer.innerHTML = '';
-            options.forEach(option => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.textContent = option;
-                btn.onclick = () => handleOption(option);
-                optionsContainer.appendChild(btn);
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+            
+            // Material
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                vertexColors: true
+            });
+            
+            // Mesh
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            camera.position.z = 3;
+            
+            // Animación
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particlesMesh.rotation.y += 0.0005;
+                particlesMesh.rotation.x += 0.0002;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Responsive
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
             });
         }
-
-        function clearVisualization() {
-            document.querySelectorAll('.agent-node, .agent-line').forEach(el => el.classList.remove('active'));
-        }
-
-        function runVisualization(vizSteps = []) {
-            clearVisualization();
-            vizSteps.forEach(step => {
-                setTimeout(() => {
-                    const el = document.getElementById(step.id);
-                    if (el) {
-                        el.classList.add('active');
-                        if (step.type === 'node' && step.duration) {
-                            setTimeout(() => el.classList.remove('active'), step.duration);
+        
+        // Animaciones con GSAP
+        function initAnimations() {
+            // Animación de entrada para elementos con clase fade-in
+            gsap.utils.toArray('.fade-in').forEach(element => {
+                gsap.fromTo(element, 
+                    { opacity: 0, y: 20 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: element,
+                            start: "top 80%",
+                            end: "bottom 20%",
+                            toggleActions: "play none none reverse"
                         }
                     }
-                }, step.delay || 0);
+                );
             });
-        }
-
-        function runDemoStep(step) {
-            if (!step) return;
-            const optionsContainer = document.getElementById('chat-options');
-            if(optionsContainer) optionsContainer.innerHTML = '';
             
-            runVisualization(step.visualize);
-
-            let messageChain = Promise.resolve();
-            step.messages.forEach(msg => {
-                messageChain = messageChain.then(() => new Promise(resolve => {
-                    setTimeout(() => {
-                        if (msg.from === 'bot') {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                if (msg.products) {
-                                    addMessage(msg.text, 'bot');
-                                    msg.products.forEach(p => addMessage('', 'bot', p));
-                                } else {
-                                    addMessage(msg.text, 'bot');
-                                }
-                                resolve();
-                            }, 800);
-                        } else {
-                            addMessage(msg.text, 'user');
-                            resolve();
+            // Animación del título del hero
+            gsap.fromTo(".hero-title", 
+                { opacity: 0, y: 50 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1.2,
+                    delay: 0.2
+                }
+            );
+            
+            // Animación del subtítulo del hero
+            gsap.fromTo(".hero-subtitle", 
+                { opacity: 0, y: 30 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1,
+                    delay: 0.5
+                }
+            );
+            
+            // Animación de la descripción del hero
+            gsap.fromTo(".hero-description", 
+                { opacity: 0, y: 20 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1,
+                    delay: 0.8
+                }
+            );
+            
+            // Animación de los botones del hero
+            gsap.fromTo(".hero-buttons", 
+                { opacity: 0, y: 20 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1,
+                    delay: 1.1
+                }
+            );
+            
+            // Animación de las tarjetas de tecnología
+            gsap.utils.toArray('.tech-card').forEach((card, index) => {
+                gsap.fromTo(card, 
+                    { opacity: 0, scale: 0.8 },
+                    { 
+                        opacity: 1, 
+                        scale: 1, 
+                        duration: 0.5,
+                        delay: 0.1 * index,
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top 80%",
+                            end: "bottom 20%",
+                            toggleActions: "play none none reverse"
                         }
-                    }, msg.delay || 0);
-                }));
-            });
-
-            messageChain.then(() => {
-                if (step.options) {
-                    showOptions(step.options);
-                }
+                    }
+                );
             });
         }
-
-        function handleOption(option) {
-            const nextStep = linniaDemoFlow.find(s => s.trigger === option);
-            if (nextStep) {
-                runDemoStep(nextStep);
-            } else {
-                addMessage(option, 'user');
-                setTimeout(() => addMessage('Esa es una función interesante, pero esta demo se enfoca en el flujo de compra. ¡Intenta reiniciar!', 'bot'), 1000);
-                showOptions([]);
+        
+        // Función para abrir demos
+        function openDemo(demoName) {
+            document.getElementById(`${demoName}-demo`).style.display = 'flex';
+            
+            // Inicializar gráficos específicos de cada demo
+            if (demoName === 'advisor') {
+                initAdvisorChart();
+            } else if (demoName === 'dashboard') {
+                initDashboardCharts();
+            } else if (demoName === 'ecommerce') {
+                initEcommerceFlow();
             }
         }
-
-        function startChat() {
-            const firstStep = linniaDemoFlow.find(s => s.action === 'start');
-            runDemoStep(firstStep);
+        
+        // Función para cerrar demos
+        function closeDemo(demoName) {
+            document.getElementById(`${demoName}-demo`).style.display = 'none';
         }
-
-        function resetChat() {
-            clearTimeout(chatTimeout);
-            const messagesContainer = document.getElementById('chat-messages');
-            const optionsContainer = document.getElementById('chat-options');
-            if(messagesContainer) messagesContainer.innerHTML = '';
-            if(optionsContainer) optionsContainer.innerHTML = '';
-            clearVisualization();
-            startChat();
-        }
-
-        // ETL Demo
-        document.getElementById('doc-slider')?.addEventListener('input', (e) => {
-            const docCount = document.getElementById('doc-count');
-            if(docCount) docCount.textContent = e.target.value;
-        });
-
-        let etlRunning = false;
-
-        async function runETL() {
-            if (etlRunning) return;
-            etlRunning = true;
-            
-            const btn = document.getElementById('run-etl');
-            if(!btn) return;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Procesando...';
-            
-            const processType = document.querySelector('input[name="etl-type"]:checked').value;
-            const stages = ['input', 'process', 'merge', 'output'];
-            const arrows = document.querySelectorAll('#demo-etl .etl-arrow');
-            const progress = document.getElementById('etl-progress');
-            const status = document.getElementById('etl-status');
-            
-            // Reset
-            stages.forEach(stage => {
-                const stageEl = document.getElementById('stage-' + stage);
-                if(stageEl) stageEl.classList.remove('active');
-            });
-            arrows.forEach(arrow => arrow.classList.remove('visible'));
-            if(progress) progress.style.width = '0%';
-
-            const statusTexts = {
-                'Multas': ['Leyendo base de datos...', 'Aplicando reglas de multas...', 'Generando requerimientos...', 'Enviando a impresión...'],
-                'Predial': ['Leyendo base de datos...', 'Calculando impuesto predial...', 'Generando citatorios...', 'Enviando a SFTP...']
-            };
-            
-            for (let i = 0; i < stages.length; i++) {
-                const stageEl = document.getElementById('stage-' + stages[i]);
-                if(stageEl) stageEl.classList.add('active');
-                if(progress) progress.style.width = ((i + 1) / stages.length * 100) + '%';
-                
-                if(status) status.textContent = statusTexts[processType][i];
-                
-                await new Promise(resolve => setTimeout(resolve, 1200));
-                
-                if (i < arrows.length) {
-                    arrows[i].classList.add('visible');
-                }
-            }
-            
-            if(status) status.textContent = '¡Proceso completado!';
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-check mr-2"></i>Completado';
-            etlRunning = false;
-            
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-play mr-2"></i>Ejecutar Proceso';
-            }, 3000);
-        }
-
-        // Financial Chart
+        
+        // Inicializar gráfico del asesor financiero
         let portfolioChart;
-
-        function initFinancialChart() {
-            const ctx = document.getElementById('portfolio-chart')?.getContext('2d');
-            if (!ctx) return;
+        function initAdvisorChart() {
+            const ctx = document.getElementById('portfolio-chart').getContext('2d');
+            
+            if (portfolioChart) {
+                portfolioChart.destroy();
+            }
             
             portfolioChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Acciones', 'Bonos', 'Crypto'],
+                    labels: ['Bonos', 'Acciones', 'Criptomonedas', 'Efectivo'],
                     datasets: [{
-                        data: [60, 30, 10],
-                        backgroundColor: ['#00d9ff', '#8b5cf6', '#10b981'],
-                        borderColor: '#141420',
-                        borderWidth: 3
+                        data: [60, 30, 0, 10],
+                        backgroundColor: [
+                            '#7C3AED',
+                            '#EC4899',
+                            '#F59E0B',
+                            '#10B981'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#fff',
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+        }
+        
+        // Actualizar gráfico del asesor financiero
+        function updateChart() {
+            const profile = document.getElementById('risk-profile').value;
+            const recommendation = document.getElementById('recommendation');
+            
+            let data, title, text;
+            
+            switch(profile) {
+                case 'conservative':
+                    data = [60, 30, 0, 10];
+                    title = 'Recomendación para Perfil Conservador';
+                    text = 'Basado en tu perfil de riesgo conservador, te recomendamos una cartera con 60% en bonos, 30% en acciones de grandes empresas y 10% en efectivo. Esta distribución busca preservar tu capital con un crecimiento moderado y bajo riesgo.';
+                    break;
+                case 'moderate':
+                    data = [40, 50, 0, 10];
+                    title = 'Recomendación para Perfil Moderado';
+                    text = 'Para tu perfil de riesgo moderado, sugerimos una cartera con 40% en bonos, 50% en acciones de diferentes sectores y 10% en efectivo. Esta combinación busca un equilibrio entre crecimiento y seguridad.';
+                    break;
+                case 'aggressive':
+                    data = [20, 60, 10, 10];
+                    title = 'Recomendación para Perfil Agresivo';
+                    text = 'Con tu perfil de riesgo agresivo, recomendamos una cartera con 20% en bonos, 60% en acciones (incluyendo empresas de crecimiento y emergentes), 10% en criptomonedas y 10% en efectivo. Esta estrategia maximiza el potencial de retorno a cambio de mayor volatilidad.';
+                    break;
+            }
+            
+            portfolioChart.data.datasets[0].data = data;
+            portfolioChart.update();
+            
+            recommendation.innerHTML = `<h3 style="margin-bottom: 1rem; color: var(--secondary);">${title}</h3><p style="line-height: 1.6;">${text}</p>`;
+        }
+        
+        // Inicializar gráficos del dashboard
+        function initDashboardCharts() {
+            // Gráfico de anuncios por plataforma
+            const platformCtx = document.getElementById('platform-chart').getContext('2d');
+            new Chart(platformCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Google', 'Meta', 'LinkedIn'],
+                    datasets: [{
+                        label: 'Anuncios',
+                        data: [125, 89, 67],
+                        backgroundColor: [
+                            'rgba(66, 133, 244, 0.8)',
+                            'rgba(24, 119, 242, 0.8)',
+                            'rgba(0, 119, 181, 0.8)'
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 8
                     }]
                 },
                 options: {
                     responsive: true,
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#e5e7eb',
-                                font: { size: 14 }
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                display: false
                             }
                         }
                     }
                 }
             });
             
-            document.querySelectorAll('.risk-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    const risk = btn.dataset.risk;
-                    const profiles = {
-                        conservative: [60, 35, 5],
-                        moderate: [50, 35, 15],
-                        aggressive: [30, 30, 40]
-                    };
-                    
-                    portfolioChart.data.datasets[0].data = profiles[risk];
-                    portfolioChart.update();
-                });
-            });
-        }
-
-        // Scraping Demo
-        function animateScrapingStats() {
-            const counters = [
-                { id: 'ads-count', target: 1247, suffix: '' },
-                { id: 'platforms-count', target: 3, suffix: '' },
-                { id: 'competitors-count', target: 28, suffix: '' },
-                { id: 'success-rate', target: 98, suffix: '%' }
-            ];
-            
-            counters.forEach(counter => {
-                const element = document.getElementById(counter.id);
-                if (!element) return;
-                let current = 0;
-                const increment = counter.target / 50;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= counter.target) {
-                        element.textContent = counter.target + counter.suffix;
-                        clearInterval(timer);
-                    } else {
-                        element.textContent = Math.floor(current) + counter.suffix;
+            // Gráfico de tendencia de anuncios
+            const trendCtx = document.getElementById('trend-chart').getContext('2d');
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Google',
+                        data: [12, 19, 15, 25, 22, 30, 28],
+                        borderColor: '#4285F4',
+                        backgroundColor: 'rgba(66, 133, 244, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Meta',
+                        data: [8, 11, 13, 15, 12, 18, 16],
+                        borderColor: '#1877F2',
+                        backgroundColor: 'rgba(24, 119, 242, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'LinkedIn',
+                        data: [5, 8, 7, 10, 9, 12, 11],
+                        borderColor: '#0077B5',
+                        backgroundColor: 'rgba(0, 119, 181, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#fff'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
                     }
-                }, 30);
+                }
+            });
+        }
+        
+        // Animación del flujo de documentos
+        function animateDocFlow() {
+            const steps = document.querySelectorAll('.doc-step');
+            
+            steps.forEach((step, index) => {
+                gsap.fromTo(step, 
+                    { opacity: 0, x: -50 },
+                    { 
+                        opacity: 1, 
+                        x: 0, 
+                        duration: 0.5,
+                        delay: 0.3 * index,
+                        ease: "power2.out"
+                    }
+                );
+            });
+        }
+        
+        // Simulación de chat para E-Commerce
+        const chatResponses = {
+            "start": {
+                bot: ["¡Hola! Bienvenido a Linnia. Soy tu asistente de compras personal. ¿Qué estás buscando hoy? 🛍️"],
+                replies: [
+                    { text: "Ver catálogo", icon: "fa-th", action: "show_catalog" },
+                    { text: "Ofertas", icon: "fa-tag", action: "show_offers" },
+                    { text: "Mi pedido", icon: "fa-box", action: "track_order" },
+                    { text: "Ayuda", icon: "fa-question-circle", action: "help" }
+                ]
+            },
+            "show_catalog": {
+                bot: ["¡Claro! Aquí tienes nuestras categorías principales:"],
+                replies: [
+                    { text: "Ropa", icon: "fa-tshirt", action: "show_category_ropa" },
+                    { text: "Electrónicos", icon: "fa-laptop", action: "show_category_electronicos" },
+                    { text: "Hogar", icon: "fa-couch", action: "show_category_hogar" },
+                    { text: "Volver", icon: "fa-arrow-left", action: "start" }
+                ]
+            },
+            "show_category_ropa": {
+                bot: ["Excelente elección. Aquí tienes algunos de nuestros productos más vendidos en ropa:", {
+                    type: "product",
+                    name: "Camisa Casual",
+                    price: "$499.00",
+                    image: "https://via.placeholder.com/150/7C3AED/FFFFFF?Text=Ropa1"
+                }, {
+                    type: "product",
+                    name: "Pantalón de Mezclilla",
+                    price: "$799.00",
+                    image: "https://via.placeholder.com/150/EC4899/FFFFFF?Text=Ropa2"
+                }],
+                replies: [
+                    { text: "Agregar Camisa", icon: "fa-cart-plus", action: "add_to_cart_camisa" },
+                    { text: "Agregar Pantalón", icon: "fa-cart-plus", action: "add_to_cart_pantalon" },
+                    { text: "Ver más", icon: "fa-search-plus", action: "show_catalog" },
+                    { text: "Volver", icon: "fa-arrow-left", action: "show_catalog" }
+                ]
+            },
+            "add_to_cart_camisa": {
+                bot: ["¡Camisa Casual agregada a tu carrito! 🛒"],
+                replies: [
+                    { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
+                    { text: "Ver carrito", icon: "fa-shopping-cart", action: "view_cart" },
+                    { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
+                ]
+            },
+             "add_to_cart_pantalon": {
+                bot: ["¡Pantalón de Mezclilla agregado a tu carrito! 🛒"],
+                replies: [
+                    { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
+                    { text: "Ver carrito", icon: "fa-shopping-cart", action: "view_cart" },
+                    { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
+                ]
+            },
+            "view_cart": {
+                bot: ["En tu carrito tienes: Camisa Casual ($499.00). Total: $499.00."],
+                replies: [
+                    { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
+                    { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
+                ]
+            },
+            "checkout": {
+                bot: ["Perfecto. Para completar tu compra, por favor haz clic en el siguiente enlace seguro. ¡Gracias por comprar en Linnia!"],
+                replies: [
+                    { text: "Finalizar Compra (Simulado)", icon: "fa-lock", action: "end_conversation" },
+                    { text: "Cancelar", icon: "fa-times", action: "start" }
+                ]
+            },
+            "show_offers": {
+                bot: ["¡Hoy tenemos 20% de descuento en toda la categoría de Hogar! 🏡 Usa el código HOGAR20."],
+                replies: [
+                    { text: "Ver artículos de Hogar", icon: "fa-couch", action: "show_category_hogar" },
+                    { text: "Volver", icon: "fa-arrow-left", action: "start" }
+                ]
+            },
+            "track_order": {
+                bot: ["Para rastrear tu pedido, por favor introduce tu número de orden."],
+                replies: [
+                     { text: "Volver", icon: "fa-arrow-left", action: "start" }
+                ]
+            },
+             "help": {
+                bot: ["Claro, estoy aquí para ayudarte. ¿Qué necesitas?"],
+                replies: [
+                    { text: "Ver catálogo", icon: "fa-th", action: "show_catalog" },
+                    { text: "Rastrear mi pedido", icon: "fa-box", action: "track_order" },
+                    { text: "Hablar con un humano", icon: "fa-user", action: "human_support" }
+                ]
+            },
+            "human_support": {
+                bot: ["Entendido. Te estoy transfiriendo con un agente humano. Por favor, espera un momento..."],
+                replies: [
+                    { text: "Finalizar Chat", icon: "fa-times", action: "start" }
+                ]
+            },
+            "end_conversation": {
+                bot: ["¡Tu compra ha sido simulada con éxito! Gracias por usar Linnia. Vuelve pronto."],
+                replies: [
+                    { text: "Iniciar de nuevo", icon: "fa-redo", action: "start" }
+                ]
+            }
+        };
+
+        function displayUserMessage(text) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = text;
+            messagesContainer.appendChild(userMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function displayBotMessage(message) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const botMessageContainer = document.createElement('div');
+            botMessageContainer.className = 'message bot-message';
+
+            if (typeof message === 'string') {
+                botMessageContainer.textContent = message;
+            } else if (message.type === 'product') {
+                botMessageContainer.innerHTML = `
+                    <div class="product-card">
+                        <img src="${message.image}" alt="${message.name}" class="product-image">
+                        <div class="product-info">
+                            <div class="product-name">${message.name}</div>
+                            <div class="product-price">${message.price}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(botMessageContainer);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function displayTypingIndicator() {
+            const messagesContainer = document.getElementById('chat-messages');
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message bot-message';
+            typingIndicator.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            messagesContainer.appendChild(typingIndicator);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return typingIndicator;
+        }
+
+        function updateQuickReplies(replies) {
+            const repliesContainer = document.querySelector('#chat-input-container .quick-replies');
+            repliesContainer.innerHTML = '';
+            replies.forEach(reply => {
+                const replyButton = document.createElement('div');
+                replyButton.className = 'quick-reply';
+                replyButton.setAttribute('onclick', `sendQuickReply('${reply.action}')`);
+                replyButton.innerHTML = `<i class="fas ${reply.icon}"></i> ${reply.text}`;
+                repliesContainer.appendChild(replyButton);
             });
         }
 
-        // Initialize
+        function sendQuickReply(action) {
+            // Find the text associated with the action for display
+            const repliesContainer = document.querySelector('#chat-input-container .quick-replies');
+            let userMessageText = '';
+            for(let i = 0; i < repliesContainer.children.length; i++){
+                const button = repliesContainer.children[i];
+                if(button.getAttribute('onclick') === `sendQuickReply('${action}')`){
+                    userMessageText = button.textContent.trim();
+                    break;
+                }
+            }
+            
+            if(userMessageText) displayUserMessage(userMessageText);
+
+            const response = chatResponses[action];
+            if (!response) return;
+
+            const typingIndicator = displayTypingIndicator();
+            updateQuickReplies([]); // Clear buttons while bot is "thinking"
+
+            setTimeout(() => {
+                typingIndicator.remove();
+                
+                response.bot.forEach(message => {
+                    displayBotMessage(message);
+                });
+
+                if (response.replies) {
+                    updateQuickReplies(response.replies);
+                }
+            }, 1200); // Simulate bot thinking time
+        }
+        
+        function initEcommerceDemo() {
+            const initialResponse = chatResponses['start'];
+            updateQuickReplies(initialResponse.replies);
+        }
+        
+        // Scroll suave para enlaces de navegación
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Cambiar estilo de navegación al hacer scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Botón flotante para volver arriba
+        document.getElementById('scrollToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Inicialización cuando el DOM está listo
         document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            startChat();
-            window.chatInitialized = true;
+            initParticles();
+            initAnimations();
         });
     </script>
 </body>

@@ -396,23 +396,204 @@ body {
     gap: 0.75rem;
     animation: scroll-ui 8s linear infinite;
 }
-.ui-header {
-    height: 30px;
-    background-color: #e0e0e0;
-    border-radius: 0.25rem;
-    margin-bottom: 1rem;
-}
-.ui-card {
-    height: 80px;
-    background-color: #d1d5db;
-    border-radius: 0.5rem;
-}
-.ui-card.small {
-    height: 50px;
+
+/* Split.js specific styles */
+.split-container {
+    display: flex;
+    flex-direction: row;
 }
 
-@keyframes scroll-ui {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-30%); }
-    100% { transform: translateY(0); }
+.gutter {
+    background-color: #374151; /* gray-700 */
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bM/5+BgeEzkA2Mv5lM9GQdABAvI3k8EwD9TLeA02ZCrAAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+}
+
+/* WhatsApp Demo Styles */
+.whatsapp-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #0d1418; /* WhatsApp dark background */
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.whatsapp-header {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: #2a2f32; /* WhatsApp dark header */
+    gap: 0.75rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.whatsapp-messages {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background-image: url('assets/whatsapp_bg.png');
+    background-blend-mode: overlay;
+    background-color: rgba(10, 10, 15, 0.8);
+}
+
+.whatsapp-bubble {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    max-width: 80%;
+    position: relative;
+}
+
+.whatsapp-bubble.user {
+    background-color: #056162; /* User bubble color */
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.whatsapp-bubble.bot {
+    background-color: #262d31; /* Bot bubble color */
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+.whatsapp-bubble .timestamp {
+    font-size: 0.7rem;
+    color: #a0a0a0;
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+.whatsapp-bubble .read {
+    color: #53bdeb; /* Blue check color */
+    margin-left: 0.25rem;
+}
+
+.whatsapp-input {
+    padding: 0.5rem;
+    background-color: #1e2428;
+}
+
+.whatsapp-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.whatsapp-options button {
+    background-color: #25d366;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.whatsapp-options button:hover {
+    background-color: #128c7e;
+}
+
+.typing-indicator span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #a0a0a0;
+    margin: 0 1px;
+    animation: typing-bounce 1s infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+}
+
+/* Flowchart Styles */
+#flow-panel .node {
+    padding: 10px;
+}
+
+#flow-panel .node rect {
+    rx: 8;
+    ry: 8;
+}
+
+#flow-panel .node .node-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#flow-panel .node .node-content i {
+    font-size: 1.2em;
+}
+
+#flow-panel .edge-path {
+    stroke-width: 2px;
+}
+
+#flow-panel .arrowhead {
+    fill: #4a4a4a;
+}
+
+.node.active > rect {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        stroke-width: 2px;
+        stroke: #fff;
+    }
+    50% {
+        stroke-width: 4px;
+        stroke: #ffab40;
+    }
+    100% {
+        stroke-width: 2px;
+        stroke: #fff;
+    }
+}
+
+.flow-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+    max-width: 250px;
+}
+
+/* Animated connections */
+.edge-path.path-A-B, .edge-path.path-D-E {
+    stroke-dasharray: 10;
+    animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: -20;
+    }
 }

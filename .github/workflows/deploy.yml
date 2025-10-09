@@ -1,0 +1,48 @@
+# Flujo de trabajo para desplegar un sitio simple a GitHub Pages
+name: Deploy GitHub Pages
+
+on:
+  # Se ejecuta en cada push a la rama "main"
+  push:
+    branches: ["main"]
+  # Permite ejecutarlo manualmente desde la pestaña de Actions en GitHub
+  workflow_dispatch:
+
+# Permisos para el GITHUB_TOKEN para permitir el despliegue
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permite un solo despliegue concurrente, cancelando los anteriores
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Único trabajo llamado "deploy"
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Obtiene el código de tu repositorio
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Prepara los archivos para la publicación (el artefacto)
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 3. Sube el artefacto. Apunta a la raíz de tu proyecto ('./')
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Sube el contenido de la carpeta raíz
+          path: './'
+
+      # 4. Despliega el artefacto en GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

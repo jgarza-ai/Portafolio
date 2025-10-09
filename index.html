@@ -542,6 +542,127 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        
+        /* Tech Stack */
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-category {
+            background: rgba(20, 20, 32, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-category:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .tech-category h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tech-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .tech-icon {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .tech-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .tech-icon img {
+            height: 48px;
+            transition: transform 0.3s ease;
+        }
+
+        .tech-icon span {
+            font-size: 0.875rem;
+            color: #e5e7eb;
+            margin-top: 0.75rem;
+        }
+        
+        .tech-stack-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (min-width: 1024px) {
+            .tech-stack-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Agent Visualization */
+        #agent-visualization {
+            position: relative;
+        }
+        .agent-node {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            width: 110px;
+            text-align: center;
+            transition: all 0.4s ease;
+            z-index: 10;
+            font-size: 12px;
+        }
+        .agent-node i {
+            font-size: 20px;
+            color: var(--primary);
+        }
+        .agent-node.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+            transform: scale(1.05);
+        }
+        #viz-user.active, #viz-agent.active, #viz-tool-search.active, #viz-response.active {
+            transform: translateX(-50%) scale(1.05);
+        }
+        .agent-line {
+            stroke: var(--secondary);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 0.8s ease-in-out;
+        }
+        .agent-line.active {
+            stroke-dashoffset: 0;
+        }
+        .product-message { display: flex; align-items: center; gap: 12px; background-color: transparent !important; padding: 0 !important; }
+        .product-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -556,6 +677,7 @@
                 <div class="hidden md:flex gap-8">
                     <a href="#home" class="hover:text-[var(--primary)] transition-colors">Inicio</a>
                     <a href="#proyectos" class="hover:text-[var(--primary)] transition-colors">Proyectos</a>
+                    <a href="#tech-stack" class="hover:text-[var(--primary)] transition-colors">Stack</a>
                     <a href="#demos" class="hover:text-[var(--primary)] transition-colors">Demos</a>
                     <a href="#contacto" class="hover:text-[var(--primary)] transition-colors">Contacto</a>
                 </div>
@@ -653,6 +775,125 @@
         </div>
     </section>
 
+    <!-- Tech Stack Section -->
+    <section id="tech-stack" class="py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-16 gradient-text">Mi Stack Tecnológico</h2>
+            <div class="tech-stack-grid">
+                <div class="tech-category">
+                    <h3>Automatización & No-Code</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon">
+                            <img src="https://static.cdnlogo.com/logos/n/19/n8n.svg" alt="n8n">
+                            <span>n8n</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://www.vectorlogo.zone/logos/make/make-icon.svg" alt="Make.com">
+                            <span>Make.com</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://avatars.githubusercontent.com/u/124463833?s=200&v=4" alt="Flowise">
+                            <span>Flowise</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>Desarrollo</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+                            <span>Python</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg" alt="Next.js" style="filter: invert(1);">
+                            <span>Next.js</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter">
+                            <span>Flutter</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" alt="WordPress" style="filter: invert(1);">
+                            <span>WordPress</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>IA & LLMs</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon">
+                            <img src="https://www.vectorlogo.zone/logos/openai/openai-icon.svg" alt="OpenAI" style="filter: invert(1);">
+                            <span>OpenAI</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg" alt="Gemini">
+                            <span>Gemini</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>BI & Reporting</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon">
+                            <img src="https://www.svgrepo.com/show/354213/power-bi.svg" alt="Power BI">
+                            <span>Power BI</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://www.svgrepo.com/show/353731/excel.svg" alt="Excel">
+                            <span>Excel</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>Sistemas & Cloud</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux">
+                            <span>Linux</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg" alt="Debian">
+                            <span>Debian</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redhat/redhat-original.svg" alt="RedHat">
+                            <span>RedHat</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure">
+                            <span>Azure</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt="GCP">
+                            <span>GCP</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>Bases de Datos</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL">
+                            <span>PostgreSQL</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
+                            <span>MySQL</span>
+                        </div>
+                        <div class="tech-icon">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQLite">
+                            <span>SQLite</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Demos Section -->
     <section id="demos" class="py-20 px-6">
         <div class="container mx-auto">
@@ -681,67 +922,115 @@
             </div>
 
             <!-- Demo Contents -->
-            <div class="glass rounded-2xl p-8">
+            <div class="glass rounded-2xl p-4 md:p-8">
                 <!-- WhatsApp Demo -->
                 <div id="demo-whatsapp" class="demo-content active">
-                    <div class="whatsapp-mockup">
-                        <div class="whatsapp-header">
-                            <div class="avatar"><i class="fas fa-robot"></i></div>
-                            <div>
-                                <div class="font-bold">E-Commerce Bot</div>
-                                <div class="text-sm text-gray-400">Online</div>
+                    <div class="grid lg:grid-cols-5 gap-8 items-start">
+                        <!-- Left Column: Chat Mockup -->
+                        <div class="lg:col-span-2">
+                            <div class="whatsapp-mockup">
+                                <div class="whatsapp-header">
+                                    <div class="avatar"><i class="fas fa-seedling"></i></div>
+                                    <div>
+                                        <div class="font-bold">Linnia</div>
+                                        <div class="text-sm text-gray-400" id="whatsapp-status">en línea</div>
+                                    </div>
+                                </div>
+                                <div class="whatsapp-messages" id="chat-messages"></div>
+                                <div class="message-options" id="chat-options"></div>
+                            </div>
+                            <div class="text-center mt-6">
+                                <button class="btn-primary" onclick="resetChat()">
+                                    <i class="fas fa-redo mr-2"></i>Reiniciar Conversación
+                                </button>
                             </div>
                         </div>
-                        <div class="whatsapp-messages" id="chat-messages"></div>
-                        <div class="message-options" id="chat-options"></div>
-                    </div>
-                    <div class="text-center mt-6">
-                        <button class="btn-primary" onclick="resetChat()">
-                            <i class="fas fa-redo mr-2"></i>Reiniciar Conversación
-                        </button>
+
+                        <!-- Right Column: Agent Visualization -->
+                        <div class="lg:col-span-3 glass p-6 rounded-xl">
+                            <h3 class="text-xl font-bold text-center mb-6 gradient-text">Proceso del Agente IA</h3>
+                            <div class="relative flex flex-col items-center justify-center min-h-[450px]" id="viz-container">
+                                <!-- Nodes -->
+                                <div class="agent-node" id="viz-user" style="top: 0; left: 50%; transform: translateX(-50%);">
+                                    <i class="fas fa-comment"></i><span>Usuario</span>
+                                </div>
+                                <div class="agent-node" id="viz-agent" style="top: 120px; left: 50%; transform: translateX(-50%);">
+                                    <i class="fas fa-robot"></i><span>Agente Linnia</span>
+                                </div>
+                                <div class="agent-node" id="viz-tool-promo" style="top: 240px; left: 0;">
+                                    <i class="fas fa-tags"></i><span>Tool: Get Promotions</span>
+                                </div>
+                                <div class="agent-node" id="viz-tool-search" style="top: 240px; left: 50%; transform: translateX(-50%);">
+                                    <i class="fas fa-search"></i><span>Tool: Product Search</span>
+                                </div>
+                                <div class="agent-node" id="viz-tool-cart" style="top: 240px; right: 0;">
+                                    <i class="fas fa-shopping-cart"></i><span>Tool: Add to Cart</span>
+                                </div>
+                                <div class="agent-node" id="viz-response" style="top: 360px; left: 50%; transform: translateX(-50%);">
+                                    <i class="fas fa-reply"></i><span>Respuesta</span>
+                                </div>
+
+                                <!-- SVG Lines -->
+                                <svg class="absolute top-0 left-0 w-full h-full z-0" id="viz-svg">
+                                    <!-- User -> Agent -->
+                                    <path id="line-user-agent" class="agent-line" d="M 150 55 V 120" />
+                                    <!-- Agent -> Tools -->
+                                    <path id="line-agent-promo" class="agent-line" d="M 150 165 C 150 200, 60 200, 60 240" />
+                                    <path id="line-agent-search" class="agent-line" d="M 150 165 V 240" />
+                                    <path id="line-agent-cart" class="agent-line" d="M 150 165 C 150 200, 240 200, 240 240" />
+                                    <!-- Tools -> Agent -->
+                                    <path id="line-promo-agent" class="agent-line" d="M 60 295 C 60 200, 150 200, 150 165" />
+                                    <path id="line-search-agent" class="agent-line" d="M 150 295 V 165" />
+                                    <path id="line-cart-agent" class="agent-line" d="M 240 295 C 240 200, 150 200, 150 165" />
+                                    <!-- Agent -> Response -->
+                                    <path id="line-agent-response" class="agent-line" d="M 150 165 V 360" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ETL Demo -->
                 <div id="demo-etl" class="demo-content">
-                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="grid md:grid-cols-3 gap-6">
                         <div class="glass p-4 rounded-lg col-span-1">
                             <div class="control-group">
-                                <label class="text-sm font-medium">Documentos: <span id="doc-count">1000</span></label>
-                                <input type="range" class="slider" id="doc-slider" min="100" max="10000" value="1000" step="100">
+                                <label class="text-sm font-medium">Registros a Procesar: <span id="doc-count-visual">5000</span></label>
+                                <input type="range" class="slider" id="doc-slider-visual" min="100" max="50000" value="5000" step="100">
                             </div>
                             <div class="control-group mt-4">
                                 <label class="text-sm font-medium">Progreso</label>
                                 <div class="progress-bar">
-                                    <div class="progress-fill" id="etl-progress"></div>
+                                    <div class="progress-fill" id="etl-progress-visual"></div>
                                 </div>
-                                <div class="text-center mt-2 text-sm text-gray-400" id="etl-status">Listo para iniciar</div>
+                                <div class="text-center mt-2 text-sm text-gray-400" id="etl-status-visual">Listo para iniciar</div>
                             </div>
-                            <button class="btn-primary w-full mt-4" id="run-etl" onclick="runETL()">
+                            <button class="btn-primary w-full mt-4" id="run-etl-visual" onclick="runETLVisual()">
                                 <i class="fas fa-play mr-2"></i>Ejecutar Proceso
                             </button>
                         </div>
-                        <div class="col-span-2">
-                            <div class="etl-pipeline">
-                                <div class="etl-stage" id="stage-input">
-                                    <div class="etl-icon"><i class="fas fa-file-excel"></i></div>
-                                    <span>Input</span>
+                        <div class="col-span-2 glass p-4 rounded-xl relative min-h-[350px] flex items-center justify-center overflow-hidden" id="etl-canvas">
+                            <div class="etl-viz-item" id="viz-excel">
+                                <i class="fas fa-file-excel text-green-400 text-6xl"></i>
+                                <div class="mt-2">Datos de Origen</div>
+                            </div>
+                            <div class="etl-viz-item doc-template" id="viz-doc">
+                                <div class="doc-header">REQUERIMIENTO</div>
+                                <p>Estimado <span class="placeholder" id="ph-name">[[NOMBRE]]</span>,</p>
+                                <p>Le informamos que su cuenta <span class="placeholder" id="ph-account">[[CUENTA]]</span> presenta un adeudo de <span class="placeholder" id="ph-amount">[[MONTO]]</span>.</p>
+                                <p class="mt-4">Fecha Límite: <span class="placeholder" id="ph-date">[[FECHA]]</span></p>
+                            </div>
+                            <div class="etl-viz-item" id="viz-batch">
+                                <div class="file-batch">
+                                    <i class="fas fa-copy"></i>
+                                    <i class="fas fa-copy"></i>
+                                    <i class="fas fa-copy"></i>
                                 </div>
-                                <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
-                                <div class="etl-stage" id="stage-process">
-                                    <div class="etl-icon"><i class="fas fa-cogs"></i></div>
-                                    <span>Procesamiento</span>
-                                </div>
-                                <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
-                                <div class="etl-stage" id="stage-merge">
-                                    <div class="etl-icon"><i class="fas fa-file-invoice"></i></div>
-                                    <span>Merge</span>
-                                </div>
-                                <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
-                                <div class="etl-stage" id="stage-output">
-                                    <div class="etl-icon"><i class="fas fa-file-pdf"></i></div>
-                                    <span>Output</span>
-                                </div>
+                                <div class="mt-2">Lote de Archivos</div>
+                            </div>
+                            <div class="etl-viz-item" id="viz-printer">
+                                <i class="fas fa-print text-gray-400 text-6xl"></i>
+                                <div class="mt-2">Impresora</div>
                             </div>
                         </div>
                     </div>
@@ -900,6 +1189,8 @@
         // Particles
         function createParticles() {
             const container = document.getElementById('particles');
+            if (!container) return;
+            container.innerHTML = ''; // Clear existing particles
             for (let i = 0; i < 50; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -925,9 +1216,13 @@
                 document.getElementById('demo-' + demoId).classList.add('active');
                 
                 // Initialize specific demos when activated
-                if (demoId === 'whatsapp' && !window.chatInitialized) {
-                    startChat();
-                    window.chatInitialized = true;
+                if (demoId === 'whatsapp') {
+                    if (!window.chatInitialized) {
+                        startChat();
+                        window.chatInitialized = true;
+                    } else {
+                        resetChat();
+                    }
                 }
                 if (demoId === 'financial' && !window.chartInitialized) {
                     initFinancialChart();
@@ -940,72 +1235,106 @@
             });
         });
 
-        // WhatsApp Chat Demo
-        const chatFlow = [
-            { type: 'bot', text: '¡Hola! Bienvenido a nuestra tienda. ¿En qué puedo ayudarte hoy?', delay: 500 },
-            { type: 'options', options: ['Ver catálogo', 'Rastrear pedido', 'Hablar con agente'], delay: 1000 },
+        // --- Linnia WhatsApp Demo Logic ---
+        const linniaDemoFlow = [
+            {
+                step: 0,
+                action: 'start',
+                messages: [
+                    { from: 'bot', text: '¡Hola! Soy Linnia, tu asistente de compras. Te comento que hoy tenemos un 20% de descuento en productos para el cuidado de la piel.', delay: 1500 }
+                ],
+                visualize: [
+                    { type: 'node', id: 'viz-agent', duration: 500 },
+                    { type: 'line', id: 'line-agent-promo', delay: 500 },
+                    { type: 'node', id: 'viz-tool-promo', delay: 1000, duration: 1500 },
+                    { type: 'line', id: 'line-promo-agent', delay: 1500 },
+                    { type: 'line', id: 'line-agent-response', delay: 2000 },
+                    { type: 'node', id: 'viz-response', delay: 2500, duration: 1000 }
+                ],
+                options: ['Busco algo para la energía', 'Ver productos para la piel', '¿Qué es Linnia?']
+            },
+            {
+                step: 1,
+                trigger: 'Busco algo para la energía',
+                messages: [
+                    { from: 'user', text: 'Busco algo para darme más energía' },
+                    { from: 'bot', text: 'Entendido, buscas más energía. Permíteme revisar...', delay: 1200 },
+                    { from: 'bot', text: 'Encontré estos productos que te pueden ayudar:', products: [
+                        { name: 'Vitality Boost', price: '$450.00', img: 'https://i.imgur.com/5yS6m2N.png' },
+                        { name: 'Focus Max', price: '$520.00', img: 'https://i.imgur.com/tZ8sL0s.png' }
+                    ], delay: 3000 }
+                ],
+                visualize: [
+                    { type: 'node', id: 'viz-user', duration: 500 },
+                    { type: 'line', id: 'line-user-agent', delay: 500 },
+                    { type: 'node', id: 'viz-agent', delay: 1000, duration: 2500 },
+                    { type: 'line', id: 'line-agent-search', delay: 1500 },
+                    { type: 'node', id: 'viz-tool-search', delay: 2000, duration: 1500 },
+                    { type: 'line', id: 'line-search-agent', delay: 2500 },
+                    { type: 'line', id: 'line-agent-response', delay: 3000 },
+                    { type: 'node', id: 'viz-response', delay: 3500, duration: 1000 }
+                ],
+                options: ['Quiero el Vitality Boost', 'Más detalles de Focus Max']
+            },
+            {
+                step: 2,
+                trigger: 'Quiero el Vitality Boost',
+                messages: [
+                    { from: 'user', text: 'Quiero el Vitality Boost' },
+                    { from: 'bot', text: '¡Perfecto! Agregué 1 \'Vitality Boost\' a tu orden. El total es $450.00.', delay: 1200 }
+                ],
+                visualize: [
+                    { type: 'node', id: 'viz-user', duration: 500 },
+                    { type: 'line', id: 'line-user-agent', delay: 500 },
+                    { type: 'node', id: 'viz-agent', delay: 1000, duration: 2500 },
+                    { type: 'line', id: 'line-agent-cart', delay: 1500 },
+                    { type: 'node', id: 'viz-tool-cart', delay: 2000, duration: 1500 },
+                    { type: 'line', id: 'line-cart-agent', delay: 2500 },
+                    { type: 'line', id: 'line-agent-response', delay: 3000 },
+                    { type: 'node', id: 'viz-response', delay: 3500, duration: 1000 }
+                ],
+                options: ['Finalizar compra', 'Seguir buscando']
+            }
         ];
-
-        const responses = {
-            'Ver catálogo': [
-                { type: 'user', text: 'Ver catálogo', delay: 300 },
-                { type: 'bot', text: '¡Claro! Aquí están nuestras categorías:', delay: 800 },
-                { type: 'options', options: ['Electrónicos', 'Ropa', 'Hogar'], delay: 500 }
-            ],
-            'Rastrear pedido': [
-                { type: 'user', text: 'Rastrear pedido', delay: 300 },
-                { type: 'bot', text: 'Por supuesto. Por favor, ingresa tu número de pedido para rastrearlo.', delay: 800 }
-            ],
-            'Hablar con agente': [
-                { type: 'user', text: 'Hablar con agente', delay: 300 },
-                { type: 'bot', text: 'Te estoy transfiriendo con un agente humano. Un momento por favor...', delay: 800 }
-            ],
-            'Electrónicos': [
-                { type: 'user', text: 'Electrónicos', delay: 300 },
-                { type: 'bot', text: 'Tenemos laptops, smartphones y tablets. ¿Qué te interesa?', delay: 800 }
-            ],
-            'Ropa': [
-                { type: 'user', text: 'Ropa', delay: 300 },
-                { type: 'bot', text: 'Contamos con ropa para hombre, mujer y niños. ¿Qué buscas?', delay: 800 }
-            ],
-            'Hogar': [
-                { type: 'user', text: 'Hogar', delay: 300 },
-                { type: 'bot', text: 'Tenemos muebles, decoración y electrodomésticos disponibles.', delay: 800 }
-            ]
-        };
 
         let chatTimeout;
 
-        function addMessage(text, type) {
+        function addMessage(text, type, product = null) {
             const messagesContainer = document.getElementById('chat-messages');
+            if (!messagesContainer) return;
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
-            messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
+            let bubbleHTML = '';
+            if (product) {
+                bubbleHTML = `
+                    <div class="message-bubble product-message">
+                        <img src="${product.img}" alt="${product.name}" class="product-image">
+                        <div class="product-details">
+                            <div class="font-bold">${product.name}</div>
+                            <div>${product.price}</div>
+                        </div>
+                    </div>`;
+            } else {
+                bubbleHTML = `<div class="message-bubble">${text}</div>`;
+            }
+            messageDiv.innerHTML = bubbleHTML;
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        function showTyping() {
-            const messagesContainer = document.getElementById('chat-messages');
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message bot';
-            typingDiv.id = 'typing-indicator';
-            typingDiv.innerHTML = `
-                <div class="message-bubble typing-indicator">
-                    <span></span><span></span><span></span>
-                </div>
-            `;
-            messagesContainer.appendChild(typingDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        function showTyping(status = 'escribiendo...') {
+            const statusEl = document.getElementById('whatsapp-status');
+            if(statusEl) statusEl.textContent = status;
         }
 
-        function removeTyping() {
-            const typing = document.getElementById('typing-indicator');
-            if (typing) typing.remove();
+        function hideTyping() {
+            const statusEl = document.getElementById('whatsapp-status');
+            if(statusEl) statusEl.textContent = 'en línea';
         }
 
         function showOptions(options) {
             const optionsContainer = document.getElementById('chat-options');
+            if (!optionsContainer) return;
             optionsContainer.innerHTML = '';
             options.forEach(option => {
                 const btn = document.createElement('button');
@@ -1016,54 +1345,93 @@
             });
         }
 
-        function handleOption(option) {
-            document.getElementById('chat-options').innerHTML = '';
+        function clearVisualization() {
+            document.querySelectorAll('.agent-node, .agent-line').forEach(el => el.classList.remove('active'));
+        }
+
+        function runVisualization(vizSteps = []) {
+            clearVisualization();
+            vizSteps.forEach(step => {
+                setTimeout(() => {
+                    const el = document.getElementById(step.id);
+                    if (el) {
+                        el.classList.add('active');
+                        if (step.type === 'node' && step.duration) {
+                            setTimeout(() => el.classList.remove('active'), step.duration);
+                        }
+                    }
+                }, step.delay || 0);
+            });
+        }
+
+        function runDemoStep(step) {
+            if (!step) return;
+            const optionsContainer = document.getElementById('chat-options');
+            if(optionsContainer) optionsContainer.innerHTML = '';
             
-            if (responses[option]) {
-                responses[option].forEach((msg, index) => {
-                    chatTimeout = setTimeout(() => {
-                        if (msg.type === 'bot') {
+            runVisualization(step.visualize);
+
+            let messageChain = Promise.resolve();
+            step.messages.forEach(msg => {
+                messageChain = messageChain.then(() => new Promise(resolve => {
+                    setTimeout(() => {
+                        if (msg.from === 'bot') {
                             showTyping();
                             setTimeout(() => {
-                                removeTyping();
-                                addMessage(msg.text, 'bot');
-                            }, 1000);
-                        } else if (msg.type === 'user') {
+                                hideTyping();
+                                if (msg.products) {
+                                    addMessage(msg.text, 'bot');
+                                    msg.products.forEach(p => addMessage('', 'bot', p));
+                                } else {
+                                    addMessage(msg.text, 'bot');
+                                }
+                                resolve();
+                            }, 800);
+                        } else {
                             addMessage(msg.text, 'user');
-                        } else if (msg.type === 'options') {
-                            setTimeout(() => showOptions(msg.options), 500);
+                            resolve();
                         }
-                    }, msg.delay + (index * 1000));
-                });
+                    }, msg.delay || 0);
+                }));
+            });
+
+            messageChain.then(() => {
+                if (step.options) {
+                    showOptions(step.options);
+                }
+            });
+        }
+
+        function handleOption(option) {
+            const nextStep = linniaDemoFlow.find(s => s.trigger === option);
+            if (nextStep) {
+                runDemoStep(nextStep);
+            } else {
+                addMessage(option, 'user');
+                setTimeout(() => addMessage('Esa es una función interesante, pero esta demo se enfoca en el flujo de compra. ¡Intenta reiniciar!', 'bot'), 1000);
+                showOptions([]);
             }
         }
 
         function startChat() {
-            chatFlow.forEach((step, index) => {
-                chatTimeout = setTimeout(() => {
-                    if (step.type === 'bot') {
-                        showTyping();
-                        setTimeout(() => {
-                            removeTyping();
-                            addMessage(step.text, 'bot');
-                        }, 1000);
-                    } else if (step.type === 'options') {
-                        showOptions(step.options);
-                    }
-                }, step.delay + (index * 1500));
-            });
+            const firstStep = linniaDemoFlow.find(s => s.action === 'start');
+            runDemoStep(firstStep);
         }
 
         function resetChat() {
             clearTimeout(chatTimeout);
-            document.getElementById('chat-messages').innerHTML = '';
-            document.getElementById('chat-options').innerHTML = '';
+            const messagesContainer = document.getElementById('chat-messages');
+            const optionsContainer = document.getElementById('chat-options');
+            if(messagesContainer) messagesContainer.innerHTML = '';
+            if(optionsContainer) optionsContainer.innerHTML = '';
+            clearVisualization();
             startChat();
         }
 
         // ETL Demo
         document.getElementById('doc-slider')?.addEventListener('input', (e) => {
-            document.getElementById('doc-count').textContent = e.target.value;
+            const docCount = document.getElementById('doc-count');
+            if(docCount) docCount.textContent = e.target.value;
         });
 
         let etlRunning = false;
@@ -1073,50 +1441,59 @@
             etlRunning = true;
             
             const btn = document.getElementById('run-etl');
+            if(!btn) return;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Procesando...';
             
+            const processType = document.querySelector('input[name="etl-type"]:checked').value;
             const stages = ['input', 'process', 'merge', 'output'];
-            const arrows = document.querySelectorAll('.etl-arrow');
+            const arrows = document.querySelectorAll('#demo-etl .etl-arrow');
             const progress = document.getElementById('etl-progress');
             const status = document.getElementById('etl-status');
             
             // Reset
             stages.forEach(stage => {
-                document.getElementById('stage-' + stage).classList.remove('active');
+                const stageEl = document.getElementById('stage-' + stage);
+                if(stageEl) stageEl.classList.remove('active');
             });
             arrows.forEach(arrow => arrow.classList.remove('visible'));
-            progress.style.width = '0%';
+            if(progress) progress.style.width = '0%';
+
+            const statusTexts = {
+                'Multas': ['Leyendo base de datos...', 'Aplicando reglas de multas...', 'Generando requerimientos...', 'Enviando a impresión...'],
+                'Predial': ['Leyendo base de datos...', 'Calculando impuesto predial...', 'Generando citatorios...', 'Enviando a SFTP...']
+            };
             
             for (let i = 0; i < stages.length; i++) {
-                document.getElementById('stage-' + stages[i]).classList.add('active');
-                progress.style.width = ((i + 1) / stages.length * 100) + '%';
+                const stageEl = document.getElementById('stage-' + stages[i]);
+                if(stageEl) stageEl.classList.add('active');
+                if(progress) progress.style.width = ((i + 1) / stages.length * 100) + '%';
                 
-                const statusTexts = ['Cargando datos...', 'Procesando...', 'Aplicando templates...', 'Generando PDFs...'];
-                status.textContent = statusTexts[i];
+                if(status) status.textContent = statusTexts[processType][i];
                 
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                await new Promise(resolve => setTimeout(resolve, 1200));
                 
                 if (i < arrows.length) {
                     arrows[i].classList.add('visible');
                 }
             }
             
-            status.textContent = '¡Proceso completado!';
+            if(status) status.textContent = '¡Proceso completado!';
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-check mr-2"></i>Completado';
             etlRunning = false;
             
             setTimeout(() => {
                 btn.innerHTML = '<i class="fas fa-play mr-2"></i>Ejecutar Proceso';
-            }, 2000);
+            }, 3000);
         }
 
         // Financial Chart
         let portfolioChart;
 
         function initFinancialChart() {
-            const ctx = document.getElementById('portfolio-chart').getContext('2d');
+            const ctx = document.getElementById('portfolio-chart')?.getContext('2d');
+            if (!ctx) return;
             
             portfolioChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -1172,6 +1549,7 @@
             
             counters.forEach(counter => {
                 const element = document.getElementById(counter.id);
+                if (!element) return;
                 let current = 0;
                 const increment = counter.target / 50;
                 

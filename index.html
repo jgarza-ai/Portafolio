@@ -3,30 +3,548 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>José Garza | Desarrollador Full Stack y Especialista en Automatización e Integración Empresarial</title>
-    <meta name="description" content="Desarrollador Full Stack con más de 5 años de experiencia en automatización de procesos y agentes conversacionales. Especializado en n8n, Flowise, CRMs/ERPs y desarrollo con Python, JavaScript y Flutter.">
-    
+    <title>José Garza | Desarrollador Full Stack y Especialista en Automatización</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="style.css">
-
-    <!-- GSAP for animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- Split.js for split view -->
-    <script src="https://unpkg.com/split.js/dist/split.min.js"></script>
-    <!-- Mermaid for flowchart -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-
-    <!-- New Libraries for ETL Demo -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.6.2/countUp.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #00d9ff;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --dark: #0a0a0f;
+            --dark-card: #141420;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--dark);
+            color: #e5e7eb;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.2), transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(0, 217, 255, 0.2), transparent 50%);
+            animation: bgPulse 10s ease-in-out infinite;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: rgba(139, 92, 246, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(100vw, -100vh); opacity: 0; }
+        }
+        
+        .glass {
+            background: rgba(20, 20, 32, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Project Cards */
+        .project-card {
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .project-card:hover::before {
+            left: 100%;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.3);
+        }
+        
+        /* Demo Styles */
+        .demo-container {
+            min-height: 500px;
+            position: relative;
+        }
+        
+        /* WhatsApp Demo */
+        .whatsapp-mockup {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #0d1418;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        .whatsapp-header {
+            background: #2a2f32;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .whatsapp-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: linear-gradient(to bottom, #0a0a0f, #141420);
+        }
+        
+        .message {
+            margin-bottom: 12px;
+            animation: slideIn 0.4s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message-bubble {
+            padding: 10px 14px;
+            border-radius: 8px;
+            max-width: 80%;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .message.bot .message-bubble {
+            background: #262d31;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .message.user {
+            text-align: right;
+        }
+        
+        .message.user .message-bubble {
+            background: #056162;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+            padding: 10px 14px;
+        }
+        
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #666;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        .message-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 20px 20px;
+        }
+        
+        .option-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .option-btn:hover {
+            background: #128c7e;
+            transform: scale(1.05);
+        }
+        
+        /* ETL Demo */
+        .etl-pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 40px 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .etl-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.4;
+            transition: all 0.5s;
+        }
+        
+        .etl-stage.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .etl-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            background: var(--dark-card);
+            transition: all 0.5s;
+        }
+        
+        .etl-stage.active .etl-icon {
+            background: var(--secondary);
+            border-color: var(--primary);
+            box-shadow: 0 0 30px var(--secondary);
+        }
+        
+        .etl-arrow {
+            font-size: 30px;
+            color: var(--secondary);
+            opacity: 0;
+            transform: scaleX(0);
+            transition: all 0.5s;
+        }
+        
+        .etl-arrow.visible {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+        
+        .etl-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--dark);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--dark);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        /* Financial Demo */
+        .risk-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .risk-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--secondary);
+            background: transparent;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .risk-btn.active {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+        
+        .portfolio-chart {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        /* Scraping Demo */
+        .scraping-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .metric-card {
+            background: var(--dark-card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .metric-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            padding: 20px;
+        }
+        
+        .bar {
+            width: 40px;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            border-radius: 4px 4px 0 0;
+            transform-origin: bottom;
+            transform: scaleY(0);
+            animation: growBar 1s ease forwards;
+        }
+        
+        @keyframes growBar {
+            to { transform: scaleY(1); }
+        }
+        
+        /* Mobile App Demo */
+        .phone-mockup {
+            width: 300px;
+            height: 600px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .app-ui {
+            padding: 20px;
+            color: white;
+        }
+        
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .balance-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        
+        .transaction {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            animation: slideIn 0.5s ease;
+        }
+        
+        /* Navigation Tabs */
+        .demo-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding: 10px;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: var(--dark-card);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: var(--primary);
+        }
+        
+        .demo-content {
+            display: none;
+        }
+        
+        .demo-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .etl-pipeline {
+                flex-direction: column;
+            }
+            
+            .etl-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .demo-tabs {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 217, 255, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-    <!-- Animated Background -->
     <div class="animated-bg"></div>
     <div class="particles" id="particles"></div>
 
@@ -36,535 +554,319 @@
             <div class="flex justify-between items-center">
                 <a href="#home" class="text-2xl font-bold gradient-text">JG</a>
                 <div class="hidden md:flex gap-8">
-                    <a href="#home" class="hover:text-primary transition-colors">Inicio</a>
-                    <a href="#proyectos" class="hover:text-primary transition-colors">Proyectos</a>
-                    <a href="#stack" class="hover:text-primary transition-colors">Stack</a>
-                    <a href="#demos" class="hover:text-primary transition-colors">Demos</a>
-                    <a href="#contacto" class="hover:text-primary transition-colors">Contacto</a>
+                    <a href="#home" class="hover:text-[var(--primary)] transition-colors">Inicio</a>
+                    <a href="#proyectos" class="hover:text-[var(--primary)] transition-colors">Proyectos</a>
+                    <a href="#demos" class="hover:text-[var(--primary)] transition-colors">Demos</a>
+                    <a href="#contacto" class="hover:text-[var(--primary)] transition-colors">Contacto</a>
                 </div>
-                <button id="menu-btn" class="md:hidden">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-40 glass hidden">
-        <div class="flex flex-col items-center justify-center h-full gap-8 text-xl">
-            <a href="#home" class="hover:text-primary transition-colors">Inicio</a>
-            <a href="#proyectos" class="hover:text-primary transition-colors">Proyectos</a>
-            <a href="#stack" class="hover:text-primary transition-colors">Stack</a>
-            <a href="#demos" class="hover:text-primary transition-colors">Demos</a>
-            <a href="#contacto" class="hover:text-primary transition-colors">Contacto</a>
-        </div>
-    </div>
-
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center pt-20 px-6 fade-in-section">
-        <div class="container mx-auto">
-            <div class="text-center reveal">
-                <h1 class="text-6xl md:text-7xl font-bold mb-4">
-                    <span class="gradient-text">José Garza</span>
-                </h1>
-                <h2 class="text-2xl md:text-3xl text-gray-400 mb-6">
-                    Desarrollador Full Stack y Especialista en Automatización e Integración Empresarial
-                </h2>
-                <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
-                    Desarrollador de sistemas inteligentes con más de 5 años de experiencia en automatización de procesos empresariales. 
-                    Especializado en <strong class="text-secondary">n8n</strong>, 
-                    <strong style="color: #ff6b35">Flowise</strong>, 
-                    <strong style="color: #25d366">WhatsApp APIs</strong> y soluciones de IA conversacional.
-                </p>
-                <div class="flex flex-wrap justify-center gap-4 mb-12">
-                    <a href="#demos" class="px-8 py-3 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold transition-transform btn-hover-effect">
-                        <i class="fas fa-laptop-code mr-2"></i>Ver Demos Interactivos
-                    </a>
-                    <a href="CV.pdf" class="px-8 py-3 border-2 border-primary rounded-full hover:bg-primary hover:text-dark transition-all btn-hover-effect">
-                        <i class="fas fa-download mr-2"></i>Descargar CV
-                    </a>
-                </div>
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20 px-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-6xl md:text-7xl font-bold mb-4">
+                <span class="gradient-text">José Garza</span>
+            </h1>
+            <h2 class="text-2xl md:text-3xl text-gray-400 mb-6">
+                Desarrollador Full Stack y Especialista en Automatización
+            </h2>
+            <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
+                +5 años transformando procesos empresariales con <strong style="color: var(--primary)">n8n</strong>, 
+                <strong style="color: var(--secondary)">Flowise</strong> y soluciones de IA conversacional.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <a href="#demos" class="btn-primary">
+                    <i class="fas fa-laptop-code mr-2"></i>Ver Demos Interactivos
+                </a>
+            </div>
 
-                <!-- Stats -->
-                <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
-                    <div class="glass p-6 rounded-xl">
-                        <div class="text-4xl font-bold gradient-text stat-number" data-target="50">0</div>
-                        <div class="text-sm text-gray-500 mt-2">Proyectos</div>
-                    </div>
-                    <div class="glass p-6 rounded-xl">
-                        <div class="text-4xl font-bold gradient-text stat-number" data-target="10">0</div>
-                        <div class="text-sm text-gray-500 mt-2">K+ Docs/Mes</div>
-                    </div>
-                    <div class="glass p-6 rounded-xl">
-                        <div class="text-4xl font-bold gradient-text stat-number" data-target="80">0</div>
-                        <div class="text-sm text-gray-500 mt-2">% Optimización</div>
-                    </div>
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
+                <div class="glass p-6 rounded-xl">
+                    <div class="text-4xl font-bold gradient-text" id="stat1">50+</div>
+                    <div class="text-sm text-gray-500 mt-2">Proyectos</div>
+                </div>
+                <div class="glass p-6 rounded-xl">
+                    <div class="text-4xl font-bold gradient-text" id="stat2">10K+</div>
+                    <div class="text-sm text-gray-500 mt-2">Docs/Mes</div>
+                </div>
+                <div class="glass p-6 rounded-xl">
+                    <div class="text-4xl font-bold gradient-text" id="stat3">80%</div>
+                    <div class="text-sm text-gray-500 mt-2">Optimización</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="proyectos" class="py-20 px-6 fade-in-section">
+    <section id="proyectos" class="py-20 px-6">
         <div class="container mx-auto">
-            <h2 class="text-5xl font-bold text-center mb-16 gradient-text reveal">Proyectos Destacados</h2>
+            <h2 class="text-5xl font-bold text-center mb-16 gradient-text">Proyectos Destacados</h2>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- GMD Scripts -->
                 <div class="project-card glass p-6 rounded-xl">
                     <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-file-alt text-4xl text-blue-400 icon-pulse"></i>
+                        <i class="fas fa-file-alt text-4xl" style="color: #00d9ff"></i>
                         <h3 class="text-xl font-bold">Generación Masiva de Documentos</h3>
                     </div>
                     <p class="text-gray-400 mb-4">
-                        Sistema desktop con GUI para AFC: automatiza generación, impresión y gestión de documentos legales. 
-                        Procesamiento batch con plantillas Word y base de datos Excel.
+                        Sistema automatizado que procesa +10K documentos legales mensuales con templates Word y Python.
                     </p>
                     <div class="flex flex-wrap gap-2 mb-4">
                         <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Python</span>
                         <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">PyQt5</span>
-                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">python-docx</span>
-                    </div>
-                    <div class="text-sm text-gray-500">
-                        ⚡ 10K+ docs/mes | ✓ Vista previa PDF | 🖨️ Impresión batch
                     </div>
                 </div>
 
-                <!-- Allianz Portfolio -->
                 <div class="project-card glass p-6 rounded-xl">
                     <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-chart-line text-4xl text-green-400 icon-pulse"></i>
+                        <i class="fas fa-chart-line text-4xl" style="color: #10b981"></i>
                         <h3 class="text-xl font-bold">Portfolio Intelligence IA</h3>
                     </div>
                     <p class="text-gray-400 mb-4">
-                        Plataforma web para optimización de portafolios financieros. Usa Markowitz + Google Gemini para 
-                        análisis de riesgo, recomendaciones personalizadas y generación de reportes PDF.
+                        Plataforma de optimización financiera con Markowitz y análisis IA para recomendaciones personalizadas.
                     </p>
                     <div class="flex flex-wrap gap-2 mb-4">
                         <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">FastAPI</span>
                         <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">React</span>
-                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Gemini AI</span>
-                    </div>
-                    <div class="text-sm text-gray-500">
-                        📊 Optimización Markowitz | 🤖 Análisis con IA | 📄 Reports PDF
                     </div>
                 </div>
 
-                <!-- Advantage Scraping -->
                 <div class="project-card glass p-6 rounded-xl">
                     <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-spider text-4xl text-purple-400 icon-pulse"></i>
-                        <h3 class="text-xl font-bold">Ad Intelligence Platform</h3>
+                        <i class="fas fa-robot text-4xl" style="color: #8b5cf6"></i>
+                        <h3 class="text-xl font-bold">E-Commerce Conversacional</h3>
                     </div>
                     <p class="text-gray-400 mb-4">
-                        Sistema autónomo de scraping multi-plataforma (Google, Meta, LinkedIn). Scrapy + Playwright 
-                        con scheduler, PostgreSQL y dashboard Streamlit para análisis competitivo.
+                        Bot de ventas vía WhatsApp con n8n y Flowise. +60% aumento en ventas automatizadas.
                     </p>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm">Scrapy</span>
-                        <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">PostgreSQL</span>
-                        <span class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">Streamlit</span>
-                    </div>
-                    <div class="text-sm text-gray-500">
-                        🕷️ Multi-platform | ⏰ Auto-scheduler | 📊 Analytics dashboard
-                    </div>
-                </div>
-
-                <!-- Government Automation -->
-                <div class="project-card glass p-6 rounded-xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-landmark text-4xl text-yellow-400 icon-pulse"></i>
-                        <h3 class="text-xl font-bold">Automatización Gubernamental</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Sistema para Secretaría de Finanzas: procesamiento automático de documentos fiscales. 
-                        Pipeline n8n + Python con Gemini y LLaMA local para validación.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Python</span>
-                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">Odoo</span>
-                        <span class="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm">n8n</span>
-                    </div>
-                    <div class="text-sm text-gray-500">
-                        ⚡ 10K+ docs/mes | ✓ 99% precisión | 📊 50K+ registros
-                    </div>
-                </div>
-
-                <!-- Multi-channel AI -->
-                <div class="project-card glass p-6 rounded-xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-phone-volume text-4xl text-cyan-400 icon-pulse"></i>
-                        <h3 class="text-xl font-bold">Sistema Multi-canal IA</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Integración Vapi (voz) + WhAPI (WhatsApp) con memoria conversacional ZEP. 
-                        Agendamiento automático y soporte 24/7 con múltiples canales.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Vapi</span>
-                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">WhAPI</span>
-                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">ZEP</span>
-                    </div>
-                    <div class="text-sm text-gray-500">
-                        📈 75% resolución automática | 🎯 +40% conversión
-                    </div>
-                </div>
-
-                <!-- RAG Assistant -->
-                <div class="project-card glass p-6 rounded-xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fas fa-brain text-4xl text-orange-400 icon-pulse"></i>
-                        <h3 class="text-xl font-bold">Asistente IA con RAG</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        Agente conversacional Flowise + LangChain con base de conocimientos vectorial. 
-                        MCPs personalizados para tareas específicas y memoria de largo plazo.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">Flowise</span>
-                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">LangChain</span>
-                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">OpenAI</span>
-                    </div>
-                    <div class="text-sm text-gray-500">
-                        🤖 En desarrollo | 🎯 Beta disponible
+                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">n8n</span>
+                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">Flowise</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Tech Stack Section -->
-    <section id="stack" class="py-20 px-6 fade-in-section">
-        <div class="container mx-auto">
-            <h2 class="text-5xl font-bold text-center mb-16 gradient-text reveal">Stack Tecnológico</h2>
-            
-            <!-- Main Technologies Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Automation & Workflow -->
-                <div class="tech-card glass p-6 rounded-xl reveal">
-                    <h3 class="text-lg font-bold mb-4 text-primary flex items-center gap-2">
-                        <i class="fas fa-robot"></i> Automatización
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
-                            <i class="fas fa-robot text-2xl text-primary"></i>
-                            <span class="text-sm font-medium">n8n</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
-                            <i class="devicon-nodejs-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Node.js</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
-                            <i class="devicon-python-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Python</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
-                            <i class="devicon-docker-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Docker</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AI & LLMs -->
-                <div class="tech-card glass p-6 rounded-xl reveal">
-                    <h3 class="text-lg font-bold mb-4 text-secondary flex items-center gap-2">
-                        <i class="fas fa-brain"></i> IA & LLMs
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
-                            <i class="devicon-openai-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">OpenAI GPT</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
-                            <i class="fas fa-robot text-orange-400 text-2xl"></i>
-                            <span class="text-sm font-medium">Flowise</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
-                            <i class="devicon-google-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Gemini AI</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
-                            <i class="fas fa-link text-cyan-400 text-2xl"></i>
-                            <span class="text-sm font-medium">LangChain</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Data & Cloud -->
-                <div class="tech-card glass p-6 rounded-xl reveal">
-                    <h3 class="text-lg font-bold mb-4 text-yellow-400 flex items-center gap-2">
-                        <i class="fas fa-database"></i> Data & Cloud
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
-                            <i class="devicon-postgresql-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">PostgreSQL</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
-                            <i class="devicon-mysql-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">MySQL</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
-                            <i class="devicon-redis-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Redis</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
-                            <i class="devicon-supabase-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Supabase</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Development -->
-                <div class="tech-card glass p-6 rounded-xl reveal">
-                    <h3 class="text-lg font-bold mb-4 text-accent flex items-center gap-2">
-                        <i class="fas fa-code"></i> Desarrollo
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
-                            <i class="devicon-python-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Python</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
-                            <i class="devicon-javascript-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">JavaScript</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
-                            <i class="devicon-react-original colored text-2xl"></i>
-                            <span class="text-sm font-medium">React</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
-                            <i class="devicon-fastapi-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">FastAPI</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Technologies -->
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Web Scraping -->
-                <div class="tech-card glass p-6 rounded-xl reveal">
-                    <h3 class="text-lg font-bold mb-4 text-red-400 flex items-center gap-2">
-                        <i class="fas fa-spider"></i> Web Scraping
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
-                            <i class="fas fa-spider text-red-400 text-2xl"></i>
-                            <span class="text-sm font-medium">Scrapy</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
-                            <i class="devicon-playwright-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Playwright</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
-                            <i class="devicon-selenium-original colored text-2xl"></i>
-                            <span class="text-sm font-medium">Selenium</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
-                            <i class="fas fa-soup text-green-400 text-2xl"></i>
-                            <span class="text-sm font-medium">BeautifulSoup</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Business Tools -->
-                <div class="tech-card glass p-6 rounded-xl reveal">
-                    <h3 class="text-lg font-bold mb-4 text-purple-400 flex items-center gap-2">
-                        <i class="fas fa-briefcase"></i> ERP & Business
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
-                            <i class="fas fa-cogs text-purple-400 text-2xl"></i>
-                            <span class="text-sm font-medium">Odoo ERP</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
-                            <i class="fas fa-chart-bar text-2xl text-purple-400"></i>
-                            <span class="text-sm font-medium">Power BI</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
-                            <i class="devicon-msexcel-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Excel VBA</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
-                            <i class="fas fa-headset text-cyan-400 text-2xl"></i>
-                            <span class="text-sm font-medium">Zendesk</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- DevOps & Tools -->
-                <div class="tech-card glass p-6 rounded-xl reveal">
-                    <h3 class="text-lg font-bold mb-4 text-cyan-400 flex items-center gap-2">
-                        <i class="fas fa-tools"></i> DevOps & Tools
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
-                            <i class="devicon-github-original colored text-2xl"></i>
-                            <span class="text-sm font-medium">Git/GitHub</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
-                            <i class="devicon-linux-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Linux/Ubuntu</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
-                            <i class="devicon-azure-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">Azure</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
-                            <i class="devicon-googlecloud-plain colored text-2xl"></i>
-                            <span class="text-sm font-medium">GCP</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
 
     <!-- Demos Section -->
-    <section id="demos" class="py-20 px-6 fade-in-section">
+    <section id="demos" class="py-20 px-6">
         <div class="container mx-auto">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-5xl font-bold mb-4 gradient-text">Demos Interactivos</h2>
-                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
-                    Explora simulaciones interactivas de mis proyectos más destacados.
-                </p>
+            <h2 class="text-5xl font-bold text-center mb-8 gradient-text">Demos Interactivos</h2>
+            <p class="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
+                Explora simulaciones funcionales de mis proyectos más destacados
+            </p>
+
+            <!-- Demo Tabs -->
+            <div class="demo-tabs">
+                <button class="tab-btn active" data-demo="whatsapp">
+                    <i class="fab fa-whatsapp mr-2"></i>Chatbot WhatsApp
+                </button>
+                <button class="tab-btn" data-demo="etl">
+                    <i class="fas fa-cogs mr-2"></i>Pipeline ETL
+                </button>
+                <button class="tab-btn" data-demo="financial">
+                    <i class="fas fa-chart-pie mr-2"></i>Asesor Financiero
+                </button>
+                <button class="tab-btn" data-demo="scraping">
+                    <i class="fas fa-spider mr-2"></i>Web Scraping
+                </button>
+                <button class="tab-btn" data-demo="mobile">
+                    <i class="fas fa-mobile-alt mr-2"></i>App Móvil
+                </button>
             </div>
 
-            <!-- Swiper Carousel -->
-            <div class="swiper-container glass rounded-2xl p-4 md:p-8 relative">
-                <div class="swiper-wrapper">
-                    <!-- Slide 1: E-Commerce Chatbot -->
-                    <div class="swiper-slide">
-                        <div class="demo-slide-content w-full h-full">
-                            <h3 class="text-2xl font-bold mb-4">E-Commerce Chatbot</h3>
-                            <div id="split-container" class="split-container w-full h-[400px]">
-                                <div id="whatsapp-panel" class="split bg-gray-800 rounded-l-lg">
-                                    <!-- WhatsApp UI will be generated here -->
-                                </div>
-                                <div id="flow-panel" class="split bg-gray-900 rounded-r-lg">
-                                    <!-- Flowchart will be rendered here -->
-                                </div>
+            <!-- Demo Contents -->
+            <div class="glass rounded-2xl p-8">
+                <!-- WhatsApp Demo -->
+                <div id="demo-whatsapp" class="demo-content active">
+                    <div class="whatsapp-mockup">
+                        <div class="whatsapp-header">
+                            <div class="avatar"><i class="fas fa-robot"></i></div>
+                            <div>
+                                <div class="font-bold">E-Commerce Bot</div>
+                                <div class="text-sm text-gray-400">Online</div>
                             </div>
                         </div>
+                        <div class="whatsapp-messages" id="chat-messages"></div>
+                        <div class="message-options" id="chat-options"></div>
                     </div>
-                    <!-- Slide 2: Document Automation -->
-                    <div class="swiper-slide">
-                        <div class="demo-slide-content w-full h-full flex flex-col p-4 md:p-6">
-                            <h3 class="text-2xl font-bold mb-4 text-center">Visualización de Pipeline ETL</h3>
-                            <div class="flex-grow flex flex-col md:flex-row gap-4">
-                                <!-- Left Side: Controls and Stats -->
-                                <div class="w-full md:w-1/3 flex flex-col gap-4">
-                                    <div class="glass p-4 rounded-lg">
-                                        <label for="doc-volume-slider" class="block mb-2 text-sm font-medium">Volumen de Documentos: <span id="doc-volume-label" class="font-bold text-primary">100</span></label>
-                                        <input id="doc-volume-slider" type="range" min="100" max="10000" value="100" step="100" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
-                                    </div>
-                                    <div class="glass p-4 rounded-lg flex-grow">
-                                        <h4 class="text-lg font-bold mb-2">Estadísticas</h4>
-                                        <div class="flex items-center justify-between">
-                                            <span>Documentos Procesados:</span>
-                                            <span id="processed-docs-counter" class="text-2xl font-bold text-secondary">0</span>
-                                        </div>
-                                        <div class="mt-4">
-                                            <canvas id="doc-type-chart"></canvas>
-                                        </div>
-                                    </div>
-                                    <button id="run-etl-button" class="w-full px-6 py-3 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold transition-transform btn-hover-effect">
-                                        <i class="fas fa-play mr-2"></i>Run Process
-                                    </button>
-                                </div>
-                                <!-- Right Side: Animation Canvas -->
-                                <div class="w-full md:w-2/3 glass rounded-lg p-4">
-                                    <div id="etl-pipeline-container" class="w-full h-full"></div>
-                                </div>
+                    <div class="text-center mt-6">
+                        <button class="btn-primary" onclick="resetChat()">
+                            <i class="fas fa-redo mr-2"></i>Reiniciar Conversación
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ETL Demo -->
+                <div id="demo-etl" class="demo-content">
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                        <div class="glass p-4 rounded-lg col-span-1">
+                            <div class="control-group">
+                                <label class="text-sm font-medium">Documentos: <span id="doc-count">1000</span></label>
+                                <input type="range" class="slider" id="doc-slider" min="100" max="10000" value="1000" step="100">
                             </div>
-                        </div>
-                    </div>
-                    <!-- Slide 3: Web Scraping Dashboard -->
-                    <div class="swiper-slide">
-                        <div class="demo-slide-content">
-                            <h3 class="text-2xl font-bold mb-4">Web Scraping Dashboard</h3>
-                            <div class="dashboard-demo">
-                                <div class="chart-bar" style="height: 60%;"></div>
-                                <div class="chart-bar" style="height: 80%;"></div>
-                                <div class="chart-bar" style="height: 40%;"></div>
-                                <div class="chart-bar" style="height: 90%;"></div>
-                                <div class="chart-bar" style="height: 70%;"></div>
+                            <div class="control-group mt-4">
+                                <label class="text-sm font-medium">Progreso</label>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="etl-progress"></div>
+                                </div>
+                                <div class="text-center mt-2 text-sm text-gray-400" id="etl-status">Listo para iniciar</div>
                             </div>
+                            <button class="btn-primary w-full mt-4" id="run-etl" onclick="runETL()">
+                                <i class="fas fa-play mr-2"></i>Ejecutar Proceso
+                            </button>
                         </div>
-                    </div>
-                    <!-- Slide 4: Financial Advisor -->
-                    <div class="swiper-slide">
-                        <div class="demo-slide-content">
-                            <h3 class="text-2xl font-bold mb-4">Financial Advisor</h3>
-                            <select id="risk-profile-selector" class="mb-4">
-                                <option value="conservative">Conservative</option>
-                                <option value="moderate">Moderate</option>
-                                <option value="aggressive">Aggressive</option>
-                            </select>
-                            <div id="doughnut-chart-container"></div>
-                        </div>
-                    </div>
-                    <!-- Slide 5: Mobile App - WallyUp -->
-                    <div class="swiper-slide">
-                        <div class="demo-slide-content">
-                            <h3 class="text-2xl font-bold mb-4">Mobile App - WallyUp</h3>
-                            <div class="phone-mockup-container">
-                                <div class="phone-screen">
-                                    <div class="wallyup-ui">
-                                        <div class="ui-header"></div>
-                                        <div class="ui-card"></div>
-                                        <div class="ui-card small"></div>
-                                        <div class="ui-card"></div>
-                                        <div class="ui-card small"></div>
-                                        <div class="ui-card"></div>
-                                        <div class="ui-card"></div>
-                                        <div class="ui-card small"></div>
-                                    </div>
+                        <div class="col-span-2">
+                            <div class="etl-pipeline">
+                                <div class="etl-stage" id="stage-input">
+                                    <div class="etl-icon"><i class="fas fa-file-excel"></i></div>
+                                    <span>Input</span>
+                                </div>
+                                <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
+                                <div class="etl-stage" id="stage-process">
+                                    <div class="etl-icon"><i class="fas fa-cogs"></i></div>
+                                    <span>Procesamiento</span>
+                                </div>
+                                <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
+                                <div class="etl-stage" id="stage-merge">
+                                    <div class="etl-icon"><i class="fas fa-file-invoice"></i></div>
+                                    <span>Merge</span>
+                                </div>
+                                <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
+                                <div class="etl-stage" id="stage-output">
+                                    <div class="etl-icon"><i class="fas fa-file-pdf"></i></div>
+                                    <span>Output</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Add Pagination -->
-                <div class="swiper-pagination"></div>
-                <!-- Add Navigation -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
+
+                <!-- Financial Demo -->
+                <div id="demo-financial" class="demo-content">
+                    <div class="risk-selector">
+                        <button class="risk-btn active" data-risk="conservative">Conservador</button>
+                        <button class="risk-btn" data-risk="moderate">Moderado</button>
+                        <button class="risk-btn" data-risk="aggressive">Agresivo</button>
+                    </div>
+                    <div class="portfolio-chart">
+                        <canvas id="portfolio-chart"></canvas>
+                    </div>
+                    <div class="text-center mt-6 text-gray-400">
+                        <p>Selecciona un perfil de riesgo para ver la distribución recomendada</p>
+                    </div>
+                </div>
+
+                <!-- Scraping Demo -->
+                <div id="demo-scraping" class="demo-content">
+                    <div class="scraping-dashboard">
+                        <div class="metric-card">
+                            <div class="metric-value" id="ads-count">0</div>
+                            <div class="metric-label">Anuncios Scrapeados</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="platforms-count">0</div>
+                            <div class="metric-label">Plataformas</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="competitors-count">0</div>
+                            <div class="metric-label">Competidores</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="success-rate">0%</div>
+                            <div class="metric-label">Tasa de Éxito</div>
+                        </div>
+                    </div>
+                    <div class="chart-bars mt-6">
+                        <div class="bar" style="height: 60%; animation-delay: 0.1s;"></div>
+                        <div class="bar" style="height: 85%; animation-delay: 0.2s;"></div>
+                        <div class="bar" style="height: 45%; animation-delay: 0.3s;"></div>
+                        <div class="bar" style="height: 95%; animation-delay: 0.4s;"></div>
+                        <div class="bar" style="height: 70%; animation-delay: 0.5s;"></div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn-primary" onclick="animateScrapingStats()">
+                            <i class="fas fa-sync mr-2"></i>Actualizar Datos
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile App Demo -->
+                <div id="demo-mobile" class="demo-content">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="app-ui">
+                                <div class="app-header">
+                                    <h3 class="text-xl font-bold">WallyUp</h3>
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <div class="balance-card">
+                                    <div class="text-sm opacity-80">Balance Total</div>
+                                    <div class="balance-amount">$12,458.50</div>
+                                    <div class="text-sm opacity-80 mt-2">+2.5% este mes</div>
+                                </div>
+                                <div class="transaction">
+                                    <div>
+                                        <div class="font-semibold">Supermercado</div>
+                                        <div class="text-sm opacity-70">Hoy, 10:30 AM</div>
+                                    </div>
+                                    <div class="font-bold text-red-300">-$45.20</div>
+                                </div>
+                                <div class="transaction">
+                                    <div>
+                                        <div class="font-semibold">Salario</div>
+                                        <div class="text-sm opacity-70">Ayer, 9:00 AM</div>
+                                    </div>
+                                    <div class="font-bold text-green-300">+$2,500.00</div>
+                                </div>
+                                <div class="transaction">
+                                    <div>
+                                        <div class="font-semibold">Netflix</div>
+                                        <div class="text-sm opacity-70">2 días atrás</div>
+                                    </div>
+                                    <div class="font-bold text-red-300">-$15.99</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-6 text-gray-400">
+                        <p><i class="fas fa-mobile-alt mr-2"></i>Aplicación móvil de finanzas personales con IA</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contacto" class="py-20 px-6 fade-in-section">
+    <section id="contacto" class="py-20 px-6">
         <div class="container mx-auto max-w-4xl">
-            <div class="text-center mb-12 reveal">
-                <h2 class="text-5xl font-bold mb-4 gradient-text">¿Listo para Automatizar?</h2>
-                <p class="text-xl text-gray-400">
-                    Transformemos tus procesos empresariales con automatización inteligente
-                </p>
-            </div>
+            <h2 class="text-5xl font-bold text-center mb-4 gradient-text">¿Listo para Automatizar?</h2>
+            <p class="text-xl text-gray-400 text-center mb-12">
+                Transformemos tus procesos con automatización inteligente
+            </p>
 
-            <div class="glass p-8 rounded-2xl reveal">
+            <div class="glass p-8 rounded-2xl">
                 <div class="grid md:grid-cols-3 gap-6 mb-8">
-                    <a href="mailto:eduardgo29@hotmail.com" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-primary transition-all icon-pulse">
-                        <i class="fas fa-envelope text-4xl text-primary"></i>
+                    <a href="mailto:eduardgo29@hotmail.com" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-[var(--primary)] transition-all">
+                        <i class="fas fa-envelope text-4xl" style="color: var(--primary)"></i>
                         <div class="text-center">
                             <div class="font-bold">Email</div>
                             <div class="text-sm text-gray-400">eduardgo29@hotmail.com</div>
                         </div>
                     </a>
 
-                    <a href="tel:+528123321007" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-accent transition-all icon-pulse">
-                        <i class="fas fa-phone text-4xl text-accent"></i>
+                    <a href="tel:+528123321007" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-[var(--accent)] transition-all">
+                        <i class="fas fa-phone text-4xl" style="color: var(--accent)"></i>
                         <div class="text-center">
                             <div class="font-bold">Teléfono</div>
                             <div class="text-sm text-gray-400">+52 81 2332 1007</div>
                         </div>
                     </a>
 
-                    <a href="https://www.linkedin.com/in/josegarzal" target="_blank" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-blue-400 transition-all icon-pulse">
+                    <a href="https://www.linkedin.com/in/josegarzal" target="_blank" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-blue-400 transition-all">
                         <i class="fab fa-linkedin text-4xl text-blue-400"></i>
                         <div class="text-center">
                             <div class="font-bold">LinkedIn</div>
@@ -574,14 +876,11 @@
                 </div>
 
                 <div class="flex justify-center gap-4">
-                    <a href="https://github.com/jgarza-ai" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-primary transition-all icon-pulse">
+                    <a href="https://github.com/jgarza-ai" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-[var(--primary)] transition-all">
                         <i class="fab fa-github text-xl"></i>
                     </a>
-                    <a href="https://wa.me/528123321007" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-accent transition-all icon-pulse">
+                    <a href="https://wa.me/528123321007" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-[var(--accent)] transition-all">
                         <i class="fab fa-whatsapp text-xl"></i>
-                    </a>
-                    <a href="https://jgarza-ai.github.io/Portafolio" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-secondary transition-all icon-pulse">
-                        <i class="fas fa-globe text-xl"></i>
                     </a>
                 </div>
             </div>
@@ -591,12 +890,307 @@
     <!-- Footer -->
     <footer class="py-8 border-t border-gray-800">
         <div class="container mx-auto px-6 text-center text-gray-500">
-            <p>© 2025 José Garza. Desarrollador Full Stack y Especialista en Automatización e Integración Empresarial</p>
-            <p class="text-sm mt-2">San Nicolás de los Garza, NL, México</p>
+            <p>© 2025 José Garza. Desarrollador Full Stack y Especialista en Automatización</p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Tab Navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const demoId = btn.dataset.demo;
+                
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                document.querySelectorAll('.demo-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById('demo-' + demoId).classList.add('active');
+                
+                // Initialize specific demos when activated
+                if (demoId === 'whatsapp' && !window.chatInitialized) {
+                    startChat();
+                    window.chatInitialized = true;
+                }
+                if (demoId === 'financial' && !window.chartInitialized) {
+                    initFinancialChart();
+                    window.chartInitialized = true;
+                }
+                if (demoId === 'scraping' && !window.scrapingInitialized) {
+                    animateScrapingStats();
+                    window.scrapingInitialized = true;
+                }
+            });
+        });
+
+        // WhatsApp Chat Demo
+        const chatFlow = [
+            { type: 'bot', text: '¡Hola! Bienvenido a nuestra tienda. ¿En qué puedo ayudarte hoy?', delay: 500 },
+            { type: 'options', options: ['Ver catálogo', 'Rastrear pedido', 'Hablar con agente'], delay: 1000 },
+        ];
+
+        const responses = {
+            'Ver catálogo': [
+                { type: 'user', text: 'Ver catálogo', delay: 300 },
+                { type: 'bot', text: '¡Claro! Aquí están nuestras categorías:', delay: 800 },
+                { type: 'options', options: ['Electrónicos', 'Ropa', 'Hogar'], delay: 500 }
+            ],
+            'Rastrear pedido': [
+                { type: 'user', text: 'Rastrear pedido', delay: 300 },
+                { type: 'bot', text: 'Por supuesto. Por favor, ingresa tu número de pedido para rastrearlo.', delay: 800 }
+            ],
+            'Hablar con agente': [
+                { type: 'user', text: 'Hablar con agente', delay: 300 },
+                { type: 'bot', text: 'Te estoy transfiriendo con un agente humano. Un momento por favor...', delay: 800 }
+            ],
+            'Electrónicos': [
+                { type: 'user', text: 'Electrónicos', delay: 300 },
+                { type: 'bot', text: 'Tenemos laptops, smartphones y tablets. ¿Qué te interesa?', delay: 800 }
+            ],
+            'Ropa': [
+                { type: 'user', text: 'Ropa', delay: 300 },
+                { type: 'bot', text: 'Contamos con ropa para hombre, mujer y niños. ¿Qué buscas?', delay: 800 }
+            ],
+            'Hogar': [
+                { type: 'user', text: 'Hogar', delay: 300 },
+                { type: 'bot', text: 'Tenemos muebles, decoración y electrodomésticos disponibles.', delay: 800 }
+            ]
+        };
+
+        let chatTimeout;
+
+        function addMessage(text, type) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            const messagesContainer = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="message-bubble typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function removeTyping() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) typing.remove();
+        }
+
+        function showOptions(options) {
+            const optionsContainer = document.getElementById('chat-options');
+            optionsContainer.innerHTML = '';
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => handleOption(option);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleOption(option) {
+            document.getElementById('chat-options').innerHTML = '';
+            
+            if (responses[option]) {
+                responses[option].forEach((msg, index) => {
+                    chatTimeout = setTimeout(() => {
+                        if (msg.type === 'bot') {
+                            showTyping();
+                            setTimeout(() => {
+                                removeTyping();
+                                addMessage(msg.text, 'bot');
+                            }, 1000);
+                        } else if (msg.type === 'user') {
+                            addMessage(msg.text, 'user');
+                        } else if (msg.type === 'options') {
+                            setTimeout(() => showOptions(msg.options), 500);
+                        }
+                    }, msg.delay + (index * 1000));
+                });
+            }
+        }
+
+        function startChat() {
+            chatFlow.forEach((step, index) => {
+                chatTimeout = setTimeout(() => {
+                    if (step.type === 'bot') {
+                        showTyping();
+                        setTimeout(() => {
+                            removeTyping();
+                            addMessage(step.text, 'bot');
+                        }, 1000);
+                    } else if (step.type === 'options') {
+                        showOptions(step.options);
+                    }
+                }, step.delay + (index * 1500));
+            });
+        }
+
+        function resetChat() {
+            clearTimeout(chatTimeout);
+            document.getElementById('chat-messages').innerHTML = '';
+            document.getElementById('chat-options').innerHTML = '';
+            startChat();
+        }
+
+        // ETL Demo
+        document.getElementById('doc-slider')?.addEventListener('input', (e) => {
+            document.getElementById('doc-count').textContent = e.target.value;
+        });
+
+        let etlRunning = false;
+
+        async function runETL() {
+            if (etlRunning) return;
+            etlRunning = true;
+            
+            const btn = document.getElementById('run-etl');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Procesando...';
+            
+            const stages = ['input', 'process', 'merge', 'output'];
+            const arrows = document.querySelectorAll('.etl-arrow');
+            const progress = document.getElementById('etl-progress');
+            const status = document.getElementById('etl-status');
+            
+            // Reset
+            stages.forEach(stage => {
+                document.getElementById('stage-' + stage).classList.remove('active');
+            });
+            arrows.forEach(arrow => arrow.classList.remove('visible'));
+            progress.style.width = '0%';
+            
+            for (let i = 0; i < stages.length; i++) {
+                document.getElementById('stage-' + stages[i]).classList.add('active');
+                progress.style.width = ((i + 1) / stages.length * 100) + '%';
+                
+                const statusTexts = ['Cargando datos...', 'Procesando...', 'Aplicando templates...', 'Generando PDFs...'];
+                status.textContent = statusTexts[i];
+                
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                if (i < arrows.length) {
+                    arrows[i].classList.add('visible');
+                }
+            }
+            
+            status.textContent = '¡Proceso completado!';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check mr-2"></i>Completado';
+            etlRunning = false;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-play mr-2"></i>Ejecutar Proceso';
+            }, 2000);
+        }
+
+        // Financial Chart
+        let portfolioChart;
+
+        function initFinancialChart() {
+            const ctx = document.getElementById('portfolio-chart').getContext('2d');
+            
+            portfolioChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Acciones', 'Bonos', 'Crypto'],
+                    datasets: [{
+                        data: [60, 30, 10],
+                        backgroundColor: ['#00d9ff', '#8b5cf6', '#10b981'],
+                        borderColor: '#141420',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e5e7eb',
+                                font: { size: 14 }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            document.querySelectorAll('.risk-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const risk = btn.dataset.risk;
+                    const profiles = {
+                        conservative: [60, 35, 5],
+                        moderate: [50, 35, 15],
+                        aggressive: [30, 30, 40]
+                    };
+                    
+                    portfolioChart.data.datasets[0].data = profiles[risk];
+                    portfolioChart.update();
+                });
+            });
+        }
+
+        // Scraping Demo
+        function animateScrapingStats() {
+            const counters = [
+                { id: 'ads-count', target: 1247, suffix: '' },
+                { id: 'platforms-count', target: 3, suffix: '' },
+                { id: 'competitors-count', target: 28, suffix: '' },
+                { id: 'success-rate', target: 98, suffix: '%' }
+            ];
+            
+            counters.forEach(counter => {
+                const element = document.getElementById(counter.id);
+                let current = 0;
+                const increment = counter.target / 50;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= counter.target) {
+                        element.textContent = counter.target + counter.suffix;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current) + counter.suffix;
+                    }
+                }, 30);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            startChat();
+            window.chatInitialized = true;
+        });
+    </script>
 </body>
 </html>

@@ -19,6 +19,11 @@
     <script src="https://unpkg.com/split.js/dist/split.min.js"></script>
     <!-- Mermaid for flowchart -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <!-- New Libraries for ETL Demo -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.6.2/countUp.umd.min.js"></script>
 </head>
 <body>
     <!-- Animated Background -->
@@ -446,14 +451,33 @@
                     </div>
                     <!-- Slide 2: Document Automation -->
                     <div class="swiper-slide">
-                        <div class="demo-slide-content">
-                            <h3 class="text-2xl font-bold mb-4">Document Automation</h3>
-                            <div class="doc-automation-demo">
-                                <i class="fas fa-file-excel"></i>
-                                <i class="fas fa-arrow-right"></i>
-                                <i class="fas fa-file-word"></i>
-                                <i class="fas fa-arrow-right"></i>
-                                <i class="fas fa-file-pdf"></i>
+                        <div class="demo-slide-content w-full h-full flex flex-col p-4 md:p-6">
+                            <h3 class="text-2xl font-bold mb-4 text-center">Visualización de Pipeline ETL</h3>
+                            <div class="flex-grow flex flex-col md:flex-row gap-4">
+                                <!-- Left Side: Controls and Stats -->
+                                <div class="w-full md:w-1/3 flex flex-col gap-4">
+                                    <div class="glass p-4 rounded-lg">
+                                        <label for="doc-volume-slider" class="block mb-2 text-sm font-medium">Volumen de Documentos: <span id="doc-volume-label" class="font-bold text-primary">100</span></label>
+                                        <input id="doc-volume-slider" type="range" min="100" max="10000" value="100" step="100" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                    </div>
+                                    <div class="glass p-4 rounded-lg flex-grow">
+                                        <h4 class="text-lg font-bold mb-2">Estadísticas</h4>
+                                        <div class="flex items-center justify-between">
+                                            <span>Documentos Procesados:</span>
+                                            <span id="processed-docs-counter" class="text-2xl font-bold text-secondary">0</span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <canvas id="doc-type-chart"></canvas>
+                                        </div>
+                                    </div>
+                                    <button id="run-etl-button" class="w-full px-6 py-3 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold transition-transform btn-hover-effect">
+                                        <i class="fas fa-play mr-2"></i>Run Process
+                                    </button>
+                                </div>
+                                <!-- Right Side: Animation Canvas -->
+                                <div class="w-full md:w-2/3 glass rounded-lg p-4">
+                                    <div id="etl-pipeline-container" class="w-full h-full"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

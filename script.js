@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Setup Interactive Demos
     buildWhatsAppUI();
     initializeFlowchart();
+    initializeEtlDemo(); // Initialize the new ETL Demo
 
     // 3. Initialize Swiper
     const swiper = new Swiper('.swiper-container', {
@@ -406,4 +407,156 @@ function initializeFlowchart() {
             });
         }
     });
+}
+
+
+// SLIDE 2: ETL Pipeline Demo
+function initializeEtlDemo() {
+    const slider = document.getElementById('doc-volume-slider');
+    const volumeLabel = document.getElementById('doc-volume-label');
+    const runButton = document.getElementById('run-etl-button');
+    const counterElement = document.getElementById('processed-docs-counter');
+    const pipelineContainer = document.getElementById('etl-pipeline-container');
+    const chartCanvas = document.getElementById('doc-type-chart');
+
+    if (!slider) return; // Exit if the demo elements are not on the page
+
+    let isRunning = false;
+    let chart;
+
+    // Initial HTML structure for the pipeline
+    pipelineContainer.innerHTML = `
+        <div class="etl-stage" id="etl-input">
+            <div class="icon-container"><div id="lottie-excel" style="width: 40px; height: 40px;"></div></div>
+            <span class="label">Input</span>
+        </div>
+        <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="etl-stage" id="etl-processing">
+            <div class="icon-container"><i class="fas fa-cogs"></i></div>
+            <span class="label">Processing</span>
+            <div class="progress-bar-container"><div class="progress-bar"></div></div>
+            <span class="processing-step-label"></span>
+        </div>
+        <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="etl-stage" id="etl-merge">
+            <div class="icon-container"><i class="fas fa-file-invoice"></i></div>
+            <span class="label">Template Merge</span>
+        </div>
+        <div class="etl-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="etl-stage" id="etl-output">
+            <div class="icon-container"><i class="fas fa-file-pdf"></i></div>
+            <span class="label">Output</span>
+        </div>
+    `;
+
+    const lottieContainer = document.getElementById('lottie-excel');
+    if(lottieContainer) {
+        lottie.loadAnimation({
+            container: lottieContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'https://assets-v2.lottiefiles.com/a/cb3cea46-116b-11ee-98ef-ebb74e1b9a88/urzRrrBDyX.lottie'
+        });
+    }
+
+    const counter = new CountUp(counterElement, 0, { duration: 3 });
+
+    function createChart() {
+        const ctx = chartCanvas.getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Facturas', 'Contratos', 'Reportes'],
+                datasets: [{
+                    data: [50, 30, 20],
+                    backgroundColor: ['#00d9ff', '#8b5cf6', '#10b981'],
+                    borderColor: '#141420',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#e5e7eb',
+                            font: { size: 10 }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function resetPipeline() {
+        document.querySelectorAll('.etl-stage').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.etl-arrow').forEach(el => el.classList.remove('visible'));
+        const progressBar = document.querySelector('#etl-processing .progress-bar');
+        if(progressBar) progressBar.style.width = '0%';
+        const stepLabel = document.querySelector('#etl-processing .processing-step-label');
+        if(stepLabel) stepLabel.textContent = '';
+        counter.reset();
+    }
+
+    async function runEtlProcess() {
+        if (isRunning) return;
+        isRunning = true;
+        runButton.disabled = true;
+        resetPipeline();
+
+        const volume = parseInt(slider.value, 10);
+        // Scale duration based on volume for a more realistic simulation
+        const dynamicDuration = 500 + (volume / 10000) * 1500;
+
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        // 1. Input
+        document.getElementById('etl-input').classList.add('active');
+        await sleep(dynamicDuration);
+        document.querySelector('.etl-arrow:nth-of-type(1)').classList.add('visible');
+
+        // 2. Processing
+        const processingStage = document.getElementById('etl-processing');
+        processingStage.classList.add('active');
+        const progressBar = processingStage.querySelector('.progress-bar');
+        const stepLabel = processingStage.querySelector('.processing-step-label');
+
+        await sleep(dynamicDuration / 2);
+        stepLabel.textContent = 'Parsing...';
+        progressBar.style.width = '33%';
+        await sleep(dynamicDuration);
+
+        stepLabel.textContent = 'Validating...';
+        progressBar.style.width = '66%';
+        await sleep(dynamicDuration);
+
+        stepLabel.textContent = 'Transforming...';
+        progressBar.style.width = '100%';
+        await sleep(dynamicDuration / 2);
+        document.querySelector('.etl-arrow:nth-of-type(2)').classList.add('visible');
+
+        // 3. Template Merge
+        document.getElementById('etl-merge').classList.add('active');
+        counter.update(volume); // This is already linked to the slider value
+        await sleep(dynamicDuration);
+        document.querySelector('.etl-arrow:nth-of-type(3)').classList.add('visible');
+
+        // 4. Output
+        document.getElementById('etl-output').classList.add('active');
+        await sleep(dynamicDuration);
+
+        isRunning = false;
+        runButton.disabled = false;
+    }
+
+    slider.addEventListener('input', (e) => {
+        volumeLabel.textContent = e.target.value;
+    });
+
+    runButton.addEventListener('click', runEtlProcess);
+
+    createChart();
+    resetPipeline();
 }

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +27,7 @@
                     <a href="#home" class="hover:text-primary transition-colors">Inicio</a>
                     <a href="#proyectos" class="hover:text-primary transition-colors">Proyectos</a>
                     <a href="#stack" class="hover:text-primary transition-colors">Stack</a>
-                    <a href="#demo" class="hover:text-primary transition-colors">Demo E-Commerce</a>
+                    <a href="#demos" class="hover:text-primary transition-colors">Demos</a>
                     <a href="#contacto" class="hover:text-primary transition-colors">Contacto</a>
                 </div>
                 <button id="menu-btn" class="md:hidden">
@@ -42,7 +43,7 @@
             <a href="#home" class="hover:text-primary transition-colors">Inicio</a>
             <a href="#proyectos" class="hover:text-primary transition-colors">Proyectos</a>
             <a href="#stack" class="hover:text-primary transition-colors">Stack</a>
-            <a href="#demo" class="hover:text-primary transition-colors">Demo E-Commerce</a>
+            <a href="#demos" class="hover:text-primary transition-colors">Demos</a>
             <a href="#contacto" class="hover:text-primary transition-colors">Contacto</a>
         </div>
     </div>
@@ -64,8 +65,8 @@
                     <strong style="color: #25d366">WhatsApp APIs</strong> y soluciones de IA conversacional.
                 </p>
                 <div class="flex flex-wrap justify-center gap-4 mb-12">
-                    <a href="#demo" class="px-8 py-3 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold transition-transform btn-hover-effect">
-                        <i class="fas fa-shopping-cart mr-2"></i>Ver Demo E-Commerce
+                    <a href="#demos" class="px-8 py-3 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold transition-transform btn-hover-effect">
+                        <i class="fas fa-laptop-code mr-2"></i>Ver Demos Interactivos
                     </a>
                     <a href="CV.pdf" class="px-8 py-3 border-2 border-primary rounded-full hover:bg-primary hover:text-dark transition-all btn-hover-effect">
                         <i class="fas fa-download mr-2"></i>Descargar CV
@@ -408,108 +409,91 @@
         </div>
     </section>
 
-    <!-- Demo E-Commerce Section -->
-    <section id="demo" class="py-20 px-6 fade-in-section">
+
+    <!-- Demos Section -->
+    <section id="demos" class="py-20 px-6 fade-in-section">
         <div class="container mx-auto">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-5xl font-bold mb-4 gradient-text">Demo E-Commerce Inteligente</h2>
+                <h2 class="text-5xl font-bold mb-4 gradient-text">Demos Interactivos</h2>
                 <p class="text-xl text-gray-400 max-w-3xl mx-auto">
-                    Sistema conversacional end-to-end que demuestra la integración de n8n, Flowise y WhatsApp APIs
+                    Explora simulaciones interactivas de mis proyectos más destacados.
                 </p>
             </div>
 
-            <!-- Interactive Demo Container -->
-            <div class="glass p-8 rounded-2xl reveal">
-                <div class="demo-container flex gap-8 min-h-[600px]">
-                    <!-- Chat Interface (Left) -->
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <span class="ml-4 text-sm text-gray-400">WhatsApp Business API</span>
+            <!-- Swiper Carousel -->
+            <div class="swiper-container glass rounded-2xl p-4 md:p-8 relative">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1: E-Commerce Chatbot -->
+                    <div class="swiper-slide">
+                        <div class="demo-slide-content">
+                            <h3 class="text-2xl font-bold mb-4">E-Commerce Chatbot</h3>
+                            <div class="chat-demo-container"></div>
                         </div>
-                        
-                        <div class="chat-container bg-dark-card rounded-lg p-4 mb-4" id="chat-container">
-                            <div class="message-bubble flex items-start gap-3 mb-4 p-3 bg-green-500/20 rounded-lg">
-                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <!-- Slide 2: Document Automation -->
+                    <div class="swiper-slide">
+                        <div class="demo-slide-content">
+                            <h3 class="text-2xl font-bold mb-4">Document Automation</h3>
+                            <div class="doc-automation-demo">
+                                <i class="fas fa-file-excel"></i>
+                                <i class="fas fa-arrow-right"></i>
+                                <i class="fas fa-file-word"></i>
+                                <i class="fas fa-arrow-right"></i>
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 3: Web Scraping Dashboard -->
+                    <div class="swiper-slide">
+                        <div class="demo-slide-content">
+                            <h3 class="text-2xl font-bold mb-4">Web Scraping Dashboard</h3>
+                            <div class="dashboard-demo">
+                                <div class="chart-bar" style="height: 60%;"></div>
+                                <div class="chart-bar" style="height: 80%;"></div>
+                                <div class="chart-bar" style="height: 40%;"></div>
+                                <div class="chart-bar" style="height: 90%;"></div>
+                                <div class="chart-bar" style="height: 70%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 4: Financial Advisor -->
+                    <div class="swiper-slide">
+                        <div class="demo-slide-content">
+                            <h3 class="text-2xl font-bold mb-4">Financial Advisor</h3>
+                            <select id="risk-profile-selector" class="mb-4">
+                                <option value="conservative">Conservative</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="aggressive">Aggressive</option>
+                            </select>
+                            <div id="doughnut-chart-container"></div>
+                        </div>
+                    </div>
+                    <!-- Slide 5: Mobile App - WallyUp -->
+                    <div class="swiper-slide">
+                        <div class="demo-slide-content">
+                            <h3 class="text-2xl font-bold mb-4">Mobile App - WallyUp</h3>
+                            <div class="phone-mockup-container">
+                                <div class="phone-screen">
+                                    <div class="wallyup-ui">
+                                        <div class="ui-header"></div>
+                                        <div class="ui-card"></div>
+                                        <div class="ui-card small"></div>
+                                        <div class="ui-card"></div>
+                                        <div class="ui-card small"></div>
+                                        <div class="ui-card"></div>
+                                        <div class="ui-card"></div>
+                                        <div class="ui-card small"></div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="text-xs text-gray-400 mb-1">Bot Assistant</div>
-                                    <div class="text-sm">¡Hola! 👋 Soy tu asistente de compras. ¿En qué puedo ayudarte hoy?</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Chat Options -->
-                        <div class="space-y-2" id="chat-options">
-                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Buscar productos de energía')">
-                                🔋 Buscar productos de energía
-                            </div>
-                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Ver mi carrito')">
-                                🛒 Ver mi carrito
-                            </div>
-                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Proceder al pago')">
-                                💳 Proceder al pago
-                            </div>
-                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Necesito ayuda')">
-                                ❓ Necesito ayuda
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Flow Visualization (Right) -->
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-6">
-                            <i class="fas fa-project-diagram text-primary"></i>
-                            <span class="text-sm text-gray-400">Flujo de Automatización (n8n + Flowise)</span>
-                        </div>
-                        
-                        <div class="flow-container bg-dark-card rounded-lg p-6 relative" id="flow-container">
-                            <!-- Flow Nodes will be dynamically generated -->
-                            <div class="text-center text-gray-500 py-20">
-                                Selecciona una opción del chat para ver el flujo en acción
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Architecture Overview -->
-            <div class="grid md:grid-cols-3 gap-6 mt-12 reveal">
-                <div class="glass p-6 rounded-xl hover:border-green-400 transition-all">
-                    <div class="flex items-center gap-3 mb-3">
-                        <i class="fab fa-whatsapp text-4xl text-green-400"></i>
-                        <div>
-                            <div class="font-bold text-lg">WhatsApp API</div>
-                            <div class="text-sm text-gray-500">Gateway de Comunicación</div>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-400">Canal principal para interacción con clientes, envío de productos y confirmaciones de pago</p>
-                </div>
-
-                <div class="glass p-6 rounded-xl hover:border-pink-400 transition-all">
-                    <div class="flex items-center gap-3 mb-3">
-                        <i class="fas fa-project-diagram text-4xl text-pink-400"></i>
-                        <div>
-                            <div class="font-bold text-lg">n8n Workflow</div>
-                            <div class="text-sm text-gray-500">Orquestador Principal</div>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-400">30+ nodos coordinando lógica de negocio, gestión de carritos, pagos e integración con base de datos</p>
-                </div>
-
-                <div class="glass p-6 rounded-xl hover:border-orange-400 transition-all">
-                    <div class="flex items-center gap-3 mb-3">
-                        <i class="fas fa-robot text-4xl text-orange-400"></i>
-                        <div>
-                            <div class="font-bold text-lg">Flowise AI</div>
-                            <div class="text-sm text-gray-500">Agente Conversacional</div>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-400">GPT-4 con RAG, búsqueda semántica vectorial y memoria persistente en Redis</p>
-                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
         </div>
     </section>
@@ -574,6 +558,7 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

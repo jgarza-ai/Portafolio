@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>José Garza | Especialista en Automatización e IA Conversacional</title>
+    <meta name="description" content="Especialista en automatización inteligente con n8n, Flowise, y sistemas conversacionales. 5+ años transformando procesos empresariales.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00d9ff;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --dark: #0a0a0f;
+            --dark-card: #141420;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--dark);
+            color: #e5e7eb;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at top, rgba(139, 92, 246, 0.15), transparent 50%),
+                        radial-gradient(ellipse at bottom, rgba(0, 217, 255, 0.15), transparent 50%);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: rgba(139, 92, 246, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(100vw, -100vh); opacity: 0; }
+        }
+
+        /* Glass Effect */
+        .glass {
+            background: rgba(20, 20, 32, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Project Card Hover Effect */
+        .project-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Tech Stack Cards */
+        .tech-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .message-bubble {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: slideInUp 0.4s ease forwards;
+        }
+
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .chat-option:hover {
+            background: rgba(0, 217, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        /* Flow Visualization */
+        .flow-node {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .flow-node.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .flow-connection {
+            stroke-dasharray: 5;
+            animation: dash 1s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -10; }
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 5px;
+        }
+
+        /* Stats Animation */
+        .stat-number {
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Icon Pulse */
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .icon-pulse:hover {
+            animation: iconPulse 0.6s ease;
+        }
+
+        /* Loading Animation */
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .demo-container { 
+                flex-direction: column; 
+            }
+            .chat-container {
+                height: 300px;
+            }
+            .flow-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#home" class="text-2xl font-bold gradient-text">JG</a>
+                <div class="hidden md:flex gap-8">
+                    <a href="#home" class="hover:text-primary transition-colors">Inicio</a>
+                    <a href="#proyectos" class="hover:text-primary transition-colors">Proyectos</a>
+                    <a href="#stack" class="hover:text-primary transition-colors">Stack</a>
+                    <a href="#demo" class="hover:text-primary transition-colors">Demo E-Commerce</a>
+                    <a href="#contacto" class="hover:text-primary transition-colors">Contacto</a>
+                </div>
+                <button id="menu-btn" class="md:hidden">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 glass hidden">
+        <div class="flex flex-col items-center justify-center h-full gap-8 text-xl">
+            <a href="#home" class="hover:text-primary transition-colors">Inicio</a>
+            <a href="#proyectos" class="hover:text-primary transition-colors">Proyectos</a>
+            <a href="#stack" class="hover:text-primary transition-colors">Stack</a>
+            <a href="#demo" class="hover:text-primary transition-colors">Demo E-Commerce</a>
+            <a href="#contacto" class="hover:text-primary transition-colors">Contacto</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20 px-6">
+        <div class="container mx-auto">
+            <div class="text-center reveal">
+                <h1 class="text-6xl md:text-7xl font-bold mb-4">
+                    <span class="gradient-text">José Garza</span>
+                </h1>
+                <h2 class="text-2xl md:text-3xl text-gray-400 mb-6">
+                    Especialista en Automatización e IA Conversacional
+                </h2>
+                <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
+                    Desarrollador de sistemas inteligentes con más de 5 años de experiencia en automatización de procesos empresariales. 
+                    Especializado en <strong class="text-secondary">n8n</strong>, 
+                    <strong style="color: #ff6b35">Flowise</strong>, 
+                    <strong style="color: #25d366">WhatsApp APIs</strong> y soluciones de IA conversacional.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 mb-12">
+                    <a href="#demo" class="px-8 py-3 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold hover:scale-105 transition-transform">
+                        <i class="fas fa-shopping-cart mr-2"></i>Ver Demo E-Commerce
+                    </a>
+                    <a href="CV.pdf" class="px-8 py-3 border-2 border-primary rounded-full hover:bg-primary hover:text-dark transition-all">
+                        <i class="fas fa-download mr-2"></i>Descargar CV
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
+                    <div class="glass p-6 rounded-xl">
+                        <div class="text-4xl font-bold gradient-text stat-number" data-target="50">0</div>
+                        <div class="text-sm text-gray-500 mt-2">Proyectos</div>
+                    </div>
+                    <div class="glass p-6 rounded-xl">
+                        <div class="text-4xl font-bold gradient-text stat-number" data-target="10">0</div>
+                        <div class="text-sm text-gray-500 mt-2">K+ Docs/Mes</div>
+                    </div>
+                    <div class="glass p-6 rounded-xl">
+                        <div class="text-4xl font-bold gradient-text stat-number" data-target="80">0</div>
+                        <div class="text-sm text-gray-500 mt-2">% Optimización</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="proyectos" class="py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-16 gradient-text reveal">Proyectos Destacados</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- GMD Scripts -->
+                <div class="project-card glass p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-file-alt text-4xl text-blue-400 icon-pulse"></i>
+                        <h3 class="text-xl font-bold">Generación Masiva de Documentos</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Sistema desktop con GUI para AFC: automatiza generación, impresión y gestión de documentos legales. 
+                        Procesamiento batch con plantillas Word y base de datos Excel.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">PyQt5</span>
+                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">python-docx</span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        ⚡ 10K+ docs/mes | ✓ Vista previa PDF | 🖨️ Impresión batch
+                    </div>
+                </div>
+
+                <!-- Allianz Portfolio -->
+                <div class="project-card glass p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-chart-line text-4xl text-green-400 icon-pulse"></i>
+                        <h3 class="text-xl font-bold">Portfolio Intelligence IA</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Plataforma web para optimización de portafolios financieros. Usa Markowitz + Google Gemini para 
+                        análisis de riesgo, recomendaciones personalizadas y generación de reportes PDF.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">FastAPI</span>
+                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">React</span>
+                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Gemini AI</span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        📊 Optimización Markowitz | 🤖 Análisis con IA | 📄 Reports PDF
+                    </div>
+                </div>
+
+                <!-- Advantage Scraping -->
+                <div class="project-card glass p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-spider text-4xl text-purple-400 icon-pulse"></i>
+                        <h3 class="text-xl font-bold">Ad Intelligence Platform</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Sistema autónomo de scraping multi-plataforma (Google, Meta, LinkedIn). Scrapy + Playwright 
+                        con scheduler, PostgreSQL y dashboard Streamlit para análisis competitivo.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm">Scrapy</span>
+                        <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">PostgreSQL</span>
+                        <span class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">Streamlit</span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        🕷️ Multi-platform | ⏰ Auto-scheduler | 📊 Analytics dashboard
+                    </div>
+                </div>
+
+                <!-- Government Automation -->
+                <div class="project-card glass p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-landmark text-4xl text-yellow-400 icon-pulse"></i>
+                        <h3 class="text-xl font-bold">Automatización Gubernamental</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Sistema para Secretaría de Finanzas: procesamiento automático de documentos fiscales. 
+                        Pipeline n8n + Python con Gemini y LLaMA local para validación.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">Odoo</span>
+                        <span class="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm">n8n</span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        ⚡ 10K+ docs/mes | ✓ 99% precisión | 📊 50K+ registros
+                    </div>
+                </div>
+
+                <!-- Multi-channel AI -->
+                <div class="project-card glass p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-phone-volume text-4xl text-cyan-400 icon-pulse"></i>
+                        <h3 class="text-xl font-bold">Sistema Multi-canal IA</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Integración Vapi (voz) + WhAPI (WhatsApp) con memoria conversacional ZEP. 
+                        Agendamiento automático y soporte 24/7 con múltiples canales.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Vapi</span>
+                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">WhAPI</span>
+                        <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">ZEP</span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        📈 75% resolución automática | 🎯 +40% conversión
+                    </div>
+                </div>
+
+                <!-- RAG Assistant -->
+                <div class="project-card glass p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-brain text-4xl text-orange-400 icon-pulse"></i>
+                        <h3 class="text-xl font-bold">Asistente IA con RAG</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Agente conversacional Flowise + LangChain con base de conocimientos vectorial. 
+                        MCPs personalizados para tareas específicas y memoria de largo plazo.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">Flowise</span>
+                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">LangChain</span>
+                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">OpenAI</span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        🤖 En desarrollo | 🎯 Beta disponible
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="stack" class="py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-16 gradient-text reveal">Stack Tecnológico</h2>
+            
+            <!-- Main Technologies Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Automation & Workflow -->
+                <div class="tech-card glass p-6 rounded-xl reveal">
+                    <h3 class="text-lg font-bold mb-4 text-primary flex items-center gap-2">
+                        <i class="fas fa-robot"></i> Automatización
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" class="w-6 h-6" alt="n8n">
+                            <span class="text-sm font-medium">n8n</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" class="w-6 h-6" alt="Node.js">
+                            <span class="text-sm font-medium">Node.js</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                            <i class="fab fa-python text-yellow-400"></i>
+                            <span class="text-sm font-medium">Python</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                            <i class="fab fa-docker text-cyan-400"></i>
+                            <span class="text-sm font-medium">Docker</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI & LLMs -->
+                <div class="tech-card glass p-6 rounded-xl reveal">
+                    <h3 class="text-lg font-bold mb-4 text-secondary flex items-center gap-2">
+                        <i class="fas fa-brain"></i> IA & LLMs
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openai/openai-original.svg" class="w-6 h-6" alt="OpenAI">
+                            <span class="text-sm font-medium">OpenAI GPT</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
+                            <i class="fas fa-robot text-orange-400"></i>
+                            <span class="text-sm font-medium">Flowise</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="w-6 h-6" alt="Google">
+                            <span class="text-sm font-medium">Gemini AI</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10 transition-colors">
+                            <i class="fas fa-search text-cyan-400"></i>
+                            <span class="text-sm font-medium">LangChain</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data & Cloud -->
+                <div class="tech-card glass p-6 rounded-xl reveal">
+                    <h3 class="text-lg font-bold mb-4 text-yellow-400 flex items-center gap-2">
+                        <i class="fas fa-database"></i> Data & Cloud
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" class="w-6 h-6" alt="PostgreSQL">
+                            <span class="text-sm font-medium">PostgreSQL</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" class="w-6 h-6" alt="MySQL">
+                            <span class="text-sm font-medium">MySQL</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" class="w-6 h-6" alt="Redis">
+                            <span class="text-sm font-medium">Redis</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" class="w-6 h-6" alt="Supabase">
+                            <span class="text-sm font-medium">Supabase</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Development -->
+                <div class="tech-card glass p-6 rounded-xl reveal">
+                    <h3 class="text-lg font-bold mb-4 text-accent flex items-center gap-2">
+                        <i class="fas fa-code"></i> Desarrollo
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="w-6 h-6" alt="Python">
+                            <span class="text-sm font-medium">Python</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="w-6 h-6" alt="JavaScript">
+                            <span class="text-sm font-medium">JavaScript</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" class="w-6 h-6" alt="React">
+                            <span class="text-sm font-medium">React</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" class="w-6 h-6" alt="FastAPI">
+                            <span class="text-sm font-medium">FastAPI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Technologies -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Web Scraping -->
+                <div class="tech-card glass p-6 rounded-xl reveal">
+                    <h3 class="text-lg font-bold mb-4 text-red-400 flex items-center gap-2">
+                        <i class="fas fa-spider"></i> Web Scraping
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
+                            <i class="fas fa-spider text-red-400"></i>
+                            <span class="text-sm font-medium">Scrapy</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg" class="w-6 h-6" alt="Playwright">
+                            <span class="text-sm font-medium">Playwright</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/selenium/selenium-original.svg" class="w-6 h-6" alt="Selenium">
+                            <span class="text-sm font-medium">Selenium</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-400/10 transition-colors">
+                            <i class="fas fa-soup text-green-400"></i>
+                            <span class="text-sm font-medium">BeautifulSoup</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Tools -->
+                <div class="tech-card glass p-6 rounded-xl reveal">
+                    <h3 class="text-lg font-bold mb-4 text-purple-400 flex items-center gap-2">
+                        <i class="fas fa-briefcase"></i> ERP & Business
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
+                            <i class="fas fa-cogs text-purple-400"></i>
+                            <span class="text-sm font-medium">Odoo ERP</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoft/microsoft-original.svg" class="w-6 h-6" alt="Power BI">
+                            <span class="text-sm font-medium">Power BI</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoft/microsoft-original.svg" class="w-6 h-6" alt="Excel">
+                            <span class="text-sm font-medium">Excel VBA</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-400/10 transition-colors">
+                            <i class="fas fa-headset text-cyan-400"></i>
+                            <span class="text-sm font-medium">Zendesk</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DevOps & Tools -->
+                <div class="tech-card glass p-6 rounded-xl reveal">
+                    <h3 class="text-lg font-bold mb-4 text-cyan-400 flex items-center gap-2">
+                        <i class="fas fa-tools"></i> DevOps & Tools
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="w-6 h-6" alt="Git">
+                            <span class="text-sm font-medium">Git/GitHub</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" class="w-6 h-6" alt="Linux">
+                            <span class="text-sm font-medium">Linux/Ubuntu</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" class="w-6 h-6" alt="Azure">
+                            <span class="text-sm font-medium">Azure</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-cyan-400/10 transition-colors">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="w-6 h-6" alt="GCP">
+                            <span class="text-sm font-medium">GCP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo E-Commerce Section -->
+    <section id="demo" class="py-20 px-6">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-5xl font-bold mb-4 gradient-text">Demo E-Commerce Inteligente</h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Sistema conversacional end-to-end que demuestra la integración de n8n, Flowise y WhatsApp APIs
+                </p>
+            </div>
+
+            <!-- Interactive Demo Container -->
+            <div class="glass p-8 rounded-2xl reveal">
+                <div class="demo-container flex gap-8 min-h-[600px]">
+                    <!-- Chat Interface (Left) -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span class="ml-4 text-sm text-gray-400">WhatsApp Business API</span>
+                        </div>
+                        
+                        <div class="chat-container bg-dark-card rounded-lg p-4 mb-4" id="chat-container">
+                            <div class="message-bubble flex items-start gap-3 mb-4 p-3 bg-green-500/20 rounded-lg">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-robot text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400 mb-1">Bot Assistant</div>
+                                    <div class="text-sm">¡Hola! 👋 Soy tu asistente de compras. ¿En qué puedo ayudarte hoy?</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Options -->
+                        <div class="space-y-2" id="chat-options">
+                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Buscar productos de energía')">
+                                🔋 Buscar productos de energía
+                            </div>
+                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Ver mi carrito')">
+                                🛒 Ver mi carrito
+                            </div>
+                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Proceder al pago')">
+                                💳 Proceder al pago
+                            </div>
+                            <div class="chat-option p-3 glass rounded-lg text-sm cursor-pointer" onclick="sendMessage('Necesito ayuda')">
+                                ❓ Necesito ayuda
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flow Visualization (Right) -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="fas fa-project-diagram text-primary"></i>
+                            <span class="text-sm text-gray-400">Flujo de Automatización (n8n + Flowise)</span>
+                        </div>
+                        
+                        <div class="flow-container bg-dark-card rounded-lg p-6 relative" id="flow-container">
+                            <!-- Flow Nodes will be dynamically generated -->
+                            <div class="text-center text-gray-500 py-20">
+                                Selecciona una opción del chat para ver el flujo en acción
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Overview -->
+            <div class="grid md:grid-cols-3 gap-6 mt-12 reveal">
+                <div class="glass p-6 rounded-xl hover:border-green-400 transition-all">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fab fa-whatsapp text-4xl text-green-400"></i>
+                        <div>
+                            <div class="font-bold text-lg">WhatsApp API</div>
+                            <div class="text-sm text-gray-500">Gateway de Comunicación</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Canal principal para interacción con clientes, envío de productos y confirmaciones de pago</p>
+                </div>
+
+                <div class="glass p-6 rounded-xl hover:border-pink-400 transition-all">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-project-diagram text-4xl text-pink-400"></i>
+                        <div>
+                            <div class="font-bold text-lg">n8n Workflow</div>
+                            <div class="text-sm text-gray-500">Orquestador Principal</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">30+ nodos coordinando lógica de negocio, gestión de carritos, pagos e integración con base de datos</p>
+                </div>
+
+                <div class="glass p-6 rounded-xl hover:border-orange-400 transition-all">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-robot text-4xl text-orange-400"></i>
+                        <div>
+                            <div class="font-bold text-lg">Flowise AI</div>
+                            <div class="text-sm text-gray-500">Agente Conversacional</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">GPT-4 con RAG, búsqueda semántica vectorial y memoria persistente en Redis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="py-20 px-6">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-5xl font-bold mb-4 gradient-text">¿Listo para Automatizar?</h2>
+                <p class="text-xl text-gray-400">
+                    Transformemos tus procesos empresariales con automatización inteligente
+                </p>
+            </div>
+
+            <div class="glass p-8 rounded-2xl reveal">
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <a href="mailto:eduardgo29@hotmail.com" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-primary transition-all icon-pulse">
+                        <i class="fas fa-envelope text-4xl text-primary"></i>
+                        <div class="text-center">
+                            <div class="font-bold">Email</div>
+                            <div class="text-sm text-gray-400">eduardgo29@hotmail.com</div>
+                        </div>
+                    </a>
+
+                    <a href="tel:+528123321007" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-accent transition-all icon-pulse">
+                        <i class="fas fa-phone text-4xl text-accent"></i>
+                        <div class="text-center">
+                            <div class="font-bold">Teléfono</div>
+                            <div class="text-sm text-gray-400">+52 81 2332 1007</div>
+                        </div>
+                    </a>
+
+                    <a href="https://www.linkedin.com/in/josegarzal" target="_blank" class="flex flex-col items-center gap-3 p-6 glass rounded-lg hover:border-blue-400 transition-all icon-pulse">
+                        <i class="fab fa-linkedin text-4xl text-blue-400"></i>
+                        <div class="text-center">
+                            <div class="font-bold">LinkedIn</div>
+                            <div class="text-sm text-gray-400">/in/josegarzal</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <a href="https://github.com/icuruya" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-primary transition-all icon-pulse">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="https://wa.me/528123321007" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-accent transition-all icon-pulse">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                    <a href="https://icuruya.github.io/Portafolio" target="_blank" class="w-12 h-12 flex items-center justify-center glass rounded-lg hover:text-secondary transition-all icon-pulse">
+                        <i class="fas fa-globe text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800">
+        <div class="container mx-auto px-6 text-center text-gray-500">
+            <p>© 2025 José Garza. Especialista en Automatización e IA Conversacional</p>
+            <p class="text-sm mt-2">San Nicolás de los Garza, NL, México</p>
+        </div>
+    </footer>
+
+    <script>
+        // Particles Animation
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Mobile Menu
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        document.getElementById('mobile-menu').addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                this.classList.add('hidden');
+            }
+        });
+
+        // Scroll Reveal
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animated Counter
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        // Trigger counters when visible
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-number').forEach(el => counterObserver.observe(el));
+
+        // Demo Flow System
+        const flowScenarios = {
+            'Buscar productos de energía': {
+                nodes: [
+                    { id: 'whatsapp', name: 'WhatsApp API', icon: '📱', x: 50, y: 50 },
+                    { id: 'n8n1', name: 'n8n Webhook', icon: '⚙️', x: 200, y: 50 },
+                    { id: 'flowise', name: 'Flowise Agent', icon: '🤖', x: 350, y: 50 },
+                    { id: 'database', name: 'PostgreSQL', icon: '🗄️', x: 500, y: 50 },
+                    { id: 'ai', name: 'AI Processing', icon: '✨', x: 350, y: 150 },
+                    { id: 'n8n2', name: 'n8n Response', icon: '⚙️', x: 200, y: 150 },
+                    { id: 'whatsapp2', name: 'WhatsApp Send', icon: '📱', x: 50, y: 150 }
+                ],
+                connections: [
+                    { from: 'whatsapp', to: 'n8n1' },
+                    { from: 'n8n1', to: 'flowise' },
+                    { from: 'flowise', to: 'database' },
+                    { from: 'database', to: 'ai' },
+                    { from: 'ai', to: 'n8n2' },
+                    { from: 'n8n2', to: 'whatsapp2' }
+                ],
+                response: '🔋 **Productos de Energía Disponibles:**\n\n⚡ **JANNIS FIT** - $569\n• Acompaña entrenamiento y saciedad\n• Ingredientes naturales\n\n💪 **ENERGY BOOST** - $450\n• Energía natural de larga duración\n• Sin cafeína\n\n¿Te interesa alguno de estos productos?'
+            },
+            'Ver mi carrito': {
+                nodes: [
+                    { id: 'whatsapp', name: 'WhatsApp API', icon: '📱', x: 50, y: 50 },
+                    { id: 'n8n1', name: 'n8n Cart Query', icon: '⚙️', x: 200, y: 50 },
+                    { id: 'database', name: 'PostgreSQL', icon: '🗄️', x: 350, y: 50 },
+                    { id: 'flowise', name: 'Flowise Format', icon: '🤖', x: 200, y: 150 },
+                    { id: 'whatsapp2', name: 'WhatsApp Send', icon: '📱', x: 50, y: 150 }
+                ],
+                connections: [
+                    { from: 'whatsapp', to: 'n8n1' },
+                    { from: 'n8n1', to: 'database' },
+                    { from: 'database', to: 'flowise' },
+                    { from: 'flowise', to: 'whatsapp2' }
+                ],
+                response: '🛒 **Tu Carrito Actual:**\n\n• JANNIS FIT x1 - $569\n• ENERGY BOOST x1 - $450\n\n**Total: $1,019**\n\n¿Deseas proceder al pago o agregar más productos?'
+            },
+            'Proceder al pago': {
+                nodes: [
+                    { id: 'whatsapp', name: 'WhatsApp API', icon: '📱', x: 50, y: 50 },
+                    { id: 'flowise', name: 'Flowise Agent', icon: '🤖', x: 200, y: 50 },
+                    { id: 'whatsapp2', name: 'WhatsApp Data', icon: '📱', x: 350, y: 50 },
+                    { id: 'n8n1', name: 'n8n Process', icon: '⚙️', x: 200, y: 150 },
+                    { id: 'database', name: 'PostgreSQL', icon: '🗄️', x: 350, y: 150 },
+                    { id: 'odoo', name: 'Odoo ERP', icon: '📦', x: 500, y: 150 },
+                    { id: 'whatsapp3', name: 'WhatsApp Pay', icon: '📱', x: 50, y: 250 }
+                ],
+                connections: [
+                    { from: 'whatsapp', to: 'flowise' },
+                    { from: 'flowise', to: 'whatsapp2' },
+                    { from: 'whatsapp2', to: 'n8n1' },
+                    { from: 'n8n1', to: 'database' },
+                    { from: 'database', to: 'odoo' },
+                    { from: 'odoo', to: 'whatsapp3' }
+                ],
+                response: '💳 **Información de Pago:**\n\n**Transferencia Bancaria:**\n🏦 BBVA\nCLABE: 012180001234567890\n\n**Total a Pagar: $1,019**\n\n📋 **Instrucciones:**\n1. Realiza la transferencia\n2. Envía el comprobante\n3. Recibirás confirmación\n\n¿Necesitas ayuda con el proceso?'
+            },
+            'Necesito ayuda': {
+                nodes: [
+                    { id: 'whatsapp', name: 'WhatsApp API', icon: '📱', x: 50, y: 50 },
+                    { id: 'flowise', name: 'Flowise Agent', icon: '🤖', x: 200, y: 50 },
+                    { id: 'ai', name: 'AI Assistant', icon: '✨', x: 350, y: 50 },
+                    { id: 'whatsapp2', name: 'WhatsApp Help', icon: '📱', x: 200, y: 150 }
+                ],
+                connections: [
+                    { from: 'whatsapp', to: 'flowise' },
+                    { from: 'flowise', to: 'ai' },
+                    { from: 'ai', to: 'whatsapp2' }
+                ],
+                response: '❓ **¿En qué puedo ayudarte?**\n\n• 🔍 **Búsqueda de productos**\n• 🛒 **Gestión de carrito**\n• 💳 **Proceso de pago**\n• 📦 **Seguimiento de pedidos**\n• 🔧 **Soporte técnico**\n\nEscribe tu consulta específica y te ayudo inmediatamente. 😊'
+            }
+        };
+
+        function sendMessage(message) {
+            const chatContainer = document.getElementById('chat-container');
+            const flowContainer = document.getElementById('flow-container');
+            
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message-bubble flex items-start gap-3 mb-4 p-3 bg-blue-500/20 rounded-lg ml-auto';
+            userMessage.style.maxWidth = '80%';
+            userMessage.innerHTML = `
+                <div>
+                    <div class="text-xs text-gray-400 mb-1 text-right">Tú</div>
+                    <div class="text-sm">${message}</div>
+                </div>
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-white text-sm"></i>
+                </div>
+            `;
+            chatContainer.appendChild(userMessage);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Show loading
+            const loadingMessage = document.createElement('div');
+            loadingMessage.className = 'message-bubble flex items-start gap-3 mb-4 p-3 bg-gray-500/20 rounded-lg';
+            loadingMessage.innerHTML = `
+                <div class="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                    <div class="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs text-gray-400 mb-1">Bot Assistant</div>
+                    <div class="text-sm">Procesando...</div>
+                </div>
+            `;
+            chatContainer.appendChild(loadingMessage);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Simulate processing delay
+            setTimeout(() => {
+                // Remove loading
+                loadingMessage.remove();
+
+                // Add bot response
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message-bubble flex items-start gap-3 mb-4 p-3 bg-green-500/20 rounded-lg';
+                botMessage.innerHTML = `
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400 mb-1">Bot Assistant</div>
+                        <div class="text-sm whitespace-pre-line">${flowScenarios[message].response}</div>
+                    </div>
+                `;
+                chatContainer.appendChild(botMessage);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                // Show flow visualization
+                showFlowVisualization(flowScenarios[message]);
+            }, 2000);
+        }
+
+        function showFlowVisualization(scenario) {
+            const flowContainer = document.getElementById('flow-container');
+            
+            // Create SVG for flow visualization
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.setAttribute('viewBox', '0 0 600 300');
+            
+            // Clear container
+            flowContainer.innerHTML = '';
+            flowContainer.appendChild(svg);
+
+            // Draw connections first (so they appear behind nodes)
+            scenario.connections.forEach((conn, index) => {
+                setTimeout(() => {
+                    const fromNode = scenario.nodes.find(n => n.id === conn.from);
+                    const toNode = scenario.nodes.find(n => n.id === conn.to);
+                    
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', fromNode.x);
+                    line.setAttribute('y1', fromNode.y + 25);
+                    line.setAttribute('x2', toNode.x);
+                    line.setAttribute('y2', toNode.y + 25);
+                    line.setAttribute('stroke', '#00d9ff');
+                    line.setAttribute('stroke-width', '2');
+                    line.setAttribute('stroke-dasharray', '5,5');
+                    line.classList.add('flow-connection');
+                    
+                    svg.appendChild(line);
+                }, index * 300);
+            });
+
+            // Draw nodes
+            scenario.nodes.forEach((node, index) => {
+                setTimeout(() => {
+                    // Create node group
+                    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    group.classList.add('flow-node');
+                    
+                    // Create rectangle
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('x', node.x - 50);
+                    rect.setAttribute('y', node.y - 25);
+                    rect.setAttribute('width', '100');
+                    rect.setAttribute('height', '50');
+                    rect.setAttribute('rx', '10');
+                    rect.setAttribute('fill', 'rgba(20, 20, 32, 0.9)');
+                    rect.setAttribute('stroke', '#00d9ff');
+                    rect.setAttribute('stroke-width', '2');
+                    
+                    // Create text
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', node.x);
+                    text.setAttribute('y', node.y + 5);
+                    text.setAttribute('text-anchor', 'middle');
+                    text.setAttribute('fill', '#e5e7eb');
+                    text.setAttribute('font-size', '10');
+                    text.setAttribute('font-family', 'Inter, sans-serif');
+                    text.textContent = node.name;
+                    
+                    // Create icon
+                    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    icon.setAttribute('x', node.x - 35);
+                    icon.setAttribute('y', node.y - 5);
+                    icon.setAttribute('text-anchor', 'middle');
+                    icon.setAttribute('font-size', '16');
+                    icon.textContent = node.icon;
+                    
+                    group.appendChild(rect);
+                    group.appendChild(icon);
+                    group.appendChild(text);
+                    svg.appendChild(group);
+                    
+                    // Add active class after a short delay
+                    setTimeout(() => {
+                        group.classList.add('active');
+                    }, 100);
+                }, index * 500);
+            });
+        }
+
+        // Initialize
+        createParticles();
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+127.0.0.1 - - [09/Oct/2025 17:30:53] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 17:30:53] "GET /style.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 17:30:53] "GET /script.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 17:30:55] "GET /assets/phone-mockup.png HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 17:30:55] "GET /assets/avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 17:30:55] "GET /assets/whatsapp_bg.png HTTP/1.1" 200 -

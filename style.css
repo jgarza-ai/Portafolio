@@ -597,3 +597,132 @@ body {
         stroke-dashoffset: -20;
     }
 }
+
+/* ETL Pipeline Demo Styles */
+#etl-pipeline-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    position: relative;
+}
+
+.etl-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100px;
+    text-align: center;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.etl-stage.active {
+    opacity: 1;
+}
+
+.etl-stage .icon-container {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--secondary);
+    transition: all 0.3s ease;
+}
+
+.etl-stage.active .icon-container {
+    background-color: var(--secondary);
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+
+.etl-stage .icon-container i,
+#lottie-excel {
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+.etl-stage.active .icon-container i {
+    color: white;
+}
+
+.etl-stage .label {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.etl-arrow {
+    font-size: 2rem;
+    color: var(--secondary);
+    opacity: 0.5;
+    transform: scaleX(0);
+    transition: transform 0.5s ease;
+}
+
+.etl-arrow.visible {
+    transform: scaleX(1);
+}
+
+.progress-bar-container {
+    width: 80%;
+    height: 10px;
+    background-color: var(--dark);
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 5px;
+    transition: width 0.5s ease-out;
+}
+
+.processing-step-label {
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+    height: 1em;
+}
+
+#run-etl-button:disabled {
+    cursor: not-allowed;
+    background: var(--dark-card);
+    opacity: 0.6;
+}
+
+/* Custom slider styles */
+#doc-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: var(--dark);
+    outline: none;
+    border-radius: 4px;
+    border: 1px solid var(--secondary);
+}
+
+#doc-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--dark-card);
+}
+
+#doc-volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--dark-card);
+}

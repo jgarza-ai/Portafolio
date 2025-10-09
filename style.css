@@ -244,3 +244,175 @@ body {
         height: 300px;
     }
 }
+
+/* Swiper Styles */
+.swiper-container {
+    width: 100%;
+    height: 500px; /* Adjust as needed */
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    background: var(--dark-card);
+    border-radius: 1.5rem;
+}
+
+.demo-slide-content {
+    padding: 2rem;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--primary);
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--primary);
+}
+
+/* Slide 1: E-Commerce Chatbot */
+.chat-demo-container {
+    width: 100%;
+    height: 350px;
+    background-color: #0a0a0f;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.chat-demo-bubble {
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    max-width: 80%;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInUp 0.5s ease forwards;
+}
+.chat-demo-bubble.user {
+    background-color: var(--primary);
+    color: var(--dark);
+    align-self: flex-end;
+    border-bottom-right-radius: 0.25rem;
+}
+.chat-demo-bubble.bot {
+    background-color: #2a2a3a;
+    align-self: flex-start;
+    border-bottom-left-radius: 0.25rem;
+}
+
+/* Slide 2: Document Automation */
+.doc-automation-demo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 4rem;
+    color: var(--primary);
+}
+.doc-automation-demo .fa-arrow-right {
+    font-size: 2.5rem;
+    color: var(--secondary);
+    opacity: 0;
+    animation: fadeInOut 2s infinite;
+}
+.doc-automation-demo .fa-arrow-right:nth-child(2) { animation-delay: 0.5s; }
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
+/* Slide 3: Web Scraping Dashboard */
+.dashboard-demo {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
+    height: 300px;
+    background: #0a0a0f;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+.chart-bar {
+    width: 15%;
+    background: linear-gradient(to top, var(--primary), var(--secondary));
+    border-radius: 0.25rem;
+    transform-origin: bottom;
+    transform: scaleY(0);
+    animation: growBar 1s ease-out forwards;
+}
+
+@keyframes growBar {
+    to { transform: scaleY(1); }
+}
+
+/* Slide 4: Financial Advisor */
+#risk-profile-selector {
+    background: var(--dark);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--primary);
+}
+#doughnut-chart-container {
+    width: 200px;
+    height: 200px;
+    margin: 1rem auto;
+    border-radius: 50%;
+    transition: background 0.5s ease;
+}
+
+/* Slide 5: Mobile App */
+.phone-mockup-container {
+    position: relative;
+    width: 250px;
+    height: 450px;
+    margin: auto;
+    background-image: url('assets/phone-mockup.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.phone-screen {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    background-color: #f0f2f5;
+    border-radius: 2rem;
+    overflow: hidden;
+    z-index: 1;
+}
+.wallyup-ui {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: scroll-ui 8s linear infinite;
+}
+.ui-header {
+    height: 30px;
+    background-color: #e0e0e0;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+.ui-card {
+    height: 80px;
+    background-color: #d1d5db;
+    border-radius: 0.5rem;
+}
+.ui-card.small {
+    height: 50px;
+}
+
+@keyframes scroll-ui {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-30%); }
+    100% { transform: translateY(0); }
+}

@@ -5,21 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>José Garza - Desarrollador Full Stack y Especialista en Automatización</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (crítico) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome para iconos -->
+
+    <!-- Font Awesome para iconos (crítico) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- GSAP para animaciones -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    
-    <!-- Three.js para fondo interactivo -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
-    <!-- Chart.js para gráficos -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Optimización: Preload para fuentes críticas -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+    <!-- Optimización: DNS prefetch para dominios externos -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+
+    <!-- Scripts con Lazy Loading y Optimización -->
+    <script>
+        // Sistema de Lazy Loading para Scripts
+        class LazyLoader {
+            constructor() {
+                this.loadedScripts = new Set();
+                this.pendingScripts = new Map();
+                this.loadPromises = new Map();
+            }
+
+            async loadScript(src, id, options = {}) {
+                if (this.loadedScripts.has(id)) {
+                    return Promise.resolve();
+                }
+
+                if (this.loadPromises.has(id)) {
+                    return this.loadPromises.get(id);
+                }
+
+                const promise = new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.async = true;
+                    script.defer = options.defer || false;
+
+                    if (options.integrity) {
+                        script.integrity = options.integrity;
+                        script.crossOrigin = 'anonymous';
+                    }
+
+                    script.onload = () => {
+                        this.loadedScripts.add(id);
+                        this.loadPromises.delete(id);
+                        resolve();
+                    };
+
+                    script.onerror = () => {
+                        console.error(`Error loading script: ${src}`);
+                        this.loadPromises.delete(id);
+                        reject(new Error(`Failed to load ${src}`));
+                    };
+
+                    document.head.appendChild(script);
+                });
+
+                this.loadPromises.set(id, promise);
+                return promise;
+            }
+
+            async preloadCritical() {
+                try {
+                    // Cargar scripts en orden de prioridad
+                    await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js', 'gsap');
+                    await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', 'threejs');
+                    await this.loadScript('https://cdn.jsdelivr.net/npm/chart.js', 'chartjs');
+                    await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js', 'gsap-scrolltrigger');
+
+                    // Inicializar componentes después de cargar los scripts
+                    this.initializeComponents();
+                } catch (error) {
+                    console.error('Error loading critical scripts:', error);
+                }
+            }
+
+            initializeComponents() {
+                // Inicializar componentes que dependen de los scripts cargados
+                if (typeof window.initializeAnimations === 'function') {
+                    window.initializeAnimations();
+                }
+                if (typeof window.initializeCharts === 'function') {
+                    window.initializeCharts();
+                }
+            }
+        }
+
+        const lazyLoader = new LazyLoader();
+
+        // Optimización: Cargar scripts cuando el navegador esté inactivo
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => lazyLoader.preloadCritical(), { timeout: 2000 });
+        } else {
+            // Fallback para navegadores que no soportan requestIdleCallback
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => lazyLoader.preloadCritical(), 100);
+            });
+        }
+
+        // Optimización: Service Worker para caching (solo en producción)
+        if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {
+                    // Ignorar error si no hay service worker
+                });
+            });
+        }
+    </script>
     
     <style>
         :root {
@@ -88,8 +183,15 @@
             color: transparent;
         }
         
-        /* Animación de entrada */
+        /* Animación de entrada - visible por defecto para mejor UX */
         .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        /* Clase para animar cuando JS está disponible */
+        .fade-in-animate {
             opacity: 0;
             transform: translateY(20px);
         }
@@ -319,40 +421,119 @@
             display: flex;
             align-items: center;
             background: white;
-            border-radius: 8px;
-            padding: 0.75rem;
-            margin-top: 0.5rem;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 0.5rem 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
-        
+
         .product-card:hover {
             transform: scale(1.02);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
         }
-        
+
+        .product-card.selected {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.1));
+        }
+
         .product-image {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             object-fit: cover;
-            border-radius: 8px;
-            margin-right: 0.75rem;
+            border-radius: 10px;
+            margin-right: 1rem;
+            transition: transform 0.3s ease;
         }
-        
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
         .product-info {
             flex: 1;
         }
-        
+
         .product-name {
             font-weight: bold;
             margin-bottom: 0.25rem;
             color: #303030;
+            font-size: 1rem;
         }
-        
+
+        .product-description {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
         .product-price {
             color: var(--accent);
             font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .product-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: auto;
+        }
+
+        /* Carrito de compras */
+        .cart-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Estados de carga */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.5rem 1rem;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
         }
         
         .quick-replies {
@@ -573,39 +754,340 @@
             border-radius: 12px;
             padding: 1.5rem;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: left 0.8s ease;
+        }
+
+        .dashboard-card:hover::before {
+            left: 100%;
+        }
+
         .dashboard-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+            border-color: var(--primary);
         }
-        
+
         .dashboard-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             margin-bottom: 1rem;
             color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        
+
         .dashboard-value {
             font-size: 2rem;
             font-weight: bold;
             margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
         }
-        
+
+        .platform-name {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .platform-count, .advertiser-campaigns {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+
+        .metric-value {
+            display: inline-block;
+            transition: all 0.5s ease;
+        }
+
         .dashboard-change {
             font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 0.25rem;
         }
-        
+
         .dashboard-change.positive {
             color: var(--success);
         }
-        
+
         .dashboard-change.negative {
             color: var(--secondary);
+        }
+
+        /* Animación de conteo */
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .metric-value.counting {
+            animation: countUp 0.5s ease-out;
+        }
+
+        /* Estados de carga para el dashboard */
+        .dashboard-card.loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .dashboard-card.loading .dashboard-value::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Loading overlay global */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 10, 31, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(124, 58, 237, 0.3);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem auto;
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Estados de carga para botones */
+        .btn.loading {
+            position: relative;
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+        }
+
+        .toast {
+            background: linear-gradient(135deg, var(--dark-card), rgba(124, 58, 237, 0.1));
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+            animation: slideInRight 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        .toast.error {
+            border-color: var(--secondary);
+        }
+
+        .toast.info {
+            border-color: var(--info);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--secondary);
+        }
+
+        .toast.info .toast-icon {
+            color: var(--info);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .toast-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Progres indicators */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* Skeleton loaders */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-text {
+            height: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-text.title {
+            height: 1.5rem;
+            width: 60%;
+        }
+
+        .skeleton-text.subtitle {
+            width: 40%;
+        }
+
+        .skeleton-text.small {
+            height: 0.8rem;
+            width: 30%;
         }
         
         /* Document automation mejorado */
@@ -726,12 +1208,12 @@
             transition: all 0.3s ease;
             border-bottom: 1px solid rgba(124, 58, 237, 0.2);
         }
-        
+
         nav.scrolled {
             padding: 0.5rem 2rem;
             background: rgba(13, 10, 31, 0.95);
         }
-        
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -739,7 +1221,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .nav-logo {
             font-size: 1.5rem;
             font-weight: bold;
@@ -748,19 +1230,19 @@
             background-clip: text;
             color: transparent;
         }
-        
+
         .nav-links {
             display: flex;
             gap: 2rem;
         }
-        
+
         .nav-link {
             color: white;
             text-decoration: none;
             transition: all 0.3s ease;
             position: relative;
         }
-        
+
         .nav-link::after {
             content: '';
             position: absolute;
@@ -771,13 +1253,118 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             transition: width 0.3s ease;
         }
-        
+
         .nav-link:hover::after {
             width: 100%;
         }
-        
+
         .nav-link:hover {
             color: var(--primary);
+        }
+
+        /* Menú móvil */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(124, 58, 237, 0.2);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(13, 10, 31, 0.98), rgba(26, 21, 49, 0.98));
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(124, 58, 237, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-menu-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-close:hover {
+            background: rgba(236, 72, 153, 0.2);
+        }
+
+        .mobile-menu-links {
+            padding: 2rem 1rem;
+        }
+
+        .mobile-nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .mobile-nav-link:hover {
+            background: rgba(124, 58, 237, 0.2);
+            transform: translateX(5px);
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         
         /* Sección Hero */
@@ -1047,25 +1634,94 @@
             .hero-title {
                 font-size: 2.5rem;
             }
-            
+
             .hero-subtitle {
                 font-size: 1.2rem;
             }
-            
+
             .nav-links {
                 display: none;
             }
-            
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
             .projects-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .tech-grid {
                 grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             }
-            
+
             .dashboard-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* Demo containers responsivos */
+            .demo-content {
+                width: 95%;
+                max-height: 90vh;
+                padding: 1rem;
+            }
+
+            /* Chat demo móvil */
+            .chat-container {
+                height: 400px;
+                border-radius: 8px;
+            }
+
+            /* WallyUp app móvil */
+            .wallyup-app {
+                width: 280px;
+                height: 560px;
+            }
+
+            /* Dashboard móvil */
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            /* Gráficos móviles */
+            .dashboard-value {
+                font-size: 1.5rem;
+            }
+
+            /* Flujo E-Commerce móvil */
+            .flow-visualization {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .flow-node {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
+            }
+
+            .flow-line {
+                width: 4px;
+                height: 40px;
+                margin: 0.5rem 0;
+            }
+
+            /* Document flow móvil */
+            .doc-step {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .doc-icon {
+                margin: 0 auto 1rem auto;
+            }
+
+            .doc-arrow {
+                left: 50%;
+                transform: translateX(-50%);
+                top: 90px;
             }
         }
     </style>
@@ -1084,8 +1740,36 @@
                 <a href="#tech" class="nav-link">Stack</a>
                 <a href="#contact" class="nav-link">Contacto</a>
             </div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
+
+    <!-- Menú móvil -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-logo">JG</div>
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="#home" class="mobile-nav-link" onclick="closeMobileMenu()">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="#projects" class="mobile-nav-link" onclick="closeMobileMenu()">
+                <i class="fas fa-briefcase"></i> Proyectos
+            </a>
+            <a href="#tech" class="mobile-nav-link" onclick="closeMobileMenu()">
+                <i class="fas fa-code"></i> Stack
+            </a>
+            <a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()">
+                <i class="fas fa-envelope"></i> Contacto
+            </a>
+        </div>
+    </div>
     
     <!-- Sección Hero -->
     <section id="home" class="hero">
@@ -1268,11 +1952,23 @@
     <footer>
         <p>&copy; 2025 José Garza. Todos los derechos reservados.</p>
     </footer>
-    
+
     <!-- Botón flotante -->
     <div class="floating-btn" id="scrollToTop">
         <i class="fas fa-arrow-up"></i>
     </div>
+
+    <!-- Loading Overlay Global -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Cargando...</div>
+            <div class="loading-subtext">Por favor, espera un momento</div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
     
     <!-- Demo Containers -->
     <!-- Demo 1: WallyUp -->
@@ -1470,36 +2166,54 @@
                 <p>Esta demo simula el dashboard interactivo que muestra datos de anuncios recopilados mediante web scraping.</p>
             </div>
             
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <div class="dashboard-title">Total de Anuncios</div>
-                    <div class="dashboard-value" style="color: var(--primary);">281</div>
+            <div class="dashboard-grid" id="dashboard-grid">
+                <div class="dashboard-card" data-metric="total-ads">
+                    <div class="dashboard-title">
+                        <i class="fas fa-bullhorn"></i> Total de Anuncios
+                    </div>
+                    <div class="dashboard-value" style="color: var(--primary);">
+                        <span class="metric-value" data-target="281">0</span>
+                    </div>
                     <div class="dashboard-change positive">
                         <i class="fas fa-arrow-up"></i> +12.5% vs mes anterior
                     </div>
                 </div>
-                
-                <div class="dashboard-card">
-                    <div class="dashboard-title">Plataforma Principal</div>
-                    <div class="dashboard-value" style="color: var(--secondary);">Google</div>
+
+                <div class="dashboard-card" data-metric="platform">
+                    <div class="dashboard-title">
+                        <i class="fas fa-crown"></i> Plataforma Principal
+                    </div>
+                    <div class="dashboard-value" style="color: var(--secondary);">
+                        <span class="platform-name">Google</span>
+                        <div class="platform-count">125 anuncios</div>
+                    </div>
                     <div class="dashboard-change positive">
-                        <i class="fas fa-arrow-up"></i> 125 anuncios
+                        <i class="fas fa-arrow-up"></i> +8.3% crecimiento
                     </div>
                 </div>
-                
-                <div class="dashboard-card">
-                    <div class="dashboard-title">Tasa de Crecimiento</div>
-                    <div class="dashboard-value" style="color: var(--accent);">+24%</div>
+
+                <div class="dashboard-card" data-metric="growth">
+                    <div class="dashboard-title">
+                        <i class="fas fa-chart-line"></i> Tasa de Crecimiento
+                    </div>
+                    <div class="dashboard-value" style="color: var(--accent);">
+                        <span class="metric-value" data-target="24">0</span>%
+                    </div>
                     <div class="dashboard-change positive">
                         <i class="fas fa-arrow-up"></i> Últimos 7 días
                     </div>
                 </div>
-                
-                <div class="dashboard-card">
-                    <div class="dashboard-title">Anunciante Top</div>
-                    <div class="dashboard-value" style="color: var(--success);">TechStore</div>
+
+                <div class="dashboard-card" data-metric="top-advertiser">
+                    <div class="dashboard-title">
+                        <i class="fas fa-trophy"></i> Anunciante Top
+                    </div>
+                    <div class="dashboard-value" style="color: var(--success);">
+                        <span class="advertiser-name">TechStore</span>
+                        <div class="advertiser-campaigns">15 campañas</div>
+                    </div>
                     <div class="dashboard-change positive">
-                        <i class="fas fa-arrow-up"></i> 15 campañas
+                        <i class="fas fa-arrow-up"></i> +25% inversión
                     </div>
                 </div>
             </div>
@@ -1591,9 +2305,12 @@
                     <div class="chat-avatar">
                         <i class="fas fa-store"></i>
                     </div>
-                    <div>
+                    <div style="flex: 1;">
                         <div style="font-weight: bold;">Linnia Store</div>
                         <div style="font-size: 0.8rem; opacity: 0.8;">Bot de ventas</div>
+                    </div>
+                    <div class="cart-indicator" id="cart-indicator" style="display: none;">
+                        0
                     </div>
                 </div>
                 <div class="chat-messages" id="chat-messages">
@@ -1603,16 +2320,16 @@
                 </div>
                 <div class="chat-input-container" id="chat-input-container">
                     <div class="quick-replies">
-                        <div class="quick-reply" onclick="sendQuickReply('Ver catálogo')">
+                        <div class="quick-reply" onclick="sendQuickReply('show_catalog')">
                             <i class="fas fa-th"></i> Ver catálogo
                         </div>
-                        <div class="quick-reply" onclick="sendQuickReply('Ofertas')">
+                        <div class="quick-reply" onclick="sendQuickReply('show_offers')">
                             <i class="fas fa-tag"></i> Ofertas
                         </div>
-                        <div class="quick-reply" onclick="sendQuickReply('Mi pedido')">
+                        <div class="quick-reply" onclick="sendQuickReply('track_order')">
                             <i class="fas fa-box"></i> Mi pedido
                         </div>
-                        <div class="quick-reply" onclick="sendQuickReply('Ayuda')">
+                        <div class="quick-reply" onclick="sendQuickReply('help')">
                             <i class="fas fa-question-circle"></i> Ayuda
                         </div>
                     </div>
@@ -1621,27 +2338,59 @@
     </div>
     
     <script>
-        // Inicialización de Three.js para el fondo de partículas
+        // Inicialización de Three.js para el fondo de partículas (optimizada)
         function initParticles() {
+            // Verificar si Three.js está disponible
+            if (typeof THREE === 'undefined') {
+                console.warn('Three.js not loaded yet');
+                return;
+            }
+
+            // Detectar capabilities del dispositivo para optimización
+            const isMobile = window.innerWidth <= 768;
+            const isLowEnd = navigator.hardwareConcurrency <= 2 || navigator.deviceMemory <= 2;
+
+            // Ajustar cantidad de partículas según dispositivo
+            const particlesCount = isMobile ? (isLowEnd ? 500 : 1000) : (isLowEnd ? 1500 : 3000);
+
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            
+
+            // Configurar renderer con optimizaciones
+            const renderer = new THREE.WebGLRenderer({
+                alpha: true,
+                antialias: !isLowEnd,
+                powerPreference: 'high-performance'
+            });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowEnd ? 1 : 2));
             renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Hacer el canvas responsive
+            renderer.domElement.style.position = 'fixed';
+            renderer.domElement.style.top = '0';
+            renderer.domElement.style.left = '0';
+            renderer.domElement.style.zIndex = '-1';
+            renderer.domElement.style.pointerEvents = 'none';
+
             document.getElementById('particles-bg').appendChild(renderer.domElement);
-            
-            // Crear partículas con colores
+
+            // Crear partículas con colores (optimizado)
             const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 3000;
             const posArray = new Float32Array(particlesCount * 3);
             const colorsArray = new Float32Array(particlesCount * 3);
-            
+
+            // Usar typed arrays más eficientes
             for (let i = 0; i < particlesCount * 3; i += 3) {
-                posArray[i] = (Math.random() - 0.5) * 10;
-                posArray[i + 1] = (Math.random() - 0.5) * 10;
-                posArray[i + 2] = (Math.random() - 0.5) * 10;
-                
-                // Colores variados
+                // Distribución más natural
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const radius = 2 + Math.random() * 3;
+
+                posArray[i] = radius * Math.sin(phi) * Math.cos(theta);
+                posArray[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                posArray[i + 2] = radius * Math.cos(phi);
+
+                // Colores variados (optimizado)
                 const colorChoice = Math.random();
                 if (colorChoice < 0.33) {
                     colorsArray[i] = 124/255;     // Purple
@@ -1660,91 +2409,195 @@
             
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
             particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
-            
-            // Material
+  
+            // Material optimizado según dispositivo
             const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.005,
-                vertexColors: true
+                size: isMobile ? 0.003 : 0.005,
+                vertexColors: true,
+                sizeAttenuation: true,
+                transparent: true,
+                opacity: isMobile ? 0.8 : 0.9
             });
-            
+
             // Mesh
             const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particlesMesh);
-            
+
             camera.position.z = 3;
-            
-            // Animación
-            function animate() {
+
+            // Optimización: Usar RAF throttled para mejor rendimiento
+            let lastTime = 0;
+            const targetFPS = isMobile ? 30 : 60;
+            const frameInterval = 1000 / targetFPS;
+
+            function animate(currentTime = 0) {
                 requestAnimationFrame(animate);
-                
-                particlesMesh.rotation.y += 0.0005;
-                particlesMesh.rotation.x += 0.0002;
-                
+
+                // Throttle frame rate en dispositivos móviles
+                if (currentTime - lastTime < frameInterval) {
+                    return;
+                }
+                lastTime = currentTime;
+
+                // Animación más suave y eficiente
+                particlesMesh.rotation.y += 0.0003;
+                particlesMesh.rotation.x += 0.0001;
+
                 renderer.render(scene, camera);
             }
-            
+
             animate();
-            
-            // Responsive
+
+            // Optimización: Debounce para resize
+            let resizeTimeout;
             window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowEnd ? 1 : 2));
+                }, 250);
             });
+
+            // Optimización: Pausar animación cuando no está visible
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // Pausar animación cuando la pestaña no está visible
+                    renderer.dispose();
+                } else {
+                    // Reanudar cuando vuelve a ser visible
+                    animate();
+                }
+            });
+
+            return { scene, camera, renderer, particlesMesh };
         }
-        
-        // Animaciones con GSAP
+
+        // Función para inicializar el sistema de partículas de forma segura
+        window.initializeAnimations = function() {
+            // Retrasar inicialización de partículas en móviles
+            const isMobile = window.innerWidth <= 768;
+            const delay = isMobile ? 2000 : 500;
+
+            setTimeout(() => {
+                try {
+                    initParticles();
+                } catch (error) {
+                    console.warn('Error initializing particles:', error);
+                }
+            }, delay);
+        };
+
+        // Animaciones con GSAP (optimizadas)
         function initAnimations() {
-            // Animación de entrada para elementos con clase fade-in
-            gsap.utils.toArray('.fade-in').forEach(element => {
-                gsap.fromTo(element, 
-                    { opacity: 0, y: 20 },
-                    { 
-                        opacity: 1, 
-                        y: 0, 
-                        duration: 1,
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 80%",
-                            end: "bottom 20%",
-                            toggleActions: "play none none reverse"
+            if (typeof gsap === 'undefined') {
+                console.warn('GSAP not loaded yet');
+                setTimeout(initAnimations, 100);
+                return;
+            }
+
+            // Optimización: Detectar preferencias de movimiento reducido
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const isMobile = window.innerWidth <= 768;
+
+            // Animación de entrada para elementos con clase fade-in-animate (optimizada)
+            if (!prefersReducedMotion) {
+                gsap.utils.toArray('.fade-in-animate').forEach((element, index) => {
+                    gsap.fromTo(element,
+                        { opacity: 0, y: 20 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: isMobile ? 0.6 : 1,
+                            delay: index * 0.1, // Stagger animation
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: element,
+                                start: "top 85%",
+                                end: "bottom 15%",
+                                toggleActions: "play none none reverse",
+                                // Optimización: Solo activar trigger cuando sea visible
+                                once: false
+                            },
+                            // Al completar la animación, remover la clase
+                            onComplete: () => {
+                                element.classList.remove('fade-in-animate');
+                            }
                         }
+                    );
+                });
+            } else {
+                // Para usuarios con preferencia de movimiento reducido
+                gsap.utils.toArray('.fade-in-animate').forEach(element => {
+                    gsap.set(element, { opacity: 1, y: 0 });
+                    element.classList.remove('fade-in-animate');
+                });
+            }
+  
+            // Animaciones del hero (optimizadas y con preferencia de movimiento)
+            if (!prefersReducedMotion) {
+                // Animación del título del hero
+                gsap.fromTo(".hero-title",
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: isMobile ? 0.8 : 1.2,
+                        delay: 0.2,
+                        ease: "power3.out"
                     }
                 );
-            });
-            
-            // Animación del título del hero
-            gsap.fromTo(".hero-title", 
-                { opacity: 0, y: 50 },
-                { 
-                    opacity: 1, 
-                    y: 0, 
-                    duration: 1.2,
-                    delay: 0.2
-                }
-            );
-            
-            // Animación del subtítulo del hero
-            gsap.fromTo(".hero-subtitle", 
-                { opacity: 0, y: 30 },
-                { 
-                    opacity: 1, 
-                    y: 0, 
-                    duration: 1,
-                    delay: 0.5
-                }
-            );
-            
-            // Animación de la descripción del hero
-            gsap.fromTo(".hero-description", 
-                { opacity: 0, y: 20 },
-                { 
-                    opacity: 1, 
-                    y: 0, 
-                    duration: 1,
-                    delay: 0.8
-                }
-            );
+
+                // Animación del subtítulo del hero
+                gsap.fromTo(".hero-subtitle",
+                    { opacity: 0, y: 30 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: isMobile ? 0.6 : 1,
+                        delay: 0.4,
+                        ease: "power2.out"
+                    }
+                );
+
+                // Animación de la descripción del hero
+                gsap.fromTo(".hero-description",
+                    { opacity: 0, y: 20 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: isMobile ? 0.6 : 1,
+                        delay: 0.6,
+                        ease: "power2.out"
+                    }
+                );
+
+                // Optimización: Animaciones para botones con hover eficiente
+                gsap.utils.toArray('button').forEach(button => {
+                    // Solo añadir listeners si no son dispositivos táctiles
+                    if (!('ontouchstart' in window)) {
+                        button.addEventListener('mouseenter', () => {
+                            gsap.to(button, {
+                                scale: 1.05,
+                                duration: 0.2,
+                                ease: "power2.out"
+                            });
+                        });
+
+                        button.addEventListener('mouseleave', () => {
+                            gsap.to(button, {
+                                scale: 1,
+                                duration: 0.2,
+                                ease: "power2.out"
+                            });
+                        });
+                    }
+                });
+            } else {
+                // Para usuarios con preferencia de movimiento reducido
+                gsap.set(".hero-title, .hero-subtitle, .hero-description", { opacity: 1, y: 0 });
+            }
             
             // Animación de los botones del hero
             gsap.fromTo(".hero-buttons", 
@@ -1777,23 +2630,127 @@
             });
         }
         
-        // Función para abrir demos
+        // Función para abrir demos con loading state
         function openDemo(demoName) {
-            document.getElementById(`${demoName}-demo`).style.display = 'flex';
-            
-            // Inicializar gráficos específicos de cada demo
-            if (demoName === 'advisor') {
-                initAdvisorChart();
-            } else if (demoName === 'dashboard') {
-                initDashboardCharts();
-            } else if (demoName === 'ecommerce') {
-                initEcommerceFlow();
-            }
+            // Mostrar loading overlay
+            showLoading('Cargando demo...', 'Preparando la experiencia interactiva');
+
+            // Simular tiempo de carga
+            setTimeout(() => {
+                hideLoading();
+                document.getElementById(`${demoName}-demo`).style.display = 'flex';
+
+                // Inicializar gráficos específicos de cada demo
+                if (demoName === 'advisor') {
+                    initAdvisorChart();
+                } else if (demoName === 'dashboard') {
+                    initDashboardCharts();
+                } else if (demoName === 'ecommerce') {
+                    initEcommerceFlow();
+                }
+
+                // Mostrar toast de éxito
+                showToast('Demo cargada', `${demoName.charAt(0).toUpperCase() + demoName.slice(1)} demo está lista para explorar`, 'success');
+            }, 1500);
         }
-        
+
         // Función para cerrar demos
         function closeDemo(demoName) {
             document.getElementById(`${demoName}-demo`).style.display = 'none';
+            showToast('Demo cerrada', 'Esperamos que hayas disfrutado la experiencia', 'info');
+        }
+
+        // Funciones para loading overlay
+        function showLoading(text = 'Cargando...', subtext = 'Por favor, espera un momento') {
+            const overlay = document.getElementById('loading-overlay');
+            const loadingText = overlay.querySelector('.loading-text');
+            const loadingSubtext = overlay.querySelector('.loading-subtext');
+
+            loadingText.textContent = text;
+            loadingSubtext.textContent = subtext;
+            overlay.classList.add('active');
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.classList.remove('active');
+        }
+
+        // Funciones para toast notifications
+        function showToast(title, message, type = 'info', duration = 5000) {
+            const container = document.getElementById('toast-container');
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const iconMap = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                info: 'fas fa-info-circle'
+            };
+
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="${iconMap[type]}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="removeToast(this.parentElement)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto-remove después de la duración
+            setTimeout(() => {
+                removeToast(toast);
+            }, duration);
+        }
+
+        function removeToast(toast) {
+            toast.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.parentElement.removeChild(toast);
+                }
+            }, 300);
+        }
+
+        // Funciones para manejar estados de botones
+        function setButtonLoading(button, isLoading = true) {
+            if (isLoading) {
+                button.classList.add('loading');
+                button.disabled = true;
+            } else {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }
+        }
+
+        // Función para mostrar progreso
+        function showProgress(targetElement, percentage = 0, duration = 1000) {
+            const progressBar = targetElement.querySelector('.progress-fill');
+            if (!progressBar) return;
+
+            const startPercentage = parseInt(progressBar.style.width) || 0;
+            const startTime = performance.now();
+
+            function updateProgress(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentPercentage = startPercentage + (percentage - startPercentage) * progress;
+
+                progressBar.style.width = `${currentPercentage}%`;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateProgress);
+                }
+            }
+
+            requestAnimationFrame(updateProgress);
         }
         
         // Inicializar gráfico del asesor financiero
@@ -1882,21 +2839,29 @@
             recommendation.innerHTML = `<h3 style="margin-bottom: 1rem; color: var(--secondary);">${title}</h3><p style="line-height: 1.6;">${text}</p>`;
         }
         
-        // Inicializar gráficos del dashboard
+        // Inicializar gráficos del dashboard mejorados
         function initDashboardCharts() {
+            // Animar contadores del dashboard
+            animateCounters();
+
+            // Simular actualización periódica de datos
+            setInterval(updateDashboardData, 5000);
+
             // Gráfico de anuncios por plataforma
             const platformCtx = document.getElementById('platform-chart').getContext('2d');
-            new Chart(platformCtx, {
+            const platformChart = new Chart(platformCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Google', 'Meta', 'LinkedIn'],
+                    labels: ['Google', 'Meta', 'LinkedIn', 'Twitter', 'TikTok'],
                     datasets: [{
                         label: 'Anuncios',
-                        data: [125, 89, 67],
+                        data: [125, 89, 67, 45, 78],
                         backgroundColor: [
                             'rgba(66, 133, 244, 0.8)',
                             'rgba(24, 119, 242, 0.8)',
-                            'rgba(0, 119, 181, 0.8)'
+                            'rgba(0, 119, 181, 0.8)',
+                            'rgba(29, 161, 242, 0.8)',
+                            'rgba(0, 0, 0, 0.8)'
                         ],
                         borderWidth: 0,
                         borderRadius: 8
@@ -1904,9 +2869,20 @@
                 },
                 options: {
                     responsive: true,
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    },
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.parsed.y} anuncios`;
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -1930,10 +2906,10 @@
                     }
                 }
             });
-            
+
             // Gráfico de tendencia de anuncios
             const trendCtx = document.getElementById('trend-chart').getContext('2d');
-            new Chart(trendCtx, {
+            const trendChart = new Chart(trendCtx, {
                 type: 'line',
                 data: {
                     labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
@@ -1943,30 +2919,44 @@
                         borderColor: '#4285F4',
                         backgroundColor: 'rgba(66, 133, 244, 0.1)',
                         tension: 0.4,
-                        fill: true
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
                     }, {
                         label: 'Meta',
                         data: [8, 11, 13, 15, 12, 18, 16],
                         borderColor: '#1877F2',
                         backgroundColor: 'rgba(24, 119, 242, 0.1)',
                         tension: 0.4,
-                        fill: true
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
                     }, {
                         label: 'LinkedIn',
                         data: [5, 8, 7, 10, 9, 12, 11],
                         borderColor: '#0077B5',
                         backgroundColor: 'rgba(0, 119, 181, 0.1)',
                         tension: 0.4,
-                        fill: true
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
                     }]
                 },
                 options: {
                     responsive: true,
+                    animation: {
+                        duration: 2500,
+                        easing: 'easeInOutQuart'
+                    },
                     plugins: {
                         legend: {
                             labels: {
                                 color: '#fff'
                             }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
                         }
                     },
                     scales: {
@@ -1989,6 +2979,73 @@
                         }
                     }
                 }
+            });
+
+            // Simular actualizaciones de datos en tiempo real
+            setInterval(() => {
+                // Actualizar gráfico de plataforma con datos aleatorios
+                platformChart.data.datasets[0].data = platformChart.data.datasets[0].data.map(val =>
+                    Math.max(20, val + Math.floor(Math.random() * 21 - 10))
+                );
+                platformChart.update('none'); // Actualizar sin animación para cambios sutiles
+
+                // Actualizar gráfico de tendencia
+                trendChart.data.datasets.forEach(dataset => {
+                    dataset.data = dataset.data.map(val =>
+                        Math.max(5, val + Math.floor(Math.random() * 11 - 5))
+                    );
+                });
+                trendChart.update('none');
+            }, 8000);
+        }
+
+        // Función para animar contadores
+        function animateCounters() {
+            const counters = document.querySelectorAll('.metric-value[data-target]');
+
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                counter.classList.add('counting');
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                        counter.classList.remove('counting');
+                    }
+                };
+
+                updateCounter();
+            });
+        }
+
+        // Función para actualizar datos del dashboard
+        function updateDashboardData() {
+            const cards = document.querySelectorAll('.dashboard-card');
+
+            cards.forEach(card => {
+                // Añadir efecto de carga
+                card.classList.add('loading');
+
+                setTimeout(() => {
+                    card.classList.remove('loading');
+
+                    // Actualizar algunos valores aleatoriamente
+                    const metricValue = card.querySelector('.metric-value');
+                    if (metricValue && metricValue.getAttribute('data-target')) {
+                        const currentTarget = parseInt(metricValue.getAttribute('data-target'));
+                        const newTarget = currentTarget + Math.floor(Math.random() * 21 - 10);
+                        metricValue.setAttribute('data-target', Math.max(0, newTarget));
+                        metricValue.textContent = Math.max(0, newTarget);
+                    }
+                }, 1000);
             });
         }
         
@@ -2010,7 +3067,33 @@
             });
         }
         
-        // Simulación de chat para E-Commerce
+        // Carrito de compras mejorado
+        let cart = [];
+        let cartTotal = 0;
+
+        function updateCartIndicator() {
+            const indicator = document.getElementById('cart-indicator');
+            if (cart.length > 0) {
+                indicator.style.display = 'flex';
+                indicator.textContent = cart.length;
+            } else {
+                indicator.style.display = 'none';
+            }
+        }
+
+        function addToCart(product) {
+            cart.push(product);
+            updateCartIndicator();
+            return true;
+        }
+
+        function clearCart() {
+            cart = [];
+            cartTotal = 0;
+            updateCartIndicator();
+        }
+
+        // Simulación de chat para E-Commerce mejorada
         const chatResponses = {
             "start": {
                 bot: ["¡Hola! Bienvenido a Linnia. Soy tu asistente de compras personal. ¿Qué estás buscando hoy? 🛍️"],
@@ -2031,34 +3114,75 @@
                 ]
             },
             "show_category_ropa": {
-                bot: ["Excelente elección. Aquí tienes algunos de nuestros productos más vendidos en ropa:", {
+                bot: ["Excelente elección. Aquí tienes nuestros productos más vendidos:", {
                     type: "product",
-                    name: "Camisa Casual",
-                    price: "$499.00",
-                    image: "https://via.placeholder.com/150/7C3AED/FFFFFF?Text=Ropa1"
+                    id: "camisa_casual",
+                    name: "Camisa Casual Premium",
+                    description: "Algodón 100%, varios colores",
+                    price: "$599.00",
+                    originalPrice: "$799.00",
+                    badge: "-25%",
+                    image: "https://picsum.photos/seed/camisa1/70/70"
                 }, {
                     type: "product",
-                    name: "Pantalón de Mezclilla",
-                    price: "$799.00",
-                    image: "https://via.placeholder.com/150/EC4899/FFFFFF?Text=Ropa2"
+                    id: "pantalon_jeans",
+                    name: "Pantalón Jeans Slim",
+                    description: "Tela elástica, slim fit",
+                    price: "$899.00",
+                    originalPrice: "$1099.00",
+                    badge: "-18%",
+                    image: "https://picsum.photos/seed/jeans1/70/70"
+                }, {
+                    type: "product",
+                    id: "vestido_verano",
+                    name: "Vestido de Verano",
+                    description: "Ligero y fresco, talla única",
+                    price: "$450.00",
+                    originalPrice: null,
+                    badge: "Nuevo",
+                    image: "https://picsum.photos/seed/vestido1/70/70"
                 }],
                 replies: [
                     { text: "Agregar Camisa", icon: "fa-cart-plus", action: "add_to_cart_camisa" },
-                    { text: "Agregar Pantalón", icon: "fa-cart-plus", action: "add_to_cart_pantalon" },
+                    { text: "Agregar Jeans", icon: "fa-cart-plus", action: "add_to_cart_jeans" },
+                    { text: "Agregar Vestido", icon: "fa-cart-plus", action: "add_to_cart_vestido" },
                     { text: "Ver más", icon: "fa-search-plus", action: "show_catalog" },
                     { text: "Volver", icon: "fa-arrow-left", action: "show_catalog" }
                 ]
             },
             "add_to_cart_camisa": {
-                bot: ["¡Camisa Casual agregada a tu carrito! 🛒"],
+                bot: ["¡Camisa Casual Premium agregada a tu carrito! 🛒"],
+                beforeReply: () => addToCart({
+                    id: "camisa_casual",
+                    name: "Camisa Casual Premium",
+                    price: 599
+                }),
                 replies: [
                     { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
                     { text: "Ver carrito", icon: "fa-shopping-cart", action: "view_cart" },
                     { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
                 ]
             },
-             "add_to_cart_pantalon": {
-                bot: ["¡Pantalón de Mezclilla agregado a tu carrito! 🛒"],
+            "add_to_cart_jeans": {
+                bot: ["¡Pantalón Jeans Slim agregado a tu carrito! 🛒"],
+                beforeReply: () => addToCart({
+                    id: "pantalon_jeans",
+                    name: "Pantalón Jeans Slim",
+                    price: 899
+                }),
+                replies: [
+                    { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
+                    { text: "Ver carrito", icon: "fa-shopping-cart", action: "view_cart" },
+                    { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
+                ]
+            },
+            "add_to_cart_vestido": {
+                bot: ["¡Vestido de Verano agregado a tu carrito! 🛒"],
+                beforeReply: () => addToCart({
+                    id: "vestido_verano",
+                    name: "Vestido de Verano",
+                    price: 450
+                }),
                 replies: [
                     { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
                     { text: "Ver carrito", icon: "fa-shopping-cart", action: "view_cart" },
@@ -2066,50 +3190,227 @@
                 ]
             },
             "view_cart": {
-                bot: ["En tu carrito tienes: Camisa Casual ($499.00). Total: $499.00."],
-                replies: [
-                    { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
-                    { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
-                ]
+                bot: () => {
+                    if (cart.length === 0) {
+                        return ["Tu carrito está vacío. ¿Te gustaría ver nuestro catálogo? 🛍️"];
+                    } else {
+                        cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
+                        const items = cart.map(item => `• ${item.name} ($${item.price}.00)`).join('\n');
+                        return [`🛒 **Tu Carrito**\n\n${items}\n\n**Total: $${cartTotal}.00**\n\n¿Quieres proceder al pago o seguir comprando?`];
+                    }
+                },
+                replies: () => {
+                    if (cart.length === 0) {
+                        return [
+                            { text: "Ver catálogo", icon: "fa-th", action: "show_catalog" },
+                            { text: "Volver", icon: "fa-arrow-left", action: "start" }
+                        ];
+                    } else {
+                        return [
+                            { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
+                            { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" },
+                            { text: "Vaciar carrito", icon: "fa-trash", action: "clear_cart" }
+                        ];
+                    }
+                }
             },
-            "checkout": {
-                bot: ["Perfecto. Para completar tu compra, por favor haz clic en el siguiente enlace seguro. ¡Gracias por comprar en Linnia!"],
+            "clear_cart": {
+                bot: ["Tu carrito ha sido vaciado. ¿Te gustaría ver nuestro catálogo? 🛍️"],
+                beforeReply: () => clearCart(),
                 replies: [
-                    { text: "Finalizar Compra (Simulado)", icon: "fa-lock", action: "end_conversation" },
-                    { text: "Cancelar", icon: "fa-times", action: "start" }
-                ]
-            },
-            "show_offers": {
-                bot: ["¡Hoy tenemos 20% de descuento en toda la categoría de Hogar! 🏡 Usa el código HOGAR20."],
-                replies: [
-                    { text: "Ver artículos de Hogar", icon: "fa-couch", action: "show_category_hogar" },
+                    { text: "Ver catálogo", icon: "fa-th", action: "show_catalog" },
                     { text: "Volver", icon: "fa-arrow-left", action: "start" }
                 ]
             },
-            "track_order": {
-                bot: ["Para rastrear tu pedido, por favor introduce tu número de orden."],
+            "checkout": {
+                bot: () => {
+                    if (cart.length === 0) {
+                        return ["Tu carrito está vacío. Agrega algunos productos antes de proceder al pago."];
+                    } else {
+                        cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
+                        return [`✅ **Resumen de tu compra**\n\n${cart.length} productos\nTotal: $${cartTotal}.00\n\nPara completar tu compra, selecciona una opción de pago:`];
+                    }
+                },
+                replies: () => {
+                    if (cart.length === 0) {
+                        return [
+                            { text: "Ver catálogo", icon: "fa-th", action: "show_catalog" }
+                        ];
+                    } else {
+                        return [
+                            { text: "Pagar con Tarjeta", icon: "fa-credit-card", action: "pay_card" },
+                            { text: "Pagar con PayPal", icon: "fab fa-paypal", action: "pay_paypal" },
+                            { text: "Cancelar", icon: "fa-times", action: "start" }
+                        ];
+                    }
+                }
+            },
+            "pay_card": {
+                bot: ["💳 **Procesando pago con tarjeta...**\n\n✅ ¡Pago aprobado! Tu pedido ha sido confirmado.\n\n📧 Recibirás un correo con los detalles de tu compra.\n\n¡Gracias por comprar en Linnia! ❤️"],
+                beforeReply: () => clearCart(),
                 replies: [
-                     { text: "Volver", icon: "fa-arrow-left", action: "start" }
+                    { text: "Comprar de nuevo", icon: "fa-redo", action: "start" },
+                    { text: "Calificar servicio", icon: "fa-star", action: "rate_service" }
                 ]
             },
-             "help": {
-                bot: ["Claro, estoy aquí para ayudarte. ¿Qué necesitas?"],
+            "pay_paypal": {
+                bot: ["💰 **Redirigiendo a PayPal...**\n\n✅ ¡Pago completado! Tu pedido ha sido confirmado.\n\n📧 Recibirás un correo con los detalles de tu compra.\n\n¡Gracias por comprar en Linnia! ❤️"],
+                beforeReply: () => clearCart(),
+                replies: [
+                    { text: "Comprar de nuevo", icon: "fa-redo", action: "start" },
+                    { text: "Calificar servicio", icon: "fa-star", action: "rate_service" }
+                ]
+            },
+            "rate_service": {
+                bot: ["⭐ **Califica nuestro servicio**\n\n¿Cómo fue tu experiencia de compra?"],
+                replies: [
+                    { text: "⭐⭐⭐⭐⭐ Excelente", icon: "fa-star", action: "thank_you" },
+                    { text: "⭐⭐⭐⭐ Muy bueno", icon: "fa-star", action: "thank_you" },
+                    { text: "⭐⭐⭐ Regular", icon: "fa-star", action: "improve_service" },
+                    { text: "⭐⭐ Malo", icon: "fa-star", action: "improve_service" }
+                ]
+            },
+            "thank_you": {
+                bot: ["¡Gracias por tu calificación! 😊 Nos alegra que hayas tenido una excelente experiencia.\n\n¡Esperamos verte pronto en Linnia! 👋"],
+                replies: [
+                    { text: "Comprar de nuevo", icon: "fa-redo", action: "start" }
+                ]
+            },
+            "improve_service": {
+                bot: ["Agradecemos tu feedback. Trabajaremos constantemente para mejorar nuestro servicio.\n\n¿Hay algo específico en lo que podamos mejorar?"],
+                replies: [
+                    { text: "Enviar sugerencia", icon: "fa-comment", action: "send_feedback" },
+                    { text: "Comprar de nuevo", icon: "fa-redo", action: "start" }
+                ]
+            },
+            "send_feedback": {
+                bot: ["¡Gracias por tu sugerencia! La hemos recibido y la tomaremos en cuenta para mejorar nuestro servicio.\n\n¡Te esperamos pronto en Linnia! 🛍️"],
+                replies: [
+                    { text: "Comprar de nuevo", icon: "fa-redo", action: "start" }
+                ]
+            },
+            "show_offers": {
+                bot: ["🔥 **OFERTAS ESPECIALES** 🎉\n\n• 30% de descuento en toda la categoría de Ropa\n• 2x1 en Electrónicos seleccionados\n• Envío gratis en compras mayores a $1000\n\nUsa el código **VERANO25** para obtener 25% adicional 🎁"],
+                replies: [
+                    { text: "Ver ropa en oferta", icon: "fa-tshirt", action: "show_category_ropa" },
+                    { text: "Ver electrónicos", icon: "fa-laptop", action: "show_category_electronicos" },
+                    { text: "Volver", icon: "fa-arrow-left", action: "start" }
+                ]
+            },
+            "show_category_electronicos": {
+                bot: ["📱 **Electrónicos más populares**:", {
+                    type: "product",
+                    id: "smartphone",
+                    name: "Smartphone Pro Max",
+                    description: "256GB, 5G, cámara 48MP",
+                    price: "$12,999.00",
+                    originalPrice: "$15,999.00",
+                    badge: "-19%",
+                    image: "https://picsum.photos/seed/phone1/70/70"
+                }, {
+                    type: "product",
+                    id: "laptop",
+                    name: "Laptop Ultraligera",
+                    description: "Intel i7, 16GB RAM, 512GB SSD",
+                    price: "$18,500.00",
+                    originalPrice: "$22,000.00",
+                    badge: "-16%",
+                    image: "https://picsum.photos/seed/laptop1/70/70"
+                }],
+                replies: [
+                    { text: "Agregar Smartphone", icon: "fa-cart-plus", action: "add_to_cart_phone" },
+                    { text: "Agregar Laptop", icon: "fa-cart-plus", action: "add_to_cart_laptop" },
+                    { text: "Ver más", icon: "fa-search-plus", action: "show_catalog" },
+                    { text: "Volver", icon: "fa-arrow-left", action: "show_catalog" }
+                ]
+            },
+            "add_to_cart_phone": {
+                bot: ["¡Smartphone Pro Max agregado a tu carrito! 📱"],
+                beforeReply: () => addToCart({
+                    id: "smartphone",
+                    name: "Smartphone Pro Max",
+                    price: 12999
+                }),
+                replies: [
+                    { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
+                    { text: "Ver carrito", icon: "fa-shopping-cart", action: "view_cart" },
+                    { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
+                ]
+            },
+            "add_to_cart_laptop": {
+                bot: ["¡Laptop Ultraligera agregada a tu carrito! 💻"],
+                beforeReply: () => addToCart({
+                    id: "laptop",
+                    name: "Laptop Ultraligera",
+                    price: 18500
+                }),
+                replies: [
+                    { text: "Seguir comprando", icon: "fa-shopping-bag", action: "show_catalog" },
+                    { text: "Ver carrito", icon: "fa-shopping-cart", action: "view_cart" },
+                    { text: "Pagar ahora", icon: "fa-credit-card", action: "checkout" }
+                ]
+            },
+            "track_order": {
+                bot: ["📦 **Rastreo de Pedidos**\n\nPara rastrear tu pedido, por favor introduce tu número de orden (ej: LIN-2024-1234)"],
+                replies: [
+                    { text: "Ingresar número de orden", icon: "fa-search", action: "track_order_input" },
+                    { text: "Volver", icon: "fa-arrow-left", action: "start" }
+                ]
+            },
+            "track_order_input": {
+                bot: ["🔍 **Pedido LIN-2024-1234**\n\nEstado: **En camino** 🚚\nFecha estimada: 3-5 días hábiles\nUbicación actual: Centro de distribución Monterrey\n\n¿Te gustaría recibir notificaciones por WhatsApp? 📱"],
+                replies: [
+                    { text: "Sí, activar notificaciones", icon: "fa-bell", action: "enable_notifications" },
+                    { text: "No, gracias", icon: "fa-times", action: "start" }
+                ]
+            },
+            "enable_notifications": {
+                bot: ["✅ **Notificaciones activadas**\n\nRecibirás actualizaciones de tu pedido por WhatsApp.\n\n¡Gracias por tu preferencia! 🛍️"],
+                replies: [
+                    { text: "Volver al inicio", icon: "fa-home", action: "start" }
+                ]
+            },
+            "help": {
+                bot: ["🤝 **Centro de Ayuda**\n\n¿En qué puedo asistirte?"],
                 replies: [
                     { text: "Ver catálogo", icon: "fa-th", action: "show_catalog" },
                     { text: "Rastrear mi pedido", icon: "fa-box", action: "track_order" },
+                    { text: "Cambios y devoluciones", icon: "fa-exchange-alt", action: "returns" },
                     { text: "Hablar con un humano", icon: "fa-user", action: "human_support" }
                 ]
             },
-            "human_support": {
-                bot: ["Entendido. Te estoy transfiriendo con un agente humano. Por favor, espera un momento..."],
+            "returns": {
+                bot: ["🔄 **Política de Cambios y Devoluciones**\n\n• 30 días para cambios y devoluciones\n• Producto debe estar en condiciones originales\n• Envío gratuito para cambios\n• Reembolso en 3-5 días hábiles\n\n¿Necesitas iniciar un cambio o devolución?"],
                 replies: [
-                    { text: "Finalizar Chat", icon: "fa-times", action: "start" }
+                    { text: "Iniciar devolución", icon: "fa-undo", action: "start_return" },
+                    { text: "Volver", icon: "fa-arrow-left", action: "help" }
                 ]
             },
-            "end_conversation": {
-                bot: ["¡Tu compra ha sido simulada con éxito! Gracias por usar Linnia. Vuelve pronto."],
+            "start_return": {
+                bot: ["Para iniciar tu devolución, por favor proporciona el número de pedido y describe el motivo del retorno.\n\nUn agente te contactará en las próximas 24 horas. 📞"],
                 replies: [
-                    { text: "Iniciar de nuevo", icon: "fa-redo", action: "start" }
+                    { text: "Entendido", icon: "fa-check", action: "start" }
+                ]
+            },
+            "human_support": {
+                bot: ["👤 **Conectando con agente humano**\n\nPor favor, espera un momento...\n\nTiempo estimado de espera: 2-3 minutos\n\nMientras esperas, ¿hay algo específico en lo que pueda ayudarte?"],
+                replies: [
+                    { text: "Esperar a agente", icon: "fa-user-clock", action: "waiting_agent" },
+                    { text: "Cancelar", icon: "fa-times", action: "start" }
+                ]
+            },
+            "waiting_agent": {
+                bot: ["⏳ **Buscando agente disponible...**\n\nTu posición en la fila: #2\n\nUn agente te atenderá en aproximadamente 1 minuto.\n\nGracias por tu paciencia. 🙏"],
+                replies: [
+                    { text: "Seguir esperando", icon: "fa-hourglass-half", action: "waiting_agent" },
+                    { text: "Dejar mensaje", icon: "fa-comment", action: "leave_message" },
+                    { text: "Cancelar", icon: "fa-times", action: "start" }
+                ]
+            },
+            "leave_message": {
+                bot: ["📝 **Mensaje recibido**\n\nUn agente revisará tu mensaje y te responderá por correo electrónico dentro de las próximas 2 horas.\n\n¡Gracias por contactarnos! 😊"],
+                replies: [
+                    { text: "Volver al inicio", icon: "fa-home", action: "start" }
                 ]
             }
         };
@@ -2129,19 +3430,31 @@
             botMessageContainer.className = 'message bot-message';
 
             if (typeof message === 'string') {
-                botMessageContainer.textContent = message;
+                // Convert markdown-like text to HTML
+                botMessageContainer.innerHTML = message
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n/g, '<br>');
             } else if (message.type === 'product') {
+                const priceHtml = message.originalPrice ?
+                    `<div class="product-price">${message.price} <small style="text-decoration: line-through; color: #999; font-size: 0.8rem;">${message.originalPrice}</small></div>` :
+                    `<div class="product-price">${message.price}</div>`;
+
+                const badgeHtml = message.badge ?
+                    `<div class="product-badge">${message.badge}</div>` : '';
+
                 botMessageContainer.innerHTML = `
-                    <div class="product-card">
+                    <div class="product-card" data-product-id="${message.id}">
                         <img src="${message.image}" alt="${message.name}" class="product-image">
                         <div class="product-info">
                             <div class="product-name">${message.name}</div>
-                            <div class="product-price">${message.price}</div>
+                            ${message.description ? `<div class="product-description">${message.description}</div>` : ''}
+                            ${priceHtml}
                         </div>
+                        ${badgeHtml}
                     </div>
                 `;
             }
-            
+
             messagesContainer.appendChild(botMessageContainer);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
@@ -2159,13 +3472,15 @@
         function updateQuickReplies(replies) {
             const repliesContainer = document.querySelector('#chat-input-container .quick-replies');
             repliesContainer.innerHTML = '';
-            replies.forEach(reply => {
-                const replyButton = document.createElement('div');
-                replyButton.className = 'quick-reply';
-                replyButton.setAttribute('onclick', `sendQuickReply('${reply.action}')`);
-                replyButton.innerHTML = `<i class="fas ${reply.icon}"></i> ${reply.text}`;
-                repliesContainer.appendChild(replyButton);
-            });
+            if (replies && replies.length > 0) {
+                replies.forEach(reply => {
+                    const replyButton = document.createElement('div');
+                    replyButton.className = 'quick-reply';
+                    replyButton.setAttribute('onclick', `sendQuickReply('${reply.action}')`);
+                    replyButton.innerHTML = `<i class="fas ${reply.icon}"></i> ${reply.text}`;
+                    repliesContainer.appendChild(replyButton);
+                });
+            }
         }
 
         function sendQuickReply(action) {
@@ -2179,24 +3494,45 @@
                     break;
                 }
             }
-            
+
             if(userMessageText) displayUserMessage(userMessageText);
 
             const response = chatResponses[action];
             if (!response) return;
+
+            // Execute beforeReply function if exists
+            if (response.beforeReply) {
+                response.beforeReply();
+            }
 
             const typingIndicator = displayTypingIndicator();
             updateQuickReplies([]); // Clear buttons while bot is "thinking"
 
             setTimeout(() => {
                 typingIndicator.remove();
-                
-                response.bot.forEach(message => {
+
+                // Handle dynamic bot messages
+                let botMessages = [];
+                if (typeof response.bot === 'function') {
+                    botMessages = response.bot();
+                } else {
+                    botMessages = response.bot;
+                }
+
+                botMessages.forEach(message => {
                     displayBotMessage(message);
                 });
 
-                if (response.replies) {
-                    updateQuickReplies(response.replies);
+                // Handle dynamic replies
+                let replies = [];
+                if (typeof response.replies === 'function') {
+                    replies = response.replies();
+                } else {
+                    replies = response.replies;
+                }
+
+                if (replies) {
+                    updateQuickReplies(replies);
                 }
             }, 1200); // Simulate bot thinking time
         }
@@ -2204,6 +3540,24 @@
         function initEcommerceDemo() {
             const initialResponse = chatResponses['start'];
             updateQuickReplies(initialResponse.replies);
+        }
+
+        function initEcommerceFlow() {
+            // Limpiar el chat antes de iniciar
+            const chatMessages = document.getElementById('chat-messages');
+            if (chatMessages) {
+                chatMessages.innerHTML = `
+                    <div class="message bot-message">
+                        ¡Hola! Bienvenido a Linnia. Soy tu asistente de compras personal. ¿Qué estás buscando hoy? 🛍️
+                    </div>
+                `;
+            }
+
+            // Limpiar carrito
+            clearCart();
+
+            // Inicializar el chat con las respuestas iniciales
+            initEcommerceDemo();
         }
         
         // Scroll suave para enlaces de navegación
@@ -2240,11 +3594,167 @@
             });
         });
         
-        // Inicialización cuando el DOM está listo
-        document.addEventListener('DOMContentLoaded', () => {
-            initParticles();
-            initAnimations();
+        // Funcionalidad del menú móvil
+        function openMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            mobileMenu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners del menú móvil
+        document.getElementById('mobile-menu-btn').addEventListener('click', openMobileMenu);
+        document.getElementById('mobile-menu-close').addEventListener('click', closeMobileMenu);
+        document.getElementById('mobile-menu-overlay').addEventListener('click', closeMobileMenu);
+
+        // Cerrar menú al hacer scroll
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu.classList.contains('active')) {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (Math.abs(scrollTop - lastScrollTop) > 50) {
+                    closeMobileMenu();
+                }
+                lastScrollTop = scrollTop;
+            }
         });
+
+        // Sistema de inicialización optimizado
+        document.addEventListener('DOMContentLoaded', () => {
+            // Asegurar que el contenido sea visible inmediatamente
+            document.body.style.opacity = '1';
+            document.body.style.transition = 'opacity 0.3s ease-in';
+
+            // Preparar elementos para animación cuando GSAP esté disponible
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.classList.add('fade-in-animate');
+            });
+
+            // Inicializar animaciones solo si GSAP está cargado
+            if (typeof gsap !== 'undefined') {
+                initAnimations();
+            } else {
+                // Si GSAP no está cargado, reintentar en intervalos
+                let retryCount = 0;
+                const maxRetries = 10;
+                const retryInterval = setInterval(() => {
+                    retryCount++;
+                    if (typeof gsap !== 'undefined') {
+                        clearInterval(retryInterval);
+                        initAnimations();
+                    } else if (retryCount >= maxRetries) {
+                        clearInterval(retryInterval);
+                        console.warn('GSAP failed to load after multiple attempts');
+                        // Fallback: mostrar contenido sin animaciones
+                        document.querySelectorAll('.fade-in-animate').forEach(el => {
+                            el.classList.remove('fade-in-animate');
+                        });
+                    }
+                }, 200);
+            }
+
+            // Inicializar partículas con delay optimizado
+            const isMobile = window.innerWidth <= 768;
+            const particleDelay = isMobile ? 2000 : 500;
+
+            setTimeout(() => {
+                if (typeof THREE !== 'undefined') {
+                    try {
+                        initParticles();
+                    } catch (error) {
+                        console.warn('Error initializing particles:', error);
+                    }
+                } else {
+                    console.warn('Three.js not available for particles');
+                }
+            }, particleDelay);
+
+            // Optimización: Lazy loading para imágenes si existen
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            if (img.dataset.src) {
+                                img.src = img.dataset.src;
+                                img.classList.remove('lazy');
+                                imageObserver.unobserve(img);
+                            }
+                        }
+                    });
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+
+            // Optimización: Preload enlaces importantes
+            const importantLinks = document.querySelectorAll('a[href^="http"]');
+            importantLinks.forEach(link => {
+                link.addEventListener('mouseenter', () => {
+                    const prefetchLink = document.createElement('link');
+                    prefetchLink.rel = 'prefetch';
+                    prefetchLink.href = link.href;
+                    document.head.appendChild(prefetchLink);
+                }, { once: true });
+            });
+
+            // Inicializar notificaciones toast (si existen)
+            initializeToastSystem();
+        });
+
+        // Sistema de notificaciones toast optimizado
+        function initializeToastSystem() {
+            // Crear contenedor de toasts si no existe
+            if (!document.getElementById('toast-container')) {
+                const toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(toastContainer);
+            }
+        }
+
+        // Optimización: Función debounce para eventos frecuentes
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Optimización: Función throttle para animaciones
+        function throttle(func, limit) {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        }
     </script>
 </body>
 </html>
